@@ -5,7 +5,8 @@
   <title>每日法人買賣超紀錄</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    h2 { margin-top: 40px; }
+    h1 { margin-bottom: 10px; }
+    select { margin-bottom: 20px; padding: 5px; font-size: 16px; }
     table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     th { background: #333; color: white; }
@@ -16,56 +17,83 @@
 </head>
 <body>
   <h1>每日法人買賣超紀錄</h1>
-  <div id="tables"></div>
+  
+  <label for="stockSelect">選擇股票：</label>
+  <select id="stockSelect"></select>
+
+  <div id="tableContainer"></div>
 
   <script>
+    let stockData = {};
+
     async function loadData() {
       const resp = await fetch("data.json?ts=" + new Date().getTime());
-      const data = await resp.json();
-      console.log("DEBUG: data.json content =", data); // 🐞 Debug 用
+      stockData = await resp.json();
+      console.log("DEBUG: data.json =", stockData);
 
-      const container = document.getElementById("tables");
+      // 建立下拉選單
+      const stockSelect = document.getElementById("stockSelect");
+      stockSelect.innerHTML = "";
+
+      for (const stock in stockData) {
+        const name = stockData[stock][0]?.name || stock;
+        const option = document.createElement("option");
+        option.value = stock;
+        option.textContent = `${name} (${stock})`;
+        stockSelect.appendChild(option);
+      }
+
+      // 預設顯示第一檔
+      if (stockSelect.options.length > 0) {
+        renderTable(stockSelect.value);
+      }
+
+      // 綁定選擇事件
+      stockSelect.addEventListener("change", (e) => {
+        renderTable(e.target.value);
+      });
+    }
+
+    function renderTable(stock) {
+      const records = stockData[stock];
+      const container = document.getElementById("tableContainer");
       container.innerHTML = "";
 
-      for (const stock in data) {
-        const records = data[stock];
-        if (!records || records.length === 0) {
-          console.log(`⚠️ 股票 ${stock} 沒有資料`);
-          continue;
-        }
-
-        const name = records[0].name || "";
-        const h2 = document.createElement("h2");
-        h2.textContent = `${name} (${stock}) - 過去一個月法人買賣超`;
-        container.appendChild(h2);
-
-        const table = document.createElement("table");
-        table.innerHTML = `
-          <tr>
-            <th>日期</th>
-            <th>外資</th>
-            <th>投信</th>
-            <th>自營商</th>
-            <th>三大法人合計</th>
-          </tr>
-        `;
-
-        // 顯示最近 20 筆
-        const recent = records.slice(-20);
-        for (const row of recent) {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${row.date}</td>
-            <td class="${row.foreign >= 0 ? 'pos' : 'neg'}">${row.foreign}</td>
-            <td class="${row.trust >= 0 ? 'pos' : 'neg'}">${row.trust}</td>
-            <td class="${row.dealer >= 0 ? 'pos' : 'neg'}">${row.dealer}</td>
-            <td class="${row.total >= 0 ? 'pos' : 'neg'}">${row.total}</td>
-          `;
-          table.appendChild(tr);
-        }
-
-        container.appendChild(table);
+      if (!records || records.length === 0) {
+        container.textContent = "⚠️ 此股票沒有資料";
+        return;
       }
+
+      const name = records[0].name || "";
+      const h2 = document.createElement("h2");
+      h2.textContent = `${name} (${stock}) - 過去一個月法人買賣超`;
+      container.appendChild(h2);
+
+      const table = document.createElement("table");
+      table.innerHTML = `
+        <tr>
+          <th>日期</th>
+          <th>外資</th>
+          <th>投信</th>
+          <th>自營商</th>
+          <th>三大法人合計</th>
+        </tr>
+      `;
+
+      const recent = records.slice(-20);
+      for (const row of recent) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${row.date}</td>
+          <td class="${row.foreign >= 0 ? 'pos' : 'neg'}">${row.foreign}</td>
+          <td class="${row.trust >= 0 ? 'pos' : 'neg'}">${row.trust}</td>
+          <td class="${row.dealer >= 0 ? 'pos' : 'neg'}">${row.dealer}</td>
+          <td class="${row.total >= 0 ? 'pos' : 'neg'}">${row.total}</td>
+        `;
+        table.appendChild(tr);
+      }
+
+      container.appendChild(table);
     }
 
     loadData();

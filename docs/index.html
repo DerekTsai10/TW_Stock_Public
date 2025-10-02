@@ -1,26 +1,23 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>每日法人買賣超紀錄</title>
+  <title>台股法人買賣超</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    h1 { margin-bottom: 10px; }
-    select { margin-bottom: 20px; padding: 5px; font-size: 16px; }
-    table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+    h2 { text-align: center; }
+    select { display: block; margin: 20px auto; padding: 5px; font-size: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     th { background: #333; color: white; }
-    tr:nth-child(even) { background: #f9f9f9; }
+    tr:nth-child(even) { background: #f2f2f2; }
     .pos { color: red; font-weight: bold; }
     .neg { color: green; font-weight: bold; }
   </style>
 </head>
 <body>
-  <h1>每日法人買賣超紀錄</h1>
-  
-  <label for="stockSelect">選擇股票：</label>
+  <h2 id="title">台股法人買賣超</h2>
   <select id="stockSelect"></select>
-
   <div id="tableContainer"></div>
 
   <script>
@@ -31,27 +28,24 @@
       stockData = await resp.json();
       console.log("DEBUG: data.json =", stockData);
 
-      // 建立下拉選單
       const stockSelect = document.getElementById("stockSelect");
-      stockSelect.innerHTML = "";
 
-      for (const stock in stockData) {
+      // 動態建立選單
+      Object.keys(stockData).forEach(stock => {
         const name = stockData[stock][0]?.name || stock;
-        const option = document.createElement("option");
-        option.value = stock;
-        option.textContent = `${name} (${stock})`;
-        stockSelect.appendChild(option);
-      }
-
-      // 預設顯示第一檔
-      if (stockSelect.options.length > 0) {
-        renderTable(stockSelect.value);
-      }
+        const opt = document.createElement("option");
+        opt.value = stock;
+        opt.textContent = `${name} (${stock})`;
+        stockSelect.appendChild(opt);
+      });
 
       // 綁定選擇事件
       stockSelect.addEventListener("change", (e) => {
         renderTable(e.target.value);
       });
+
+      // 預設顯示第一檔
+      renderTable(stockSelect.value);
     }
 
     function renderTable(stock) {
@@ -65,9 +59,8 @@
       }
 
       const name = records[0].name || "";
-      const h2 = document.createElement("h2");
+      const h2 = document.getElementById("title");
       h2.textContent = `${name} (${stock}) - 過去一個月法人買賣超`;
-      container.appendChild(h2);
 
       const table = document.createElement("table");
       table.innerHTML = `
@@ -80,8 +73,7 @@
         </tr>
       `;
 
-      const recent = records.slice(-20);
-      for (const row of recent) {
+      for (const row of records.slice(-20)) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${row.date}</td>

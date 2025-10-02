@@ -20,18 +20,21 @@
 
   <script>
     async function loadData() {
-      // 加時間戳避免快取
       const resp = await fetch("data.json?ts=" + new Date().getTime());
       const data = await resp.json();
+      console.log("DEBUG: data.json content =", data); // 🐞 Debug 用
 
       const container = document.getElementById("tables");
       container.innerHTML = "";
 
       for (const stock in data) {
         const records = data[stock];
-        if (!records.length) continue;
+        if (!records || records.length === 0) {
+          console.log(`⚠️ 股票 ${stock} 沒有資料`);
+          continue;
+        }
 
-        const name = records[0].name;
+        const name = records[0].name || "";
         const h2 = document.createElement("h2");
         h2.textContent = `${name} (${stock}) - 過去一個月法人買賣超`;
         container.appendChild(h2);
@@ -47,7 +50,9 @@
           </tr>
         `;
 
-        for (const row of records.slice(-20)) { // 只顯示最近 20 筆
+        // 顯示最近 20 筆
+        const recent = records.slice(-20);
+        for (const row of recent) {
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${row.date}</td>

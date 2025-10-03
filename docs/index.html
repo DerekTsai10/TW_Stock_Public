@@ -3,80 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <title>股票法人買賣超紀錄</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
-    h1 { font-size: 24px; }
-    select { padding: 5px; margin-bottom: 20px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: right; }
-    th { background-color: #f2f2f2; }
-    td.name { text-align: left; }
+    h1 { font-size: 22px; }
+    select, input { padding: 5px; margin: 5px; }
+    .container { display: flex; gap: 20px; }
+    table { border-collapse: collapse; width: 60%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
+    th { background: #f5f5f5; }
+    .positive { color: red; }
+    .negative { color: green; }
+    .chart-container { width: 40%; }
   </style>
 </head>
 <body>
-  <h1>股票法人買賣超紀錄</h1>
+  <h1 id="title">股票法人買賣超紀錄</h1>
+
   <label for="stockSelect">選擇股票：</label>
   <select id="stockSelect"></select>
-  
-  <table id="dataTable">
-    <thead>
-      <tr>
-        <th>日期</th>
-        <th>外資</th>
-        <th>投信</th>
-        <th>自營商</th>
-        <th>總和</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+
+  <label for="stockInput">輸入股票代碼或名稱：</label>
+  <input type="text" id="stockInput" placeholder="例如: 2330 或 台積電">
+
+  <div class="container">
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>日期</th>
+          <th>外資</th>
+          <th>投信</th>
+          <th>自營商</th>
+          <th>三大法人合計</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="chart-container">
+      <canvas id="epsChart"></canvas>
+    </div>
+  </div>
 
   <script>
     let stockData = {};
+    let stockNames = {};
+    let epsData = {};
+    let epsChart;
 
     async function loadData() {
-      const response = await fetch("docs/data.json");
-      stockData = await response.json();
+      const [stockRes, epsRes] = await Promise.all([
+        fetch("data.json"),
+        fetch("eps.json")
+      ]);
+      stockData = await stockRes.json();
+      epsData = await epsRes.json();
 
       const select = document.getElementById("stockSelect");
+      Object.keys(stockData).sort().forEach(code => {
+        const dates = Object.keys(stockData[code]);
+        const sample = stockData[code][dates[0]];
+        let name = sample.name || code;
+        stockNames[code] = name;
 
-      // 建立下拉選單（股票代號 + 名稱）
-      Object.keys(stockData).forEach(stockId => {
-        const name = stockData[stockId][0].name;
         const option = document.createElement("option");
-        option.value = stockId;
-        option.textContent = `${stockId} ${name}`;
+        option.value = code;
+        option.textContent = `${name} (${code})`;
         select.appendChild(option);
       });
 
-      // 預設選第一檔
-      renderTable(select.value);
-
-      // 綁定選擇事件
-      select.addEventListener("change", () => renderTable(select.value));
+      if (Object.keys(stockData).length > 0) {
+        updateView(Object.keys(stockData)[0]);
+      }
     }
 
-    function renderTable(stockId) {
-      const tbody = document.querySelector("#dataTable tbody");
+    function updateView(code) {
+      updateTable(code);
+      updateChart(code);
+    }
+
+    function updateTable(code) {
+      const title = document.getElementById("title");
+      title.textContent = `${stockNames[code] || ""} (${code}) - 最近法人買賣超`;
+
+      const tbody = document.getElementById("dataTable").querySelector("tbody");
       tbody.innerHTML = "";
 
-      if (!stockData[stockId]) return;
+      const entries = Object.entries(stockData[code]);
+      entries.sort((a, b) => b[0].localeCompare(a[0]));
 
-      // 日期由新到舊排序
-      const sorted = stockData[stockId].sort((a, b) => b.date.localeCompare(a.date));
-
-      sorted.forEach(item => {
+      entries.forEach(([date, values]) => {
         const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${item.date}</td>
-          <td>${item.foreign}</td>
-          <td>${item.trust}</td>
-          <td>${item.dealer}</td>
-          <td>${item.total}</td>
-        `;
+
+        const total = values.foreign + values.trust + values.dealer;
+        const cells = [date, values.foreign, values.trust, values.dealer, total];
+
+        cells.forEach((val, idx) => {
+          const td = document.createElement("td");
+          td.textContent = val;
+          if (idx > 0) {
+            if (val > 0) td.classList.add("positive");
+            else if (val < 0) td.classList.add("negative");
+          }
+          row.appendChild(td);
+        });
         tbody.appendChild(row);
       });
     }
+
+    function updateChart(code) {
+      const ctx = document.getElementById("epsChart").getContext("2d");
+
+      if (!epsData[code]) {
+        if (epsChart) epsChart.destroy();
+        return;
+      }
+
+      const labels = epsData[code].map(d => d.date);
+      const values = epsData[code].map(d => d.eps);
+
+      if (epsChart) epsChart.destroy();
+
+      epsChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "EPS",
+            data: values,
+            borderWidth: 2,
+            fill: false,
+            borderColor: "blue",
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: "近五年 EPS" }
+          },
+          scales: {
+            x: { title: { display: true, text: "季度" } },
+            y: { title: { display: true, text: "EPS" } }
+          }
+        }
+      });
+    }
+
+    document.getElementById("stockSelect").addEventListener("change", (e) => {
+      updateView(e.target.value);
+    });
+
+    document.getElementById("stockInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const input = e.target.value.trim();
+        if (stockData[input]) {
+          updateView(input);
+          return;
+        }
+        const found = Object.keys(stockNames).find(code => stockNames[code] === input);
+        if (found) {
+          updateView(found);
+        } else {
+          alert("查無此股票");
+        }
+      }
+    });
 
     loadData();
   </script>

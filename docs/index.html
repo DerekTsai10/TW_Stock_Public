@@ -2,192 +2,75 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>台股法人買賣超</title>
+  <title>股票投資協助方案</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h2 { text-align: center; }
-    input, select { display: block; margin: 10px auto; padding: 5px; font-size: 16px; }
-    .main { display:flex; justify-content: space-between; align-items: flex-start; }
-    #tableContainer { flex:3; }
-    #epsContainer { flex:1; margin-left:20px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #333; color: white; }
-    tr:nth-child(even) { background: #f2f2f2; }
-    .pos { color: red; font-weight: bold; }
-    .neg { color: green; font-weight: bold; }
-    canvas { width:100% !important; height:300px !important; }
+    body { font-family: Arial, sans-serif; }
+    #newcomers-box {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 10px;
+      background: #f8f8f8;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 200px;
+    }
+    #newcomers-box h4 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+    }
+    #newcomers-list {
+      list-style-type: none;
+      padding-left: 10px;
+      margin: 0;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
-  <h2 id="title">台股法人買賣超</h2>
-  
-  <input type="text" id="searchBox" placeholder="輸入股票代號或名稱篩選...">
-  <select id="stockSelect"></select>
-
-  <div class="main">
-    <div id="tableContainer"></div>
-    <div id="epsContainer">
-      <h3>近五年 EPS</h3>
-      <canvas id="epsChart"></canvas>
-    </div>
+  <!-- 新上榜清單 -->
+  <div id="newcomers-box">
+    <h4>新上榜 (過去10天)</h4>
+    <ul id="newcomers-list"></ul>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    let stockData = {};
-    let epsData = {};
-    let allStocks = [];
-    let epsChart = null;
+  async function showNewcomers() {
+    const res = await fetch("data.json");
+    const data = await res.json();
 
-    async function loadData() {
-      const resp = await fetch("data.json?ts=" + new Date().getTime());
-      stockData = await resp.json();
+    // 整理所有紀錄
+    let allStocks = Object.values(data).flat();
+    allStocks.sort((a, b) => a.date.localeCompare(b.date));
 
-      const resp2 = await fetch("eps.json?ts=" + new Date().getTime());
-      epsData = await resp2.json();
+    // 最近十天日期
+    let uniqueDates = [...new Set(allStocks.map(d => d.date))].sort();
+    if (uniqueDates.length < 10) return;
+    let last10 = uniqueDates.slice(-10);
 
-      allStocks = Object.keys(stockData).map(stock => {
-        return {
-          code: stock,
-          name: stockData[stock][0]?.name || stock
-        };
-      });
+    // 計算每天前15名
+    let top15ByDay = {};
+    last10.forEach(date => {
+      let records = allStocks.filter(d => d.date === date);
+      records.sort((a, b) => b.total - a.total);
+      top15ByDay[date] = records.slice(0, 15).map(d => d.stock);
+    });
 
-      renderOptions(allStocks);
+    // 前9天集合
+    let first9 = new Set(last10.slice(0, 9).flatMap(d => top15ByDay[d]));
+    // 第10天新上榜
+    let newcomers = top15ByDay[last10[9]].filter(stock => !first9.has(stock));
 
-      const searchBox = document.getElementById("searchBox");
+    // 顯示
+    let ul = document.getElementById("newcomers-list");
+    newcomers.forEach(stock => {
+      let li = document.createElement("li");
+      li.textContent = stock;
+      ul.appendChild(li);
+    });
+  }
 
-      // 即時過濾選單
-      searchBox.addEventListener("input", (e) => {
-        const keyword = e.target.value.trim();
-        const filtered = allStocks.filter(s =>
-          s.code.includes(keyword) || s.name.includes(keyword)
-        );
-        renderOptions(filtered);
-      });
-
-      // 按 Enter 直接查詢第一筆
-      searchBox.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-          const keyword = searchBox.value.trim();
-          const filtered = allStocks.filter(s =>
-            s.code.includes(keyword) || s.name.includes(keyword)
-          );
-          if (filtered.length > 0) {
-            renderTable(filtered[0].code);
-            document.getElementById("stockSelect").value = filtered[0].code;
-          }
-        }
-      });
-
-      // 下拉選單選擇
-      document.getElementById("stockSelect").addEventListener("change", (e) => {
-        renderTable(e.target.value);
-      });
-
-      // 預設顯示第一檔
-      if (allStocks.length > 0) {
-        renderTable(allStocks[0].code);
-      }
-    }
-
-    function renderOptions(stocks) {
-      const stockSelect = document.getElementById("stockSelect");
-      stockSelect.innerHTML = "";
-      stocks.forEach(s => {
-        const opt = document.createElement("option");
-        opt.value = s.code;
-        opt.textContent = `${s.name} (${s.code})`;
-        stockSelect.appendChild(opt);
-      });
-    }
-
-    function renderTable(stock) {
-      const records = stockData[stock];
-      const container = document.getElementById("tableContainer");
-      container.innerHTML = "";
-
-      if (!records || records.length === 0) {
-        container.textContent = "⚠️ 此股票沒有資料";
-        return;
-      }
-
-      const name = records[0].name || "";
-      const h2 = document.getElementById("title");
-      h2.textContent = `${name} (${stock}) - 過去一個月法人買賣超（單位：張）`;
-
-      const table = document.createElement("table");
-      table.innerHTML = `
-        <tr>
-          <th>日期</th>
-          <th>外資</th>
-          <th>投信</th>
-          <th>自營商</th>
-          <th>三大法人合計</th>
-        </tr>
-      `;
-
-      // 最新在上
-      const recent = records.slice(-20).reverse();
-
-      for (const row of recent) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${row.date}</td>
-          <td class="${row.foreign >= 0 ? 'pos' : 'neg'}">${(row.foreign / 1000).toFixed(0)}</td>
-          <td class="${row.trust >= 0 ? 'pos' : 'neg'}">${(row.trust / 1000).toFixed(0)}</td>
-          <td class="${row.dealer >= 0 ? 'pos' : 'neg'}">${(row.dealer / 1000).toFixed(0)}</td>
-          <td class="${row.total >= 0 ? 'pos' : 'neg'}">${(row.total / 1000).toFixed(0)}</td>
-        `;
-        table.appendChild(tr);
-      }
-
-      container.appendChild(table);
-
-      // 顯示 EPS
-      renderEPS(stock);
-    }
-
-    function renderEPS(stock) {
-      const container = document.getElementById("epsContainer");
-      container.innerHTML = "<h3>近五年 EPS</h3><canvas id='epsChart'></canvas>";
-
-      if (!epsData[stock]) {
-        container.innerHTML += "<p>⚠️ 此股票暫無 EPS 資料</p>";
-        return;
-      }
-
-      const ctx = document.getElementById("epsChart").getContext("2d");
-      const labels = epsData[stock].map(d => d.date).reverse();
-      const values = epsData[stock].map(d => d.eps).reverse();
-
-      if (epsChart) {
-        epsChart.destroy();
-      }
-
-      epsChart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: labels,
-          datasets: [{
-            label: `${stock} EPS`,
-            data: values,
-            borderColor: "blue",
-            backgroundColor: "rgba(0,0,255,0.1)",
-            fill: true,
-            tension: 0.2
-          }]
-        },
-        options: { 
-          responsive: true, 
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } }
-        }
-      });
-    }
-
-    loadData();
+  showNewcomers();
   </script>
 </body>
 </html>

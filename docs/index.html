@@ -41,8 +41,10 @@
 
       renderOptions(allStocks);
 
-      // 綁定搜尋事件
-      document.getElementById("searchBox").addEventListener("input", (e) => {
+      const searchBox = document.getElementById("searchBox");
+
+      // 即時過濾選單
+      searchBox.addEventListener("input", (e) => {
         const keyword = e.target.value.trim();
         const filtered = allStocks.filter(s =>
           s.code.includes(keyword) || s.name.includes(keyword)
@@ -50,7 +52,21 @@
         renderOptions(filtered);
       });
 
-      // 綁定選擇事件
+      // 按 Enter 直接查詢第一筆結果
+      searchBox.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          const keyword = searchBox.value.trim();
+          const filtered = allStocks.filter(s =>
+            s.code.includes(keyword) || s.name.includes(keyword)
+          );
+          if (filtered.length > 0) {
+            renderTable(filtered[0].code);
+            document.getElementById("stockSelect").value = filtered[0].code;
+          }
+        }
+      });
+
+      // 下拉選單選擇
       document.getElementById("stockSelect").addEventListener("change", (e) => {
         renderTable(e.target.value);
       });

@@ -7,12 +7,16 @@
     body { font-family: Arial, sans-serif; margin: 20px; }
     h2 { text-align: center; }
     input, select { display: block; margin: 10px auto; padding: 5px; font-size: 16px; }
+    .main { display:flex; justify-content: space-between; align-items: flex-start; }
+    #tableContainer { flex:3; }
+    #epsContainer { flex:1; margin-left:20px; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     th { background: #333; color: white; }
     tr:nth-child(even) { background: #f2f2f2; }
     .pos { color: red; font-weight: bold; }
     .neg { color: green; font-weight: bold; }
+    canvas { width:100% !important; height:300px !important; }
   </style>
 </head>
 <body>
@@ -21,16 +25,27 @@
   <input type="text" id="searchBox" placeholder="輸入股票代號或名稱篩選...">
   <select id="stockSelect"></select>
 
-  <div id="tableContainer"></div>
+  <div class="main">
+    <div id="tableContainer"></div>
+    <div id="epsContainer">
+      <h3>近五年 EPS</h3>
+      <canvas id="epsChart"></canvas>
+    </div>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     let stockData = {};
+    let epsData = {};
     let allStocks = [];
+    let epsChart = null;
 
     async function loadData() {
       const resp = await fetch("data.json?ts=" + new Date().getTime());
       stockData = await resp.json();
-      console.log("DEBUG: data.json =", stockData);
+
+      const resp2 = await fetch("eps.json?ts=" + new Date().getTime());
+      epsData = await resp2.json();
 
       allStocks = Object.keys(stockData).map(stock => {
         return {
@@ -52,7 +67,7 @@
         renderOptions(filtered);
       });
 
-      // 按 Enter 直接查詢第一筆結果
+      // 按 Enter 直接查詢第一筆
       searchBox.addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
           const keyword = searchBox.value.trim();
@@ -129,6 +144,47 @@
       }
 
       container.appendChild(table);
+
+      // 顯示 EPS
+      renderEPS(stock);
+    }
+
+    function renderEPS(stock) {
+      const container = document.getElementById("epsContainer");
+      container.innerHTML = "<h3>近五年 EPS</h3><canvas id='epsChart'></canvas>";
+
+      if (!epsData[stock]) {
+        container.innerHTML += "<p>⚠️ 此股票暫無 EPS 資料</p>";
+        return;
+      }
+
+      const ctx = document.getElementById("epsChart").getContext("2d");
+      const labels = epsData[stock].map(d => d.date).reverse();
+      const values = epsData[stock].map(d => d.eps).reverse();
+
+      if (epsChart) {
+        epsChart.destroy();
+      }
+
+      epsChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `${stock} EPS`,
+            data: values,
+            borderColor: "blue",
+            backgroundColor: "rgba(0,0,255,0.1)",
+            fill: true,
+            tension: 0.2
+          }]
+        },
+        options: { 
+          responsive: true, 
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } }
+        }
+      });
     }
 
     loadData();

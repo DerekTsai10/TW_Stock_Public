@@ -15,6 +15,25 @@
     .positive { color: red; }
     .negative { color: green; }
     .chart-container { width: 40%; }
+
+    /* 自動完成樣式 */
+    #suggestions {
+      border: 1px solid #ccc;
+      max-height: 150px;
+      overflow-y: auto;
+      position: absolute;
+      background: white;
+      z-index: 1000;
+      width: 250px;
+      display: none;
+    }
+    #suggestions div {
+      padding: 5px;
+      cursor: pointer;
+    }
+    #suggestions div:hover {
+      background: #eee;
+    }
   </style>
 </head>
 <body>
@@ -25,6 +44,7 @@
 
   <label for="stockInput">輸入股票代碼或名稱：</label>
   <input type="text" id="stockInput" placeholder="例如: 2330 或 台積電">
+  <div id="suggestions"></div>
 
   <div class="container">
     <table id="dataTable">
@@ -60,6 +80,8 @@
       epsData = await epsRes.json();
 
       const select = document.getElementById("stockSelect");
+
+      // 建立下拉選單
       Object.keys(stockData).sort().forEach(code => {
         const dates = Object.keys(stockData[code]);
         const sample = stockData[code][dates[0]];
@@ -90,11 +112,10 @@
       tbody.innerHTML = "";
 
       const entries = Object.entries(stockData[code]);
-      entries.sort((a, b) => b[0].localeCompare(a[0]));
+      entries.sort((a, b) => b[0].localeCompare(a[0])); // 日期新到舊
 
       entries.forEach(([date, values]) => {
         const row = document.createElement("tr");
-
         const total = values.foreign + values.trust + values.dealer;
         const cells = [date, values.foreign, values.trust, values.dealer, total];
 
@@ -119,8 +140,10 @@
         return;
       }
 
-      const labels = epsData[code].map(d => d.date);
-      const values = epsData[code].map(d => d.eps);
+      // EPS 依時間排序（舊 → 新）
+      const sorted = epsData[code].sort((a, b) => a.date.localeCompare(b.date));
+      const labels = sorted.map(d => d.date);
+      const values = sorted.map(d => d.eps);
 
       if (epsChart) epsChart.destroy();
 
@@ -151,20 +174,65 @@
       });
     }
 
+    // 下拉選單事件
     document.getElementById("stockSelect").addEventListener("change", (e) => {
       updateView(e.target.value);
     });
 
-    document.getElementById("stockInput").addEventListener("keydown", (e) => {
+    // 輸入框 + 自動完成
+    const input = document.getElementById("stockInput");
+    const suggestions = document.getElementById("suggestions");
+
+    input.addEventListener("input", () => {
+      const query = input.value.trim();
+      suggestions.innerHTML = "";
+
+      if (!query) {
+        suggestions.style.display = "none";
+        return;
+      }
+
+      const matches = Object.keys(stockNames).filter(code =>
+        code.includes(query) || stockNames[code].includes(query)
+      );
+
+      if (matches.length === 0) {
+        suggestions.style.display = "none";
+        return;
+      }
+
+      matches.forEach(code => {
+        const div = document.createElement("div");
+        div.textContent = `${stockNames[code]} (${code})`;
+        div.onclick = () => {
+          input.value = stockNames[code];
+          updateView(code);
+          suggestions.style.display = "none";
+        };
+        suggestions.appendChild(div);
+      });
+
+      suggestions.style.display = "block";
+    });
+
+    // Enter 鍵查詢
+    input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
-        const input = e.target.value.trim();
-        if (stockData[input]) {
-          updateView(input);
+        const query = input.value.trim();
+        if (!query) return;
+
+        if (stockData[query]) {
+          updateView(query);
           return;
         }
-        const found = Object.keys(stockNames).find(code => stockNames[code] === input);
+
+        const found = Object.keys(stockNames).find(code =>
+          code.includes(query) || stockNames[code].includes(query)
+        );
+
         if (found) {
           updateView(found);
+          suggestions.style.display = "none";
         } else {
           alert("查無此股票");
         }

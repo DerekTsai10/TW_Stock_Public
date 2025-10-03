@@ -6,7 +6,7 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     h2 { text-align: center; }
-    select { display: block; margin: 20px auto; padding: 5px; font-size: 16px; }
+    input, select { display: block; margin: 10px auto; padding: 5px; font-size: 16px; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     th { background: #333; color: white; }
@@ -17,35 +17,59 @@
 </head>
 <body>
   <h2 id="title">台股法人買賣超</h2>
+  
+  <input type="text" id="searchBox" placeholder="輸入股票代號或名稱篩選...">
   <select id="stockSelect"></select>
+
   <div id="tableContainer"></div>
 
   <script>
     let stockData = {};
+    let allStocks = [];
 
     async function loadData() {
       const resp = await fetch("data.json?ts=" + new Date().getTime());
       stockData = await resp.json();
       console.log("DEBUG: data.json =", stockData);
 
-      const stockSelect = document.getElementById("stockSelect");
+      allStocks = Object.keys(stockData).map(stock => {
+        return {
+          code: stock,
+          name: stockData[stock][0]?.name || stock
+        };
+      });
 
-      // 動態建立選單
-      Object.keys(stockData).forEach(stock => {
-        const name = stockData[stock][0]?.name || stock;
-        const opt = document.createElement("option");
-        opt.value = stock;
-        opt.textContent = `${name} (${stock})`;
-        stockSelect.appendChild(opt);
+      renderOptions(allStocks);
+
+      // 綁定搜尋事件
+      document.getElementById("searchBox").addEventListener("input", (e) => {
+        const keyword = e.target.value.trim();
+        const filtered = allStocks.filter(s =>
+          s.code.includes(keyword) || s.name.includes(keyword)
+        );
+        renderOptions(filtered);
       });
 
       // 綁定選擇事件
-      stockSelect.addEventListener("change", (e) => {
+      document.getElementById("stockSelect").addEventListener("change", (e) => {
         renderTable(e.target.value);
       });
 
       // 預設顯示第一檔
-      renderTable(stockSelect.value);
+      if (allStocks.length > 0) {
+        renderTable(allStocks[0].code);
+      }
+    }
+
+    function renderOptions(stocks) {
+      const stockSelect = document.getElementById("stockSelect");
+      stockSelect.innerHTML = "";
+      stocks.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.code;
+        opt.textContent = `${s.name} (${s.code})`;
+        stockSelect.appendChild(opt);
+      });
     }
 
     function renderTable(stock) {
@@ -60,7 +84,7 @@
 
       const name = records[0].name || "";
       const h2 = document.getElementById("title");
-      h2.textContent = `${name} (${stock}) - 過去一個月法人買賣超`;
+      h2.textContent = `${name} (${stock}) - 過去一個月法人買賣超（單位：張）`;
 
       const table = document.createElement("table");
       table.innerHTML = `
@@ -73,14 +97,17 @@
         </tr>
       `;
 
-      for (const row of records.slice(-20)) {
+      // 最新在上
+      const recent = records.slice(-20).reverse();
+
+      for (const row of recent) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${row.date}</td>
-          <td class="${row.foreign >= 0 ? 'pos' : 'neg'}">${row.foreign}</td>
-          <td class="${row.trust >= 0 ? 'pos' : 'neg'}">${row.trust}</td>
-          <td class="${row.dealer >= 0 ? 'pos' : 'neg'}">${row.dealer}</td>
-          <td class="${row.total >= 0 ? 'pos' : 'neg'}">${row.total}</td>
+          <td class="${row.foreign >= 0 ? 'pos' : 'neg'}">${(row.foreign / 1000).toFixed(0)}</td>
+          <td class="${row.trust >= 0 ? 'pos' : 'neg'}">${(row.trust / 1000).toFixed(0)}</td>
+          <td class="${row.dealer >= 0 ? 'pos' : 'neg'}">${(row.dealer / 1000).toFixed(0)}</td>
+          <td class="${row.total >= 0 ? 'pos' : 'neg'}">${(row.total / 1000).toFixed(0)}</td>
         `;
         table.appendChild(tr);
       }

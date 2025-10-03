@@ -7,18 +7,21 @@
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
     h1 { font-size: 22px; }
-    select, input { padding: 5px; margin: 5px; }
-    .container { display: flex; gap: 20px; }
+    input { padding: 6px; width: 250px; margin: 5px 0; }
+
     table { border-collapse: collapse; width: 60%; margin-top: 20px; }
     th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
     th { background: #f5f5f5; }
     .positive { color: red; }
     .negative { color: green; }
+
+    .container { display: flex; gap: 20px; }
     .chart-container { width: 40%; }
 
+    /* 建議選單樣式 */
     #suggestions {
       border: 1px solid #ccc;
-      max-height: 150px;
+      max-height: 200px;
       overflow-y: auto;
       position: absolute;
       background: white;
@@ -27,7 +30,7 @@
       display: none;
     }
     #suggestions div {
-      padding: 5px;
+      padding: 6px;
       cursor: pointer;
     }
     #suggestions div:hover {
@@ -37,9 +40,6 @@
 </head>
 <body>
   <h1 id="title">股票法人買賣超紀錄</h1>
-
-  <label for="stockSelect">選擇股票：</label>
-  <select id="stockSelect"></select>
 
   <label for="stockInput">輸入股票代碼或名稱：</label>
   <input type="text" id="stockInput" placeholder="例如: 2330 或 台積電">
@@ -79,22 +79,9 @@
       stockData = await stockRes.json();
       epsData = await epsRes.json();
 
-      const select = document.getElementById("stockSelect");
-
-      // 🔹 直接從 code 層拿 name
-      Object.keys(stockData).sort().forEach(code => {
-        let name = stockData[code].name || code;
-        stockNames[code] = name;
-
-        const option = document.createElement("option");
-        option.value = code;
-        option.textContent = `${name} (${code})`;
-        select.appendChild(option);
+      Object.keys(stockData).forEach(code => {
+        stockNames[code] = stockData[code].name || code;
       });
-
-      if (Object.keys(stockData).length > 0) {
-        updateView(Object.keys(stockData)[0]);
-      }
     }
 
     function updateView(code) {
@@ -110,7 +97,7 @@
       tbody.innerHTML = "";
 
       const entries = Object.entries(stockData[code])
-        .filter(([key, _]) => key !== "name"); // 🔹 排除 name
+        .filter(([key, _]) => key !== "name");
       entries.sort((a, b) => b[0].localeCompare(a[0]));
 
       entries.forEach(([date, values]) => {
@@ -177,11 +164,6 @@
       });
     }
 
-    // 下拉選單
-    document.getElementById("stockSelect").addEventListener("change", (e) => {
-      updateView(e.target.value);
-    });
-
     // 自動完成搜尋
     const input = document.getElementById("stockInput");
     const suggestions = document.getElementById("suggestions");
@@ -208,7 +190,7 @@
         const div = document.createElement("div");
         div.textContent = `${stockNames[code]} (${code})`;
         div.onclick = () => {
-          input.value = stockNames[code];
+          input.value = `${stockNames[code]} (${code})`;
           updateView(code);
           suggestions.style.display = "none";
         };
@@ -224,16 +206,12 @@
         const query = input.value.trim();
         if (!query) return;
 
-        if (stockData[query]) {
-          updateView(query);
-          return;
-        }
-
         const found = Object.keys(stockNames).find(code =>
           code.includes(query) || stockNames[code].includes(query)
         );
 
         if (found) {
+          input.value = `${stockNames[found]} (${found})`;
           updateView(found);
           suggestions.style.display = "none";
         } else {

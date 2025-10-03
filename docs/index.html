@@ -1,88 +1,54 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <title>股票法人買賣超紀錄</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    h1 { font-size: 24px; }
-    select { padding: 5px; margin-bottom: 20px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: right; }
-    th { background-color: #f2f2f2; }
-    td.name { text-align: left; }
-    .pos { color: red; font-weight: bold; }
-    .neg { color: green; font-weight: bold; }
-  </style>
-</head>
-<body>
-  <h1>股票法人買賣超紀錄</h1>
-  <label for="stockSelect">選擇股票：</label>
-  <select id="stockSelect"></select>
-  
-  <table id="dataTable">
-    <thead>
-      <tr>
-        <th>日期</th>
-        <th>外資</th>
-        <th>投信</th>
-        <th>自營商</th>
-        <th>三大法人合計</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+import requests, json, os
+from datetime import datetime
 
-  <script>
-    let stockData = {};
+def fetch_twse(date_str):
+    url = f"https://www.twse.com.tw/rwd/zh/fund/T86?date={date_str}&selectType=ALLBUT0999&response=json"
+    r = requests.get(url)
+    r.encoding = "utf-8"
+    data = r.json()
+    result = []
+    if "data" in data:
+        for row in data["data"]:
+            stock_id = row[0].strip()
+            name = row[1].strip()
+            foreign = int(row[2].replace(",", "")) - int(row[3].replace(",", ""))
+            trust = int(row[4].replace(",", "")) - int(row[5].replace(",", ""))
+            dealer = int(row[6].replace(",", "")) - int(row[7].replace(",", ""))
+            total = foreign + trust + dealer
+            result.append({
+                "stock": stock_id,
+                "name": name,
+                "foreign": foreign,
+                "trust": trust,
+                "dealer": dealer,
+                "total": total,
+                "date": date_str
+            })
+    return result
 
-    async function loadData() {
-      const response = await fetch("docs/data.json");
-      stockData = await response.json();
+def update_daily():
+    date_str = datetime.today().strftime("%Y%m%d")
+    twse_data = fetch_twse(date_str)
+    output_path = "docs/data.json"
+    if os.path.exists(output_path):
+        with open(output_path, "r", encoding="utf-8") as f:
+            merged = json.load(f)
+    else:
+        merged = {}
 
-      const select = document.getElementById("stockSelect");
+    for item in twse_data:
+        stock_id = item["stock"]
+        merged.setdefault(stock_id, [])
+        # 移除同一天舊資料
+        merged[stock_id] = [x for x in merged[stock_id] if x["date"] != date_str]
+        merged[stock_id].append(item)
+        # 按日期排序 & 只保留最近 20 筆
+        merged[stock_id] = sorted(merged[stock_id], key=lambda x: x["date"], reverse=True)[:20]
 
-      // 建立下拉選單（股票代號 + 名稱）
-      Object.keys(stockData).forEach(stockId => {
-        const name = stockData[stockId][0].name;
-        const option = document.createElement("option");
-        option.value = stockId;
-        option.textContent = `${stockId} ${name}`;
-        select.appendChild(option);
-      });
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(merged, f, ensure_ascii=False, indent=2)
 
-      // 預設選第一檔
-      renderTable(select.value);
+    print(f"{date_str} 完成更新，共 {len(twse_data)} 筆 → 已更新 {output_path}")
 
-      // 綁定選擇事件
-      select.addEventListener("change", () => renderTable(select.value));
-    }
-
-    function renderTable(stockId) {
-      const tbody = document.querySelector("#dataTable tbody");
-      tbody.innerHTML = "";
-
-      if (!stockData[stockId]) return;
-
-      // 日期由新到舊排序，取前 20 筆
-      const sorted = stockData[stockId]
-        .sort((a, b) => b.date.localeCompare(a.date))
-        .slice(0, 20);
-
-      sorted.forEach(item => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${item.date}</td>
-          <td class="${item.foreign >= 0 ? 'pos' : 'neg'}">${item.foreign}</td>
-          <td class="${item.trust >= 0 ? 'pos' : 'neg'}">${item.trust}</td>
-          <td class="${item.dealer >= 0 ? 'pos' : 'neg'}">${item.dealer}</td>
-          <td class="${item.total >= 0 ? 'pos' : 'neg'}">${item.total}</td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    loadData();
-  </script>
-</body>
-</html>
+if __name__ == "__main__":
+    update_daily()

@@ -1,76 +1,84 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>股票投資協助方案</title>
+  <title>股票法人買賣超紀錄</title>
   <style>
-    body { font-family: Arial, sans-serif; }
-    #newcomers-box {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      padding: 10px;
-      background: #f8f8f8;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      width: 200px;
-    }
-    #newcomers-box h4 {
-      margin: 0 0 8px 0;
-      font-size: 14px;
-    }
-    #newcomers-list {
-      list-style-type: none;
-      padding-left: 10px;
-      margin: 0;
-      font-size: 13px;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { font-size: 24px; }
+    select { padding: 5px; margin-bottom: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: right; }
+    th { background-color: #f2f2f2; }
+    td.name { text-align: left; }
   </style>
 </head>
 <body>
-  <!-- 新上榜清單 -->
-  <div id="newcomers-box">
-    <h4>新上榜 (過去10天)</h4>
-    <ul id="newcomers-list"></ul>
-  </div>
+  <h1>股票法人買賣超紀錄</h1>
+  <label for="stockSelect">選擇股票：</label>
+  <select id="stockSelect"></select>
+  
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>日期</th>
+        <th>外資</th>
+        <th>投信</th>
+        <th>自營商</th>
+        <th>總和</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script>
-  async function showNewcomers() {
-    const res = await fetch("data.json");
-    const data = await res.json();
+    let stockData = {};
 
-    // 整理所有紀錄
-    let allStocks = Object.values(data).flat();
-    allStocks.sort((a, b) => a.date.localeCompare(b.date));
+    async function loadData() {
+      const response = await fetch("docs/data.json");
+      stockData = await response.json();
 
-    // 最近十天日期
-    let uniqueDates = [...new Set(allStocks.map(d => d.date))].sort();
-    if (uniqueDates.length < 10) return;
-    let last10 = uniqueDates.slice(-10);
+      const select = document.getElementById("stockSelect");
 
-    // 計算每天前15名
-    let top15ByDay = {};
-    last10.forEach(date => {
-      let records = allStocks.filter(d => d.date === date);
-      records.sort((a, b) => b.total - a.total);
-      top15ByDay[date] = records.slice(0, 15).map(d => d.stock);
-    });
+      // 建立下拉選單（股票代號 + 名稱）
+      Object.keys(stockData).forEach(stockId => {
+        const name = stockData[stockId][0].name;
+        const option = document.createElement("option");
+        option.value = stockId;
+        option.textContent = `${stockId} ${name}`;
+        select.appendChild(option);
+      });
 
-    // 前9天集合
-    let first9 = new Set(last10.slice(0, 9).flatMap(d => top15ByDay[d]));
-    // 第10天新上榜
-    let newcomers = top15ByDay[last10[9]].filter(stock => !first9.has(stock));
+      // 預設選第一檔
+      renderTable(select.value);
 
-    // 顯示
-    let ul = document.getElementById("newcomers-list");
-    newcomers.forEach(stock => {
-      let li = document.createElement("li");
-      li.textContent = stock;
-      ul.appendChild(li);
-    });
-  }
+      // 綁定選擇事件
+      select.addEventListener("change", () => renderTable(select.value));
+    }
 
-  showNewcomers();
+    function renderTable(stockId) {
+      const tbody = document.querySelector("#dataTable tbody");
+      tbody.innerHTML = "";
+
+      if (!stockData[stockId]) return;
+
+      // 日期由新到舊排序
+      const sorted = stockData[stockId].sort((a, b) => b.date.localeCompare(a.date));
+
+      sorted.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.foreign}</td>
+          <td>${item.trust}</td>
+          <td>${item.dealer}</td>
+          <td>${item.total}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    loadData();
   </script>
 </body>
 </html>

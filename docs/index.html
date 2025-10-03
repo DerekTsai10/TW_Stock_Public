@@ -11,6 +11,8 @@
     th, td { border: 1px solid #ccc; padding: 8px; text-align: right; }
     th { background-color: #f2f2f2; }
     td.name { text-align: left; }
+    .pos { color: red; font-weight: bold; }
+    .neg { color: green; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -25,7 +27,7 @@
         <th>外資</th>
         <th>投信</th>
         <th>自營商</th>
-        <th>總和</th>
+        <th>三大法人合計</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -62,17 +64,19 @@
 
       if (!stockData[stockId]) return;
 
-      // 日期由新到舊排序
-      const sorted = stockData[stockId].sort((a, b) => b.date.localeCompare(a.date));
+      // 日期由新到舊排序，取前 20 筆
+      const sorted = stockData[stockId]
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 20);
 
       sorted.forEach(item => {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${item.date}</td>
-          <td>${item.foreign}</td>
-          <td>${item.trust}</td>
-          <td>${item.dealer}</td>
-          <td>${item.total}</td>
+          <td class="${item.foreign >= 0 ? 'pos' : 'neg'}">${item.foreign}</td>
+          <td class="${item.trust >= 0 ? 'pos' : 'neg'}">${item.trust}</td>
+          <td class="${item.dealer >= 0 ? 'pos' : 'neg'}">${item.dealer}</td>
+          <td class="${item.total >= 0 ? 'pos' : 'neg'}">${item.total}</td>
         `;
         tbody.appendChild(row);
       });

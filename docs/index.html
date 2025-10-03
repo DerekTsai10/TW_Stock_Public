@@ -16,7 +16,6 @@
     .negative { color: green; }
     .chart-container { width: 40%; }
 
-    /* 自動完成樣式 */
     #suggestions {
       border: 1px solid #ccc;
       max-height: 150px;
@@ -72,7 +71,7 @@
     let epsChart;
 
     async function loadData() {
-      const timestamp = new Date().getTime(); // 避免快取
+      const timestamp = new Date().getTime();
       const [stockRes, epsRes] = await Promise.all([
         fetch("data.json?t=" + timestamp),
         fetch("eps.json?t=" + timestamp)
@@ -82,11 +81,9 @@
 
       const select = document.getElementById("stockSelect");
 
-      // 建立下拉選單
+      // 🔹 直接從 code 層拿 name
       Object.keys(stockData).sort().forEach(code => {
-        const dates = Object.keys(stockData[code]);
-        const sample = stockData[code][dates[0]];
-        let name = sample.name || code;
+        let name = stockData[code].name || code;
         stockNames[code] = name;
 
         const option = document.createElement("option");
@@ -112,13 +109,13 @@
       const tbody = document.getElementById("dataTable").querySelector("tbody");
       tbody.innerHTML = "";
 
-      const entries = Object.entries(stockData[code]);
-      entries.sort((a, b) => b[0].localeCompare(a[0])); // 日期新到舊
+      const entries = Object.entries(stockData[code])
+        .filter(([key, _]) => key !== "name"); // 🔹 排除 name
+      entries.sort((a, b) => b[0].localeCompare(a[0]));
 
       entries.forEach(([date, values]) => {
         const row = document.createElement("tr");
 
-        // 轉換成張數 (四捨五入)
         const foreign = Math.round(values.foreign / 1000);
         const trust   = Math.round(values.trust / 1000);
         const dealer  = Math.round(values.dealer / 1000);
@@ -147,7 +144,6 @@
         return;
       }
 
-      // EPS 依時間排序（舊 → 新）
       const sorted = epsData[code].sort((a, b) => a.date.localeCompare(b.date));
       const labels = sorted.map(d => d.date);
       const values = sorted.map(d => d.eps);
@@ -175,18 +171,18 @@
           },
           scales: {
             x: { title: { display: true, text: "季度" } },
-            y: { title: { display: true, text: "EPS" } }
+            y: { title: { display: true, text: "EPS" }, beginAtZero: true }
           }
         }
       });
     }
 
-    // 下拉選單事件
+    // 下拉選單
     document.getElementById("stockSelect").addEventListener("change", (e) => {
       updateView(e.target.value);
     });
 
-    // 輸入框 + 自動完成
+    // 自動完成搜尋
     const input = document.getElementById("stockInput");
     const suggestions = document.getElementById("suggestions");
 

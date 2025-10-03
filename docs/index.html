@@ -51,10 +51,10 @@
       <thead>
         <tr>
           <th>日期</th>
-          <th>外資</th>
-          <th>投信</th>
-          <th>自營商</th>
-          <th>三大法人合計</th>
+          <th>外資 (張)</th>
+          <th>投信 (張)</th>
+          <th>自營商 (張)</th>
+          <th>三大法人合計 (張)</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -72,9 +72,10 @@
     let epsChart;
 
     async function loadData() {
+      const timestamp = new Date().getTime(); // 避免快取
       const [stockRes, epsRes] = await Promise.all([
-        fetch("data.json"),
-        fetch("eps.json")
+        fetch("data.json?t=" + timestamp),
+        fetch("eps.json?t=" + timestamp)
       ]);
       stockData = await stockRes.json();
       epsData = await epsRes.json();
@@ -116,8 +117,14 @@
 
       entries.forEach(([date, values]) => {
         const row = document.createElement("tr");
-        const total = values.foreign + values.trust + values.dealer;
-        const cells = [date, values.foreign, values.trust, values.dealer, total];
+
+        // 轉換成張數 (四捨五入)
+        const foreign = Math.round(values.foreign / 1000);
+        const trust   = Math.round(values.trust / 1000);
+        const dealer  = Math.round(values.dealer / 1000);
+        const total   = foreign + trust + dealer;
+
+        const cells = [date, foreign, trust, dealer, total];
 
         cells.forEach((val, idx) => {
           const td = document.createElement("td");

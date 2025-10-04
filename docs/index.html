@@ -115,9 +115,9 @@
     async function loadData() {
       const timestamp = new Date().getTime();
       const [stockRes, epsRes, newcomersRes] = await Promise.all([
-        fetch("docs/data.json?t=" + timestamp),
-        fetch("docs/eps.json?t=" + timestamp),
-        fetch("docs/newcomers.json?t=" + timestamp).catch(() => null)
+        fetch("data.json?t=" + timestamp),
+        fetch("eps.json?t=" + timestamp),
+        fetch("newcomers.json?t=" + timestamp).catch(() => null)
       ]);
 
       stockData = await stockRes.json();

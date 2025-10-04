@@ -34,11 +34,11 @@
       max-height: 200px;
       overflow-y: auto;
       position: absolute;
-      top: 100%;   /* 緊貼輸入框下方 */
+      top: 100%;
       left: 0;
       background: white;
       z-index: 1000;
-      width: 100%; /* 跟輸入框同寬 */
+      width: 100%;
       display: none;
     }
 
@@ -48,6 +48,26 @@
     }
     #suggestions div:hover {
       background: #eee;
+    }
+
+    /* 🔹 新上榜區塊 */
+    #newcomers {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background: #fafafa;
+    }
+    #newcomers h2 {
+      font-size: 16px;
+      margin: 0 0 10px 0;
+    }
+    #newcomers ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    #newcomers li {
+      margin: 2px 0;
     }
   </style>
 </head>
@@ -61,6 +81,7 @@
   </div>
 
   <div class="container">
+    <!-- 左邊表格 -->
     <table id="dataTable">
       <thead>
         <tr>
@@ -74,7 +95,13 @@
       <tbody></tbody>
     </table>
 
+    <!-- 右邊 EPS + 新上榜 -->
     <div class="chart-container">
+      <div id="newcomers">
+        <h2>【新上榜】(近10日首次進榜)</h2>
+        <p id="newcomers-date"></p>
+        <ul id="newcomers-list"></ul>
+      </div>
       <canvas id="epsChart"></canvas>
     </div>
   </div>
@@ -87,12 +114,32 @@
 
     async function loadData() {
       const timestamp = new Date().getTime();
-      const [stockRes, epsRes] = await Promise.all([
-        fetch("data.json?t=" + timestamp),
-        fetch("eps.json?t=" + timestamp)
+      const [stockRes, epsRes, newcomersRes] = await Promise.all([
+        fetch("docs/data.json?t=" + timestamp),
+        fetch("docs/eps.json?t=" + timestamp),
+        fetch("docs/newcomers.json?t=" + timestamp).catch(() => null)
       ]);
+
       stockData = await stockRes.json();
       epsData = await epsRes.json();
+
+      if (newcomersRes) {
+        const newcomersData = await newcomersRes.json();
+        document.getElementById("newcomers-date").textContent = `日期：${newcomersData.date}`;
+        const list = document.getElementById("newcomers-list");
+        list.innerHTML = "";
+        if (newcomersData.newcomers && newcomersData.newcomers.length > 0) {
+          newcomersData.newcomers.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = `${item.stock_id} ${item.name}`;
+            list.appendChild(li);
+          });
+        } else {
+          const li = document.createElement("li");
+          li.textContent = "今日無新上榜股票";
+          list.appendChild(li);
+        }
+      }
 
       Object.keys(stockData).forEach(code => {
         stockNames[code] = stockData[code].name || code;

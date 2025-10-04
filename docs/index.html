@@ -55,26 +55,26 @@
 
     // 載入法人買賣超資料
     async function loadData() {
-      const res = await fetch('data.json');
+      const res = await fetch('docs/data.json?ts=' + new Date().getTime());
       stockData = await res.json();
       populateSelect();
     }
 
     // 載入 EPS 資料
     async function loadEPS() {
-      const res = await fetch('eps.json');
+      const res = await fetch('docs/eps.json?ts=' + new Date().getTime());
       epsData = await res.json();
     }
 
     // 載入新上榜資料
     async function loadNewcomers() {
       try {
-        const res = await fetch('docs/newcomers.json');
+        const res = await fetch('docs/newcomers.json?ts=' + new Date().getTime());
         const newcomersData = await res.json();
         document.getElementById('newcomers-date').textContent = `日期：${newcomersData.date}`;
         const list = document.getElementById('newcomers-list');
         list.innerHTML = '';
-        if (newcomersData.newcomers.length > 0) {
+        if (newcomersData.newcomers && newcomersData.newcomers.length > 0) {
           newcomersData.newcomers.forEach(item => {
             const li = document.createElement('li');
             li.textContent = `${item.stock_id} ${item.name}`;
@@ -86,7 +86,7 @@
           list.appendChild(li);
         }
       } catch (e) {
-        console.log("⚠️ 無法載入 newcomers.json");
+        console.log("⚠️ 無法載入 newcomers.json", e);
       }
     }
 

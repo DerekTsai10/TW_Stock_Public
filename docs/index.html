@@ -69,7 +69,7 @@
     // 載入新上榜資料
     async function loadNewcomers() {
       try {
-        const res = await fetch('newcomers.json');
+        const res = await fetch('docs/newcomers.json');
         const newcomersData = await res.json();
         document.getElementById('newcomers-date').textContent = `日期：${newcomersData.date}`;
         const list = document.getElementById('newcomers-list');

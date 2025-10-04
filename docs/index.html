@@ -16,7 +16,7 @@
     .container { display: flex; gap: 20px; }
     .chart-container { width: 40%; }
 
-    /* 🔹 搜尋框 + 建議下拉 */
+    /* 搜尋框 */
     .input-container {
       position: relative;
       display: inline-block;
@@ -34,11 +34,11 @@
       max-height: 200px;
       overflow-y: auto;
       position: absolute;
-      top: 100%;   /* 緊貼輸入框下方 */
+      top: 100%;
       left: 0;
       background: white;
       z-index: 1000;
-      width: 100%; /* 跟輸入框同寬 */
+      width: 100%;
       display: none;
     }
 
@@ -49,6 +49,20 @@
     #suggestions div:hover {
       background: #eee;
     }
+
+    /* 新上榜清單樣式 */
+    #newcomers {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background: #fafafa;
+      width: 60%;
+    }
+
+    #newcomers h2 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
@@ -58,6 +72,12 @@
   <div class="input-container">
     <input type="text" id="stockInput" placeholder="例如: 2330 或 台積電">
     <div id="suggestions"></div>
+  </div>
+
+  <!-- 🔹 新上榜清單 -->
+  <div id="newcomers">
+    <h2>【新上榜】近10日首次進入前15名</h2>
+    <ul id="newcomersList"><li>載入中...</li></ul>
   </div>
 
   <div class="container">
@@ -74,6 +94,7 @@
       <tbody></tbody>
     </table>
 
+    <!-- 🔹 EPS 圖表 -->
     <div class="chart-container">
       <canvas id="epsChart"></canvas>
     </div>
@@ -87,15 +108,38 @@
 
     async function loadData() {
       const timestamp = new Date().getTime();
-      const [stockRes, epsRes] = await Promise.all([
+      const [stockRes, epsRes, newcomersRes] = await Promise.all([
         fetch("data.json?t=" + timestamp),
-        fetch("eps.json?t=" + timestamp)
+        fetch("eps.json?t=" + timestamp),
+        fetch("newcomers.json?t=" + timestamp)
       ]);
+
       stockData = await stockRes.json();
       epsData = await epsRes.json();
 
+      // 股票代碼 & 名稱
       Object.keys(stockData).forEach(code => {
         stockNames[code] = stockData[code].name || code;
+      });
+
+      // 🔹 顯示新上榜清單
+      if (newcomersRes.ok) {
+        const newcomers = await newcomersRes.json();
+        renderNewcomers(newcomers);
+      }
+    }
+
+    function renderNewcomers(data) {
+      const list = document.getElementById("newcomersList");
+      list.innerHTML = "";
+      if (!data.newcomers || data.newcomers.length === 0) {
+        list.innerHTML = "<li>今天沒有新上榜股票</li>";
+        return;
+      }
+      data.newcomers.forEach(code => {
+        const li = document.createElement("li");
+        li.textContent = `${stockNames[code] || code} (${code})`;
+        list.appendChild(li);
       });
     }
 
@@ -179,7 +223,7 @@
       });
     }
 
-    // 自動完成搜尋
+    // 🔹 搜尋股票代碼/名稱
     const input = document.getElementById("stockInput");
     const suggestions = document.getElementById("suggestions");
 

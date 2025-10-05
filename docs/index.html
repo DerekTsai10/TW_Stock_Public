@@ -16,59 +16,25 @@
     .container { display: flex; gap: 20px; }
     .chart-container { width: 40%; }
 
-    /* 🔹 搜尋框 + 建議下拉 */
-    .input-container {
-      position: relative;
-      display: inline-block;
-      width: 250px;
-    }
+    /* 搜尋框 + 建議下拉 */
+    .input-container { position: relative; display: inline-block; width: 250px; }
+    #stockInput { padding: 6px; width: 100%; box-sizing: border-box; }
+    #suggestions { border: 1px solid #ccc; max-height: 200px; overflow-y: auto;
+      position: absolute; top: 100%; left: 0; background: white; z-index: 1000; width: 100%; display: none; }
+    #suggestions div { padding: 6px; cursor: pointer; }
+    #suggestions div:hover { background: #eee; }
 
-    #stockInput {
-      padding: 6px;
-      width: 100%;
-      box-sizing: border-box;
-    }
+    /* 新上榜 */
+    #newcomers { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; background: #fafafa; }
+    #newcomers h2 { font-size: 16px; margin: 0 0 10px 0; }
+    #newcomers ul { list-style-type: none; padding-left: 0; margin: 0; }
+    #newcomers li { margin: 2px 0; }
 
-    #suggestions {
-      border: 1px solid #ccc;
-      max-height: 200px;
-      overflow-y: auto;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      z-index: 1000;
-      width: 100%;
-      display: none;
-    }
-
-    #suggestions div {
-      padding: 6px;
-      cursor: pointer;
-    }
-    #suggestions div:hover {
-      background: #eee;
-    }
-
-    /* 🔹 新上榜區塊 */
-    #newcomers {
-      margin-bottom: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      background: #fafafa;
-    }
-    #newcomers h2 {
-      font-size: 16px;
-      margin: 0 0 10px 0;
-    }
-    #newcomers ul {
-      list-style-type: none;
-      padding-left: 0;
-      margin: 0;
-    }
-    #newcomers li {
-      margin: 2px 0;
-    }
+    /* 指標觀察清單 */
+    #market-insights { margin-top:20px; padding:10px; border:1px solid #ccc; background:#fdfdfd; }
+    #market-insights h2 { font-size:16px; margin:0 0 10px 0; }
+    #market-insights ul { list-style-type:none; padding-left:0; margin:0; }
+    #market-insights li { margin:2px 0; }
   </style>
 </head>
 <body>
@@ -95,7 +61,7 @@
       <tbody></tbody>
     </table>
 
-    <!-- 右邊 EPS + 新上榜 -->
+    <!-- 右邊 EPS + 新上榜 + 指標觀察 -->
     <div class="chart-container">
       <div id="newcomers">
         <h2>【新上榜】(近10日首次進榜)</h2>
@@ -103,6 +69,11 @@
         <ul id="newcomers-list"></ul>
       </div>
       <canvas id="epsChart"></canvas>
+
+      <div id="market-insights">
+        <h2>📊 指標觀察清單</h2>
+        <ul id="insights-list"></ul>
+      </div>
     </div>
   </div>
 
@@ -114,15 +85,17 @@
 
     async function loadData() {
       const timestamp = new Date().getTime();
-      const [stockRes, epsRes, newcomersRes] = await Promise.all([
+      const [stockRes, epsRes, newcomersRes, insightsRes] = await Promise.all([
         fetch("data.json?t=" + timestamp),
         fetch("eps.json?t=" + timestamp),
-        fetch("newcomers.json?t=" + timestamp).catch(() => null)
+        fetch("newcomers.json?t=" + timestamp).catch(() => null),
+        fetch("insights.json?t=" + timestamp).catch(() => null)
       ]);
 
       stockData = await stockRes.json();
       epsData = await epsRes.json();
 
+      // 新上榜
       if (newcomersRes) {
         const newcomersData = await newcomersRes.json();
         document.getElementById("newcomers-date").textContent = `日期：${newcomersData.date}`;
@@ -141,6 +114,31 @@
         }
       }
 
+      // 指標觀察清單
+      if (insightsRes) {
+        const insightsData = await insightsRes.json();
+        const list = document.getElementById("insights-list");
+        list.innerHTML = `
+          <li>大盤指數：${insightsData.market_index.price} 
+            (${insightsData.market_index.change > 0 ? "+" : ""}${insightsData.market_index.change}, 
+            ${insightsData.market_index.percent > 0 ? "+" : ""}${insightsData.market_index.percent}%)</li>
+        `;
+        if (insightsData.foreign_investors.length > 0) {
+          list.innerHTML += `<li>外資連續買超：${
+            insightsData.foreign_investors.map(x => `${x.name} ${x.days}天`).join("、")
+          }</li>`;
+        }
+        if (insightsData.volume_spike.length > 0) {
+          list.innerHTML += `<li>成交量爆量：${
+            insightsData.volume_spike.map(x => `${x.name} (${x.multiplier}倍)`).join("、")
+          }</li>`;
+        }
+        if (insightsData.hot_industries.length > 0) {
+          list.innerHTML += `<li>熱門族群：${insightsData.hot_industries.join(" > ")}</li>`;
+        }
+      }
+
+      // 股票清單
       Object.keys(stockData).forEach(code => {
         stockNames[code] = stockData[code].name || code;
       });
@@ -158,8 +156,7 @@
       const tbody = document.getElementById("dataTable").querySelector("tbody");
       tbody.innerHTML = "";
 
-      const entries = Object.entries(stockData[code])
-        .filter(([key, _]) => key !== "name");
+      const entries = Object.entries(stockData[code]).filter(([key]) => key !== "name");
       entries.sort((a, b) => b[0].localeCompare(a[0])); // 日期新到舊
 
       entries.forEach(([date, values]) => {
@@ -171,7 +168,6 @@
         const total   = foreign + trust + dealer;
 
         const cells = [date, foreign, trust, dealer, total];
-
         cells.forEach((val, idx) => {
           const td = document.createElement("td");
           td.textContent = val;
@@ -187,7 +183,6 @@
 
     function updateChart(code) {
       const ctx = document.getElementById("epsChart").getContext("2d");
-
       if (!epsData[code]) {
         if (epsChart) epsChart.destroy();
         return;
@@ -198,87 +193,46 @@
       const values = sorted.map(d => d.eps);
 
       if (epsChart) epsChart.destroy();
-
       epsChart = new Chart(ctx, {
         type: "line",
         data: {
           labels: labels,
-          datasets: [{
-            label: "EPS",
-            data: values,
-            borderWidth: 2,
-            fill: false,
-            borderColor: "blue",
-            tension: 0.1
-          }]
+          datasets: [{ label: "EPS", data: values, borderWidth: 2, borderColor: "blue", fill: false, tension: 0.1 }]
         },
         options: {
           responsive: true,
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: "近五年 EPS" }
-          },
-          scales: {
-            x: { title: { display: true, text: "季度" } },
-            y: { title: { display: true, text: "EPS" }, beginAtZero: true }
-          }
+          plugins: { legend: { display: false }, title: { display: true, text: "近五年 EPS" } },
+          scales: { x: { title: { display: true, text: "季度" } }, y: { title: { display: true, text: "EPS" }, beginAtZero: true } }
         }
       });
     }
 
-    // 自動完成搜尋
+    // 搜尋功能
     const input = document.getElementById("stockInput");
     const suggestions = document.getElementById("suggestions");
-
     input.addEventListener("input", () => {
       const query = input.value.trim();
       suggestions.innerHTML = "";
-
-      if (!query) {
-        suggestions.style.display = "none";
-        return;
-      }
-
+      if (!query) { suggestions.style.display = "none"; return; }
       const matches = Object.keys(stockNames).filter(code =>
         code.includes(query) || stockNames[code].includes(query)
       );
-
-      if (matches.length === 0) {
-        suggestions.style.display = "none";
-        return;
-      }
-
+      if (matches.length === 0) { suggestions.style.display = "none"; return; }
       matches.forEach(code => {
         const div = document.createElement("div");
         div.textContent = `${stockNames[code]} (${code})`;
-        div.onclick = () => {
-          input.value = `${stockNames[code]} (${code})`;
-          updateView(code);
-          suggestions.style.display = "none";
-        };
+        div.onclick = () => { input.value = `${stockNames[code]} (${code})`; updateView(code); suggestions.style.display = "none"; };
         suggestions.appendChild(div);
       });
-
       suggestions.style.display = "block";
     });
-
-    // Enter 鍵查詢
-    input.addEventListener("keydown", (e) => {
+    input.addEventListener("keydown", e => {
       if (e.key === "Enter") {
         const query = input.value.trim();
         if (!query) return;
-
-        const found = Object.keys(stockNames).find(code =>
-          code.includes(query) || stockNames[code].includes(query)
-        );
-
-        if (found) {
-          input.value = `${stockNames[found]} (${found})`;
-          updateView(found);
-          suggestions.style.display = "none";
-        } else {
-          alert("查無此股票");
-        }
+        const found = Object.keys(stockNames).find(code => code.includes(query) || stockNames[code].includes(query));
+        if (found) { input.value = `${stockNames[found]} (${found})`; updateView(found); suggestions.style.display = "none"; }
+        else alert("查無此股票");
       }
     });
 

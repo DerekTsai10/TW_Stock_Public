@@ -3,7 +3,8 @@
   "market_index": {
     "price": null,
     "change": null,
-    "percent": null
+    "percent": null,
+    "date": null
   },
   "foreign_investors": [
     {

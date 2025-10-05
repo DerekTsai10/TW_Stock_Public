@@ -1,0 +1,17 @@
+{
+  "date": "2025-10-05",
+  "market_index": {
+    "price": 17300.25,
+    "change": 120.00,
+    "percent": 0.70
+  },
+  "foreign_investors": [
+    {"stock_id": "2330", "name": "台積電", "days": 5},
+    {"stock_id": "2454", "name": "聯發科", "days": 3}
+  ],
+  "volume_spike": [
+    {"stock_id": "2603", "name": "長榮", "multiplier": 3.5},
+    {"stock_id": "2609", "name": "陽明", "multiplier": 3.2}
+  ],
+  "hot_industries": ["半導體", "航運", "金融"]
+}

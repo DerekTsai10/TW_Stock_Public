@@ -1,18 +1,31 @@
 {
   "date": "2025-10-05",
   "market_index": {
-    "price": 17300.25,
-    "change": 120.00,
-    "percent": 0.70
+    "price": null,
+    "change": null,
+    "percent": null
   },
   "foreign_investors": [
-    {"stock_id": "2330", "name": "台積電", "days": 5},
-    {"stock_id": "2454", "name": "聯發科", "days": 3}
+    {
+      "stock_id": "2314",
+      "name": "台揚",
+      "days": 19
+    },
+    {
+      "stock_id": "3711",
+      "name": "日月光投控",
+      "days": 14
+    },
+    {
+      "stock_id": "2851",
+      "name": "中再保",
+      "days": 12
+    }
   ],
-  "volume_spike": [
-    {"stock_id": "2603", "name": "長榮", "multiplier": 3.5},
-    {"stock_id": "2609", "name": "陽明", "multiplier": 3.2}
-  ],
-  "hot_industries": ["半導體", "航運", "金融"]
+  "volume_spike": [],
+  "hot_industries": [
+    "半導體",
+    "航運",
+    "金融"
+  ]
 }
- 

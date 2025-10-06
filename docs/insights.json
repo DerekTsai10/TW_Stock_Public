@@ -8,19 +8,19 @@
   },
   "foreign_investors": [
     {
-      "stock_id": "2314",
-      "name": "台揚",
-      "days": 19
+      "stock_id": "2344",
+      "name": "華邦電",
+      "days": 20
     },
     {
-      "stock_id": "3711",
-      "name": "日月光投控",
-      "days": 14
+      "stock_id": "00981A",
+      "name": "主動統一台股增長",
+      "days": 20
     },
     {
-      "stock_id": "2851",
-      "name": "中再保",
-      "days": 12
+      "stock_id": "00982A",
+      "name": "主動群益台灣強棒",
+      "days": 20
     }
   ],
   "volume_spike": [],

@@ -50115,6 +50115,109 @@
       "dealer": -5000
     }
   },
+  "9136": {
+    "name": "巨騰-DR",
+    "20251003": {
+      "foreign": 3000,
+      "trust": 2000,
+      "dealer": 1000
+    },
+    "20251002": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20251001": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20250930": {
+      "foreign": 0,
+      "trust": 5000,
+      "dealer": -5000
+    },
+    "20250926": {
+      "foreign": 0,
+      "trust": 2000,
+      "dealer": -2000
+    },
+    "20250925": {
+      "foreign": 3000,
+      "trust": 1000,
+      "dealer": 2000
+    },
+    "20250924": {
+      "foreign": 0,
+      "trust": 2000,
+      "dealer": -2000
+    },
+    "20250923": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20250922": {
+      "foreign": 9000,
+      "trust": 1000,
+      "dealer": 8000
+    },
+    "20250919": {
+      "foreign": 3000,
+      "trust": 1000,
+      "dealer": 2000
+    },
+    "20250918": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20250917": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20250916": {
+      "foreign": 7000,
+      "trust": 1000,
+      "dealer": 6000
+    },
+    "20250915": {
+      "foreign": 5000,
+      "trust": 9000,
+      "dealer": -4000
+    },
+    "20250912": {
+      "foreign": 0,
+      "trust": 4000,
+      "dealer": -4000
+    },
+    "20250911": {
+      "foreign": 2000,
+      "trust": 2000,
+      "dealer": 0
+    },
+    "20250910": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20250909": {
+      "foreign": 6000,
+      "trust": 3000,
+      "dealer": 3000
+    },
+    "20250908": {
+      "foreign": 1000,
+      "trust": 3000,
+      "dealer": -2000
+    },
+    "20250905": {
+      "foreign": 4000,
+      "trust": 0,
+      "dealer": 4000
+    }
+  },
   "6906": {
     "name": "現觀科",
     "20251003": {
@@ -50218,64 +50321,6 @@
       "dealer": -12000
     }
   },
-  "1470": {
-    "name": "大統新創",
-    "20251003": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20250930": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20250926": {
-      "foreign": 0,
-      "trust": 3000,
-      "dealer": -3000
-    },
-    "20250923": {
-      "foreign": 0,
-      "trust": 5000,
-      "dealer": -5000
-    },
-    "20250919": {
-      "foreign": 0,
-      "trust": 3000,
-      "dealer": -3000
-    },
-    "20250917": {
-      "foreign": 0,
-      "trust": 2200,
-      "dealer": -2200
-    },
-    "20250916": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20250910": {
-      "foreign": 1000,
-      "trust": 5000,
-      "dealer": -4000
-    },
-    "20250909": {
-      "foreign": 5000,
-      "trust": 2000,
-      "dealer": 3000
-    },
-    "20250908": {
-      "foreign": 2000,
-      "trust": 0,
-      "dealer": 2000
-    },
-    "20250905": {
-      "foreign": 0,
-      "trust": 7000,
-      "dealer": -7000
-    }
-  },
   "020020": {
     "name": "元大台股領航N",
     "20251003": {
@@ -50377,6 +50422,64 @@
       "foreign": 0,
       "trust": 0,
       "dealer": 0
+    }
+  },
+  "1470": {
+    "name": "大統新創",
+    "20251003": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20250930": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20250926": {
+      "foreign": 0,
+      "trust": 3000,
+      "dealer": -3000
+    },
+    "20250923": {
+      "foreign": 0,
+      "trust": 5000,
+      "dealer": -5000
+    },
+    "20250919": {
+      "foreign": 0,
+      "trust": 3000,
+      "dealer": -3000
+    },
+    "20250917": {
+      "foreign": 0,
+      "trust": 2200,
+      "dealer": -2200
+    },
+    "20250916": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20250910": {
+      "foreign": 1000,
+      "trust": 5000,
+      "dealer": -4000
+    },
+    "20250909": {
+      "foreign": 5000,
+      "trust": 2000,
+      "dealer": 3000
+    },
+    "20250908": {
+      "foreign": 2000,
+      "trust": 0,
+      "dealer": 2000
+    },
+    "20250905": {
+      "foreign": 0,
+      "trust": 7000,
+      "dealer": -7000
     }
   },
   "1323": {
@@ -51551,109 +51654,6 @@
       "foreign": 0,
       "trust": 1000,
       "dealer": -1000
-    }
-  },
-  "9136": {
-    "name": "巨騰-DR",
-    "20251003": {
-      "foreign": 3000,
-      "trust": 2000,
-      "dealer": 1000
-    },
-    "20251002": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20251001": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20250930": {
-      "foreign": 0,
-      "trust": 5000,
-      "dealer": -5000
-    },
-    "20250926": {
-      "foreign": 0,
-      "trust": 2000,
-      "dealer": -2000
-    },
-    "20250925": {
-      "foreign": 3000,
-      "trust": 1000,
-      "dealer": 2000
-    },
-    "20250924": {
-      "foreign": 0,
-      "trust": 2000,
-      "dealer": -2000
-    },
-    "20250923": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20250922": {
-      "foreign": 9000,
-      "trust": 1000,
-      "dealer": 8000
-    },
-    "20250919": {
-      "foreign": 3000,
-      "trust": 1000,
-      "dealer": 2000
-    },
-    "20250918": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20250917": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20250916": {
-      "foreign": 7000,
-      "trust": 1000,
-      "dealer": 6000
-    },
-    "20250915": {
-      "foreign": 5000,
-      "trust": 9000,
-      "dealer": -4000
-    },
-    "20250912": {
-      "foreign": 0,
-      "trust": 4000,
-      "dealer": -4000
-    },
-    "20250911": {
-      "foreign": 2000,
-      "trust": 2000,
-      "dealer": 0
-    },
-    "20250910": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20250909": {
-      "foreign": 6000,
-      "trust": 3000,
-      "dealer": 3000
-    },
-    "20250908": {
-      "foreign": 1000,
-      "trust": 3000,
-      "dealer": -2000
-    },
-    "20250905": {
-      "foreign": 4000,
-      "trust": 0,
-      "dealer": 4000
     }
   },
   "6807": {
@@ -54171,99 +54171,6 @@
       "dealer": 2000
     }
   },
-  "2432": {
-    "name": "倚天酷碁-創",
-    "20251003": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20251001": {
-      "foreign": 1000,
-      "trust": 0,
-      "dealer": 1000
-    },
-    "20250930": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20250926": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20250925": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20250923": {
-      "foreign": 0,
-      "trust": 1000,
-      "dealer": -1000
-    },
-    "20250922": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20250919": {
-      "foreign": 0,
-      "trust": 2000,
-      "dealer": -2000
-    },
-    "20250918": {
-      "foreign": 0,
-      "trust": 6000,
-      "dealer": -6000
-    },
-    "20250917": {
-      "foreign": 0,
-      "trust": 2150,
-      "dealer": -2150
-    },
-    "20250916": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20250915": {
-      "foreign": 1000,
-      "trust": 0,
-      "dealer": 1000
-    },
-    "20250912": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20250911": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20250910": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20250909": {
-      "foreign": 1000,
-      "trust": 0,
-      "dealer": 1000
-    },
-    "20250908": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    },
-    "20250905": {
-      "foreign": 0,
-      "trust": 0,
-      "dealer": 0
-    }
-  },
   "7631": {
     "name": "聚賢研發-創",
     "20251003": {
@@ -54345,6 +54252,99 @@
       "foreign": 6000,
       "trust": 0,
       "dealer": 6000
+    },
+    "20250908": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20250905": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    }
+  },
+  "2432": {
+    "name": "倚天酷碁-創",
+    "20251003": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20251001": {
+      "foreign": 1000,
+      "trust": 0,
+      "dealer": 1000
+    },
+    "20250930": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20250926": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20250925": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20250923": {
+      "foreign": 0,
+      "trust": 1000,
+      "dealer": -1000
+    },
+    "20250922": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20250919": {
+      "foreign": 0,
+      "trust": 2000,
+      "dealer": -2000
+    },
+    "20250918": {
+      "foreign": 0,
+      "trust": 6000,
+      "dealer": -6000
+    },
+    "20250917": {
+      "foreign": 0,
+      "trust": 2150,
+      "dealer": -2150
+    },
+    "20250916": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20250915": {
+      "foreign": 1000,
+      "trust": 0,
+      "dealer": 1000
+    },
+    "20250912": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20250911": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20250910": {
+      "foreign": 0,
+      "trust": 0,
+      "dealer": 0
+    },
+    "20250909": {
+      "foreign": 1000,
+      "trust": 0,
+      "dealer": 1000
     },
     "20250908": {
       "foreign": 0,

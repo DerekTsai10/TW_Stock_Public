@@ -26,12 +26,13 @@
       flex-direction: column;
     }
 
-    /* 🔹 指標觀察清單、新上榜共用樣式 */
+    /* 🔹 指標觀察清單、新上榜統一樣式 */
     #insightsBox, #newcomersList {
       border: 1px solid #ccc;
       padding: 10px;
-      flex: 1; /* 🔹 撐滿父層 */
+      flex: 1; /* 撐滿父層 */
       overflow-y: auto;
+      background: #fafafa; /* 🔹 淡灰底色 */
     }
     #insightsBox h3, #newcomersList h3 {
       margin: 0 0 10px 0;
@@ -39,7 +40,12 @@
     }
 
     /* 🔹 搜尋框 */
-    .input-container { position: relative; display: inline-block; width: 250px; margin-top: 10px; }
+    .search-box { 
+      margin: 15px 0; 
+      padding-bottom: 10px; 
+      border-bottom: 2px solid #ccc; /* 🔹 分隔線 */
+    }
+    .input-container { position: relative; display: inline-block; width: 250px; }
     #stockInput { padding: 6px; width: 100%; box-sizing: border-box; }
     #suggestions {
       border: 1px solid #ccc;
@@ -63,23 +69,23 @@
 
   <!-- 上排：指標觀察清單 + 新上榜 -->
   <div class="flex-row">
-    <div class="half">
-      <div id="insightsBox">
-        <h3>指標觀察清單</h3>
-        <ul id="insightsList"></ul>
-      </div>
-
-      <!-- 🔹 搜尋框 -->
-      <label for="stockInput">輸入股票代碼或名稱：</label>
-      <div class="input-container">
-        <input type="text" id="stockInput" placeholder="例如: 2330 或 台積電">
-        <div id="suggestions"></div>
-      </div>
+    <div id="insightsBox" class="half">
+      <h3>指標觀察清單</h3>
+      <ul id="insightsList"></ul>
     </div>
 
     <div id="newcomersList" class="half">
       <h3>新上榜 (近10日首次進榜)</h3>
       <ul id="newcomers"></ul>
+    </div>
+  </div>
+
+  <!-- 搜尋框：移到下排上方，加分隔線 -->
+  <div class="search-box">
+    <label for="stockInput">輸入股票代碼或名稱：</label>
+    <div class="input-container">
+      <input type="text" id="stockInput" placeholder="例如: 2330 或 台積電">
+      <div id="suggestions"></div>
     </div>
   </div>
 

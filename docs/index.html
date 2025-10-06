@@ -13,20 +13,33 @@
     .positive { color: red; }
     .negative { color: green; }
 
-    .flex-row { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
-    .flex-col { display: flex; gap: 20px; }
-    .half { flex: 1; }
+    .flex-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+      align-items: stretch; /* 🔹 左右高度對齊 */
+    }
+    .half {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
 
-    /* 🔹 新上榜清單 */
-    #newcomersList { border: 1px solid #ccc; padding: 10px; max-height: 200px; overflow-y: auto; }
-    #newcomersList h3 { margin: 0 0 10px 0; font-size: 16px; }
-
-    /* 🔹 指標觀察清單 */
-    #insightsBox { border: 1px solid #ccc; padding: 10px; max-height: 200px; overflow-y: auto; margin-bottom: 10px; }
-    #insightsBox h3 { margin: 0 0 10px 0; font-size: 16px; }
+    /* 🔹 指標觀察清單、新上榜共用樣式 */
+    #insightsBox, #newcomersList {
+      border: 1px solid #ccc;
+      padding: 10px;
+      flex: 1; /* 🔹 撐滿父層 */
+      overflow-y: auto;
+    }
+    #insightsBox h3, #newcomersList h3 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
 
     /* 🔹 搜尋框 */
-    .input-container { position: relative; display: inline-block; width: 250px; margin-top: 5px; }
+    .input-container { position: relative; display: inline-block; width: 250px; margin-top: 10px; }
     #stockInput { padding: 6px; width: 100%; box-sizing: border-box; }
     #suggestions {
       border: 1px solid #ccc;
@@ -56,7 +69,7 @@
         <ul id="insightsList"></ul>
       </div>
 
-      <!-- 🔹 搜尋框改到這裡 -->
+      <!-- 🔹 搜尋框 -->
       <label for="stockInput">輸入股票代碼或名稱：</label>
       <div class="input-container">
         <input type="text" id="stockInput" placeholder="例如: 2330 或 台積電">

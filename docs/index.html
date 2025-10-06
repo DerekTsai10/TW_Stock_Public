@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>股票法人買賣超紀錄</title>
+  <title>台股交易追蹤</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
@@ -22,11 +22,11 @@
     #newcomersList h3 { margin: 0 0 10px 0; font-size: 16px; }
 
     /* 🔹 指標觀察清單 */
-    #insightsBox { border: 1px solid #ccc; padding: 10px; max-height: 200px; overflow-y: auto; }
+    #insightsBox { border: 1px solid #ccc; padding: 10px; max-height: 200px; overflow-y: auto; margin-bottom: 10px; }
     #insightsBox h3 { margin: 0 0 10px 0; font-size: 16px; }
 
     /* 🔹 搜尋框 */
-    .input-container { position: relative; display: inline-block; width: 250px; margin-top: 10px; }
+    .input-container { position: relative; display: inline-block; width: 250px; margin-top: 5px; }
     #stockInput { padding: 6px; width: 100%; box-sizing: border-box; }
     #suggestions {
       border: 1px solid #ccc;
@@ -45,20 +45,25 @@
   </style>
 </head>
 <body>
-  <h1 id="title">股票法人買賣超紀錄</h1>
-
-  <label for="stockInput">輸入股票代碼或名稱：</label>
-  <div class="input-container">
-    <input type="text" id="stockInput" placeholder="例如: 2330 或 台積電">
-    <div id="suggestions"></div>
-  </div>
+  <!-- 主標題 -->
+  <h1 id="title">台股交易追蹤</h1>
 
   <!-- 上排：指標觀察清單 + 新上榜 -->
   <div class="flex-row">
-    <div id="insightsBox" class="half">
-      <h3>指標觀察清單</h3>
-      <ul id="insightsList"></ul>
+    <div class="half">
+      <div id="insightsBox">
+        <h3>指標觀察清單</h3>
+        <ul id="insightsList"></ul>
+      </div>
+
+      <!-- 🔹 搜尋框改到這裡 -->
+      <label for="stockInput">輸入股票代碼或名稱：</label>
+      <div class="input-container">
+        <input type="text" id="stockInput" placeholder="例如: 2330 或 台積電">
+        <div id="suggestions"></div>
+      </div>
     </div>
+
     <div id="newcomersList" class="half">
       <h3>新上榜 (近10日首次進榜)</h3>
       <ul id="newcomers"></ul>
@@ -153,7 +158,7 @@
 
     function updateTable(code) {
       const title = document.getElementById("title");
-      title.textContent = `${stockNames[code] || ""} (${code}) - 最近法人買賣超`;
+      title.textContent = `台股交易追蹤 - ${stockNames[code] || ""} (${code})`;
 
       const tbody = document.getElementById("dataTable").querySelector("tbody");
       tbody.innerHTML = "";

@@ -1,165 +1,18 @@
-<!DOCTYPE html>
-<html lang="zh-tw">
-<head>
-  <meta charset="utf-8">
-  <title>法人買賣超查詢</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body class="p-6 bg-gray-50">
-  <!-- 動態標題 -->
-  <h1 id="page-title" class="text-2xl font-bold mb-4">法人買賣超查詢</h1>
-
-  <!-- 搜尋框 -->
-  <div class="my-6 relative w-96">
-    <label class="block mb-2 font-bold">輸入股票代碼或名稱：</label>
-    <input type="text" id="search-input" 
-           placeholder="台積電 或 2330" 
-           class="w-full border p-2 rounded"
-           autocomplete="off">
-    <ul id="suggestions" 
-        class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10"></ul>
-  </div>
-
-  <!-- 下方兩塊 (左：法人表格 / 右：EPS 圖表) -->
-  <div class="grid grid-cols-2 gap-4">
-    <!-- 法人買賣超 -->
-    <div class="p-4 border rounded bg-white shadow overflow-x-auto">
-      <h3 class="font-bold mb-2">法人買賣超 (張)</h3>
-      <table id="trading-table" class="table-auto w-full text-center border-collapse border">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="border px-2 py-1">日期</th>
-            <th class="border px-2 py-1">外資</th>
-            <th class="border px-2 py-1">投信</th>
-            <th class="border px-2 py-1">自營商</th>
-            <th class="border px-2 py-1">合計</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- EPS -->
-    <div class="p-4 border rounded bg-white shadow">
-      <h3 class="font-bold mb-2">近五年 EPS</h3>
-      <canvas id="epsChart" height="200"></canvas>
-    </div>
-  </div>
-
 <script>
-let records = [];
-let stockList = [];
-
-// 載入 data.json
-fetch("data.json")
-  .then(res => res.json())
-  .then(data => {
-    records = data.records;
-    records.forEach(day => {
-      day.stocks.forEach(s => {
-        if (!stockList.find(x => x.id === s.stock_id)) {
-          stockList.push({ id: s.stock_id, name: s.name.trim() });
-        }
-      });
-    });
-  });
-
-const input = document.getElementById("search-input");
-const suggestions = document.getElementById("suggestions");
-
-// 監聽輸入事件 → 顯示候選
-input.addEventListener("input", () => {
-  const keyword = input.value.trim();
-  suggestions.innerHTML = "";
-  if (!keyword) {
-    suggestions.classList.add("hidden");
-    return;
-  }
-  const results = stockList.filter(
-    s => s.id.includes(keyword) || s.name.includes(keyword)
-  ).slice(0, 10);
-
-  if (results.length === 0) {
-    const li = document.createElement("li");
-    li.className = "p-2 text-gray-500";
-    li.textContent = "查無資料";
-    suggestions.appendChild(li);
-    suggestions.classList.remove("hidden");
-    return;
-  }
-
-  results.forEach(s => {
-    const li = document.createElement("li");
-    li.className = "p-2 cursor-pointer hover:bg-gray-200";
-    li.textContent = `${s.name} (${s.id})`;
-    li.addEventListener("click", () => {
-      input.value = `${s.name} (${s.id})`;
-      suggestions.classList.add("hidden");
-      updatePage(s.id, s.name);
-    });
-    suggestions.appendChild(li);
-  });
-  suggestions.classList.remove("hidden");
-});
-
-// 按 Enter 查詢
-input.addEventListener("keydown", e => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    const keyword = input.value.trim();
-    let target = stockList.find(s => s.id === keyword);
-    if (!target) target = stockList.find(s => s.name.includes(keyword));
-    if (target) {
-      updatePage(target.id, target.name);
-    } else {
-      alert("查無符合的股票");
-    }
-    suggestions.classList.add("hidden");
-  }
-});
-
-// 更新頁面 (法人表格 + EPS + 標題)
-function updatePage(stockId, stockName) {
-  document.getElementById("page-title").textContent = `法人買賣超查詢 - ${stockName}`;
-  renderTable(stockId);
-  renderEPS(stockId);
-}
-
-// 顯示法人表格
-function renderTable(stockId) {
-  const tbody = document.querySelector("#trading-table tbody");
-  tbody.innerHTML = "";
-  records.forEach(day => {
-    const stock = day.stocks.find(s => s.stock_id === stockId);
-    if (stock) {
-      const foreign = stock.foreign_net || 0;
-      const invest = stock.invest_net || 0;
-      const dealer = stock.dealer_net || 0;
-      const total = foreign + invest + dealer;
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="border px-2 py-1">${day.date}</td>
-        <td class="border px-2 py-1 ${foreign > 0 ? 'text-red-500' : 'text-green-500'}">${foreign}</td>
-        <td class="border px-2 py-1 ${invest > 0 ? 'text-red-500' : 'text-green-500'}">${invest}</td>
-        <td class="border px-2 py-1 ${dealer > 0 ? 'text-red-500' : 'text-green-500'}">${dealer}</td>
-        <td class="border px-2 py-1 ${total > 0 ? 'text-red-500' : 'text-green-500'}">${total}</td>
-      `;
-      tbody.appendChild(tr);
-    }
-  });
-}
-
 // 顯示 EPS 折線圖
 function renderEPS(stockId) {
   fetch("eps.json")
     .then(res => res.json())
     .then(data => {
-      const epsData = data[stockId];
+      const key = String(stockId).trim();   // 確保是字串
+      console.log("🔍 查詢 stockId:", stockId, "→ key:", key);
+      console.log("📂 eps.json keys:", Object.keys(data));
+
+      const epsData = data[key];
       const ctx = document.getElementById("epsChart").getContext("2d");
 
       if (!epsData || epsData.length === 0) {
+        if (window.epsChart) window.epsChart.destroy(); // 清掉舊圖
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.font = "16px Arial";
         ctx.fillText("查無 EPS 資料", 10, 50);
@@ -194,5 +47,3 @@ function renderEPS(stockId) {
     });
 }
 </script>
-</body>
-</html>

@@ -7,7 +7,8 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="p-6 bg-gray-50">
-  <h1 class="text-2xl font-bold mb-4">法人買賣超查詢</h1>
+  <!-- 動態標題 -->
+  <h1 id="page-title" class="text-2xl font-bold mb-4">法人買賣超查詢</h1>
 
   <!-- 搜尋框 -->
   <div class="my-6 relative w-96">
@@ -20,9 +21,9 @@
         class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10"></ul>
   </div>
 
-  <!-- 下方：法人買賣超 + EPS -->
+  <!-- 下方兩塊 (左：法人表格 / 右：EPS 圖表) -->
   <div class="grid grid-cols-2 gap-4">
-    <!-- 左邊：法人買賣超 -->
+    <!-- 法人買賣超 -->
     <div class="p-4 border rounded bg-white shadow overflow-x-auto">
       <h3 class="font-bold mb-2">法人買賣超 (張)</h3>
       <table id="trading-table" class="table-auto w-full text-center border-collapse border">
@@ -39,10 +40,10 @@
       </table>
     </div>
 
-    <!-- 右邊：EPS -->
+    <!-- EPS -->
     <div class="p-4 border rounded bg-white shadow">
-      <h3 class="font-bold mb-4">近五年 EPS</h3>
-      <canvas id="epsChart"></canvas>
+      <h3 class="font-bold mb-2">近五年 EPS</h3>
+      <canvas id="epsChart" height="200"></canvas>
     </div>
   </div>
 
@@ -62,22 +63,19 @@ fetch("data.json")
         }
       });
     });
-    console.log("✅ 載入股票數:", stockList.length);
   });
 
 const input = document.getElementById("search-input");
 const suggestions = document.getElementById("suggestions");
 
-// 監聽輸入事件 → 顯示候選選單
+// 監聽輸入事件 → 顯示候選
 input.addEventListener("input", () => {
   const keyword = input.value.trim();
   suggestions.innerHTML = "";
-
   if (!keyword) {
     suggestions.classList.add("hidden");
     return;
   }
-
   const results = stockList.filter(
     s => s.id.includes(keyword) || s.name.includes(keyword)
   ).slice(0, 10);
@@ -98,27 +96,22 @@ input.addEventListener("input", () => {
     li.addEventListener("click", () => {
       input.value = `${s.name} (${s.id})`;
       suggestions.classList.add("hidden");
-      renderTable(s.id);
-      renderEPS(s.id);
+      updatePage(s.id, s.name);
     });
     suggestions.appendChild(li);
   });
-
   suggestions.classList.remove("hidden");
 });
 
-// 按 Enter 也能查
+// 按 Enter 查詢
 input.addEventListener("keydown", e => {
   if (e.key === "Enter") {
     e.preventDefault();
     const keyword = input.value.trim();
     let target = stockList.find(s => s.id === keyword);
-    if (!target) {
-      target = stockList.find(s => s.name.includes(keyword));
-    }
+    if (!target) target = stockList.find(s => s.name.includes(keyword));
     if (target) {
-      renderTable(target.id);
-      renderEPS(target.id);
+      updatePage(target.id, target.name);
     } else {
       alert("查無符合的股票");
     }
@@ -126,11 +119,17 @@ input.addEventListener("keydown", e => {
   }
 });
 
-// 顯示法人買賣超表格
+// 更新頁面 (法人表格 + EPS + 標題)
+function updatePage(stockId, stockName) {
+  document.getElementById("page-title").textContent = `法人買賣超查詢 - ${stockName}`;
+  renderTable(stockId);
+  renderEPS(stockId);
+}
+
+// 顯示法人表格
 function renderTable(stockId) {
   const tbody = document.querySelector("#trading-table tbody");
   tbody.innerHTML = "";
-
   records.forEach(day => {
     const stock = day.stocks.find(s => s.stock_id === stockId);
     if (stock) {
@@ -152,39 +151,44 @@ function renderTable(stockId) {
   });
 }
 
-// EPS 折線圖
-let epsChart;
+// 顯示 EPS 折線圖
 function renderEPS(stockId) {
   fetch("eps.json")
     .then(res => res.json())
     .then(data => {
       const epsData = data[stockId];
-      if (!epsData) {
-        console.warn("❌ 查無 EPS 資料 for", stockId);
+      const ctx = document.getElementById("epsChart").getContext("2d");
+
+      if (!epsData || epsData.length === 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = "16px Arial";
+        ctx.fillText("查無 EPS 資料", 10, 50);
         return;
       }
 
-      const ctx = document.getElementById("epsChart").getContext("2d");
-      if (epsChart) epsChart.destroy();
+      const labels = epsData.map(e => e.date).reverse();
+      const values = epsData.map(e => e.eps).reverse();
 
-      epsChart = new Chart(ctx, {
+      if (window.epsChart) window.epsChart.destroy();
+
+      window.epsChart = new Chart(ctx, {
         type: "line",
         data: {
-          labels: epsData.map(d => d.year),
+          labels: labels,
           datasets: [{
             label: "EPS",
-            data: epsData.map(d => d.value),
+            data: values,
             borderColor: "blue",
-            fill: false,
-            tension: 0.1,
-            pointBackgroundColor: "white",
-            pointBorderColor: "blue",
-            pointRadius: 4
+            backgroundColor: "rgba(0,0,255,0.1)",
+            fill: true,
+            tension: 0.2
           }]
         },
         options: {
           responsive: true,
-          plugins: { legend: { display: false } }
+          scales: {
+            y: { beginAtZero: true }
+          }
         }
       });
     });

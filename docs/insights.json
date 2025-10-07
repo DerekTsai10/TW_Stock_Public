@@ -1,70 +1,70 @@
 {
-  "date": "20250908",
+  "date": "20250909",
   "foreign_ratio_ranking": [],
   "invest_ratio_ranking": [],
   "explosive_buy": [],
   "group_summary": [
     {
-      "industry": "其他",
-      "total_buy": 58727161,
+      "industry": "37",
+      "total_buy": 138971263,
       "stocks": [
-        "0056",
+        "9904"
+      ]
+    },
+    {
+      "industry": "其他",
+      "total_buy": 68098400,
+      "stocks": [
         "00878",
         "0050",
-        "00753L",
+        "0056",
+        "00929",
         "00940"
       ]
     },
     {
-      "industry": "24",
-      "total_buy": 51245482,
+      "industry": "31",
+      "total_buy": 34197995,
       "stocks": [
-        "2344",
-        "2330"
+        "2317"
+      ]
+    },
+    {
+      "industry": "24",
+      "total_buy": 34025860,
+      "stocks": [
+        "2330",
+        "2408",
+        "2449"
       ]
     },
     {
       "industry": "17",
-      "total_buy": 20943409,
+      "total_buy": 28730919,
       "stocks": [
         "2890",
-        "2887"
+        "2880"
       ]
     },
     {
-      "industry": "15",
-      "total_buy": 13462918,
+      "industry": "05",
+      "total_buy": 25395312,
       "stocks": [
-        "2610",
-        "2634"
+        "1504"
       ]
     },
     {
-      "industry": "03",
-      "total_buy": 10295060,
+      "industry": "01",
+      "total_buy": 12642212,
       "stocks": [
-        "1314"
+        "1101"
       ]
     },
     {
-      "industry": "26",
-      "total_buy": 6928500,
+      "industry": "27",
+      "total_buy": 10071574,
       "stocks": [
-        "3481"
-      ]
-    },
-    {
-      "industry": "10",
-      "total_buy": 6757391,
-      "stocks": [
-        "2027"
-      ]
-    },
-    {
-      "industry": "28",
-      "total_buy": 5310850,
-      "stocks": [
-        "3605"
+        "2498"
       ]
     }
   ]

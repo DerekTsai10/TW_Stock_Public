@@ -77,7 +77,7 @@ fetch("docs/newcomers.json")
     list.innerHTML = "";
     data.newcomers.forEach(stock => {
       const li = document.createElement("li");
-      li.textContent = `${stock.name} (${stock.stock_id})`;
+      li.textContent = `${stock.name.trim()} (${stock.stock_id})`;
       list.appendChild(li);
     });
   });
@@ -92,7 +92,7 @@ fetch("docs/data.json")
     records = data.records;
     records.forEach(day => {
       day.stocks.forEach(s => {
-        stockList.set(s.stock_id, s.name.trim());
+        stockList.set(s.stock_id, s.name.trim());  // ✅ 去掉多餘空白
       });
     });
     console.log("✅ 載入股票數量:", stockList.size);
@@ -152,7 +152,7 @@ input.addEventListener("keydown", e => {
       stockId = matchId[0];
     } else {
       for (let [id, name] of stockList.entries()) {
-        if (name.includes(keyword)) {
+        if (name.includes(keyword)) {   // ✅ name 已經是 trim 過的
           stockId = id;
           break;
         }

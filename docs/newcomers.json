@@ -6,22 +6,22 @@
         "stock_id": "1605",
         "name": "華新",
         "net_buy": 56557817,
-        "shares_issued": 0,
-        "ratio": null
+        "shares_issued": 4431332948,
+        "ratio": 0.012763
       },
       {
         "stock_id": "1303",
         "name": "南亞",
         "net_buy": 29141013,
-        "shares_issued": 0,
-        "ratio": null
+        "shares_issued": 7930821589,
+        "ratio": 0.003674
       },
       {
         "stock_id": "2312",
         "name": "金寶",
         "net_buy": 13367500,
-        "shares_issued": 0,
-        "ratio": null
+        "shares_issued": 1504839211,
+        "ratio": 0.008883
       }
     ],
     "invest": [
@@ -36,43 +36,43 @@
         "stock_id": "1301",
         "name": "台塑",
         "net_buy": 756000,
-        "shares_issued": 0,
-        "ratio": null
+        "shares_issued": 6365740781,
+        "ratio": 0.000119
       },
       {
         "stock_id": "8112",
         "name": "至上",
         "net_buy": 394963,
-        "shares_issued": 0,
-        "ratio": null
+        "shares_issued": 525291698,
+        "ratio": 0.000752
       },
       {
         "stock_id": "3406",
         "name": "玉晶光",
         "net_buy": 170000,
-        "shares_issued": 0,
-        "ratio": null
+        "shares_issued": 112743063,
+        "ratio": 0.001508
       },
       {
         "stock_id": "6442",
         "name": "光聖",
         "net_buy": 149000,
-        "shares_issued": 0,
-        "ratio": null
+        "shares_issued": 76000203,
+        "ratio": 0.001961
       },
       {
         "stock_id": "8996",
         "name": "高力",
         "net_buy": 131000,
-        "shares_issued": 0,
-        "ratio": null
+        "shares_issued": 91471435,
+        "ratio": 0.001432
       },
       {
         "stock_id": "3443",
         "name": "創意",
         "net_buy": 121000,
-        "shares_issued": 0,
-        "ratio": null
+        "shares_issued": 134011911,
+        "ratio": 0.000903
       }
     ]
   }

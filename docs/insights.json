@@ -1,70 +1,240 @@
 {
-  "date": "20250909",
-  "foreign_ratio_ranking": [],
-  "invest_ratio_ranking": [],
+  "date": "20251007",
+  "foreign_ratio_ranking": [
+    {
+      "stock_id": "2313",
+      "name": "華通",
+      "foreign_ratio": 19.106421058815926
+    },
+    {
+      "stock_id": "1616",
+      "name": "億泰",
+      "foreign_ratio": 18.763985910476833
+    },
+    {
+      "stock_id": "6770",
+      "name": "力積電",
+      "foreign_ratio": 16.670637024401678
+    },
+    {
+      "stock_id": "3706",
+      "name": "神達",
+      "foreign_ratio": 14.046919427677267
+    },
+    {
+      "stock_id": "1605",
+      "name": "華新",
+      "foreign_ratio": 12.763161257275042
+    },
+    {
+      "stock_id": "2009",
+      "name": "第一銅",
+      "foreign_ratio": 12.443615648662812
+    },
+    {
+      "stock_id": "1802",
+      "name": "台玻",
+      "foreign_ratio": 11.494601488387039
+    },
+    {
+      "stock_id": "3406",
+      "name": "玉晶光",
+      "foreign_ratio": 11.4141390676959
+    },
+    {
+      "stock_id": "1612",
+      "name": "宏泰",
+      "foreign_ratio": 10.497340352656156
+    },
+    {
+      "stock_id": "6209",
+      "name": "今國光",
+      "foreign_ratio": 10.164875600870708
+    },
+    {
+      "stock_id": "9955",
+      "name": "佳龍",
+      "foreign_ratio": 9.877892309322867
+    },
+    {
+      "stock_id": "1608",
+      "name": "華榮",
+      "foreign_ratio": 9.862691691140432
+    },
+    {
+      "stock_id": "8028",
+      "name": "昇陽半導體",
+      "foreign_ratio": 9.621711278036708
+    },
+    {
+      "stock_id": "3413",
+      "name": "京鼎",
+      "foreign_ratio": 9.186962144214295
+    },
+    {
+      "stock_id": "4967",
+      "name": "十銓",
+      "foreign_ratio": 8.88592023416043
+    }
+  ],
+  "invest_ratio_ranking": [
+    {
+      "stock_id": "6805",
+      "name": "富世達",
+      "invest_ratio": 9.291959132417507
+    },
+    {
+      "stock_id": "8046",
+      "name": "南電",
+      "invest_ratio": 3.620883577150879
+    },
+    {
+      "stock_id": "6449",
+      "name": "鈺邦",
+      "invest_ratio": 2.4582982871730543
+    },
+    {
+      "stock_id": "6442",
+      "name": "光聖",
+      "invest_ratio": 1.960521079134486
+    },
+    {
+      "stock_id": "3406",
+      "name": "玉晶光",
+      "invest_ratio": 1.5078533035775337
+    },
+    {
+      "stock_id": "8996",
+      "name": "高力",
+      "invest_ratio": 1.4321410831698442
+    },
+    {
+      "stock_id": "6515",
+      "name": "穎崴",
+      "invest_ratio": 1.3869940238865892
+    },
+    {
+      "stock_id": "3443",
+      "name": "創意",
+      "invest_ratio": 0.9029048171695724
+    },
+    {
+      "stock_id": "3004",
+      "name": "豐達科",
+      "invest_ratio": 0.7542418697440453
+    },
+    {
+      "stock_id": "8112",
+      "name": "至上",
+      "invest_ratio": 0.751892713141642
+    },
+    {
+      "stock_id": "1303",
+      "name": "南亞",
+      "invest_ratio": 0.6402867525154209
+    },
+    {
+      "stock_id": "3515",
+      "name": "華擎",
+      "invest_ratio": 0.6151040631840073
+    },
+    {
+      "stock_id": "2344",
+      "name": "華邦電",
+      "invest_ratio": 0.3953333163779267
+    },
+    {
+      "stock_id": "2327",
+      "name": "國巨*",
+      "invest_ratio": 0.18379463680689148
+    },
+    {
+      "stock_id": "1301",
+      "name": "台塑",
+      "invest_ratio": 0.11876072652164125
+    }
+  ],
   "explosive_buy": [],
   "group_summary": [
     {
-      "industry": "37",
-      "total_buy": 138971263,
-      "stocks": [
-        "9904"
-      ]
-    },
-    {
       "industry": "其他",
-      "total_buy": 68098400,
+      "total_buy": 151240440,
       "stocks": [
         "00878",
-        "0050",
-        "0056",
-        "00929",
-        "00940"
-      ]
-    },
-    {
-      "industry": "31",
-      "total_buy": 34197995,
-      "stocks": [
-        "2317"
+        "00919",
+        "00940",
+        "00715L",
+        "0056"
       ]
     },
     {
       "industry": "24",
-      "total_buy": 34025860,
+      "total_buy": 69831849,
       "stocks": [
-        "2330",
-        "2408",
-        "2449"
+        "6770"
+      ]
+    },
+    {
+      "industry": "06",
+      "total_buy": 56553817,
+      "stocks": [
+        "1605"
+      ]
+    },
+    {
+      "industry": "26",
+      "total_buy": 44131153,
+      "stocks": [
+        "3481"
+      ]
+    },
+    {
+      "industry": "03",
+      "total_buy": 34219013,
+      "stocks": [
+        "1303"
+      ]
+    },
+    {
+      "industry": "08",
+      "total_buy": 33427000,
+      "stocks": [
+        "1802"
+      ]
+    },
+    {
+      "industry": "91",
+      "total_buy": 23319000,
+      "stocks": [
+        "9105"
+      ]
+    },
+    {
+      "industry": "28",
+      "total_buy": 22773426,
+      "stocks": [
+        "2313"
       ]
     },
     {
       "industry": "17",
-      "total_buy": 28730919,
+      "total_buy": 22599758,
       "stocks": [
-        "2890",
-        "2880"
+        "2887"
       ]
     },
     {
-      "industry": "05",
-      "total_buy": 25395312,
+      "industry": "25",
+      "total_buy": 15990406,
       "stocks": [
-        "1504"
+        "3706"
       ]
     },
     {
-      "industry": "01",
-      "total_buy": 12642212,
+      "industry": "31",
+      "total_buy": 13367500,
       "stocks": [
-        "1101"
-      ]
-    },
-    {
-      "industry": "27",
-      "total_buy": 10071574,
-      "stocks": [
-        "2498"
+        "2312"
       ]
     }
   ]

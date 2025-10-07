@@ -6,11 +6,37 @@
     "percent": null,
     "date": null
   },
-  "foreign_investors": [],
+  "foreign_investors": [
+    {
+      "stock_id": "6770",
+      "name": "力積電",
+      "foreign_net": 69831849
+    },
+    {
+      "stock_id": "1605",
+      "name": "華新",
+      "foreign_net": 56557817
+    },
+    {
+      "stock_id": "00878",
+      "name": "國泰永續高股息",
+      "foreign_net": 45776248
+    },
+    {
+      "stock_id": "3481",
+      "name": "群創",
+      "foreign_net": 44131153
+    },
+    {
+      "stock_id": "00919",
+      "name": "群益台灣精選高息",
+      "foreign_net": 43175622
+    }
+  ],
   "volume_spike": [],
   "hot_industries": [
-    "半導體",
-    "航運",
-    "金融"
+    "28",
+    "24",
+    "26"
   ]
 }

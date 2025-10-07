@@ -109,12 +109,13 @@
   </div>
 
   <script>
-    let stockData = {};
+    let stockData = [];
     let stockNames = {};
     let epsData = {};
     let newcomersData = {};
     let insightsData = {};
     let epsChart;
+    let latestDate = "-";
 
     async function loadData() {
       const ts = new Date().getTime();
@@ -127,11 +128,11 @@
 
       const stockJson = await stockRes.json();
       stockData = stockJson.data || [];
+      latestDate = stockJson.date || "-";
       epsData = await epsRes.json();
       newcomersData = await newcomersRes.json();
       insightsData = await insightsRes.json();
 
-      // 建立 {stock_id: name}
       stockData.forEach(item => {
         const cleanName = item.name ? item.name.trim() : item.stock_id;
         stockNames[item.stock_id] = cleanName;
@@ -184,21 +185,19 @@
       const tbody = document.getElementById("dataTable").querySelector("tbody");
       tbody.innerHTML = "";
 
-      // 找出指定股票的資料（目前只有單日 data）
       const stock = stockData.find(x => x.stock_id === code);
       if (!stock) {
-        tbody.innerHTML = `<tr><td colspan="6">查無資料</td></tr>`;
+        alert("查無此股票");
         return;
       }
 
-      const date = stockJson?.date || "-";
       const foreign = Math.round(stock.foreign_net / 1000);
       const invest = Math.round(stock.invest_net / 1000);
       const total = foreign + invest;
 
       const tr = document.createElement("tr");
       const cells = [
-        date,
+        latestDate,
         foreign,
         invest,
         total,

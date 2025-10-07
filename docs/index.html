@@ -62,8 +62,9 @@
     <!-- EPS -->
     <div class="p-4 border rounded bg-white shadow">
       <h3 class="font-bold mb-2">近五年 EPS</h3>
-      <div style="height:200px;"> <!-- 固定高度 200px -->
-        <canvas id="epsChart"></canvas>
+      <!-- 固定高度 200px -->
+      <div style="height:200px;">
+        <canvas id="epsChart" style="width:100%; height:100%;"></canvas>
       </div>
     </div>
   </div>
@@ -228,7 +229,7 @@ function renderEPS(stockId) {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          maintainAspectRatio: false, // 搭配外層固定高度
           scales: {
             y: { beginAtZero: true }
           }

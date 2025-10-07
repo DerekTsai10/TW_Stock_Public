@@ -21,6 +21,25 @@
         class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10"></ul>
   </div>
 
+  <!-- 上方兩塊 (左：指標觀察 / 右：新上榜) -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <!-- 指標觀察清單 -->
+    <div class="p-4 border rounded bg-white shadow">
+      <h3 class="font-bold mb-2">📊 指標觀察清單</h3>
+      <ul id="insights-list" class="list-disc pl-6 text-sm">
+        <li>半導體：台積電、聯電</li>
+        <li>AI伺服器：廣達、緯創</li>
+        <li>金融股：國泰金、富邦金</li>
+      </ul>
+    </div>
+
+    <!-- 新上榜清單 -->
+    <div class="p-4 border rounded bg-white shadow">
+      <h3 class="font-bold mb-2">🚀 新上榜</h3>
+      <ul id="newcomers-list" class="list-disc pl-6 text-sm text-blue-700"></ul>
+    </div>
+  </div>
+
   <!-- 下方兩塊 (左：法人表格 / 右：EPS 圖表) -->
   <div class="grid grid-cols-2 gap-4">
     <!-- 法人買賣超 -->
@@ -43,7 +62,9 @@
     <!-- EPS -->
     <div class="p-4 border rounded bg-white shadow">
       <h3 class="font-bold mb-2">近五年 EPS</h3>
-      <canvas id="epsChart" class="w-full h-64"></canvas>
+      <div class="h-64">
+        <canvas id="epsChart"></canvas>
+      </div>
     </div>
   </div>
 
@@ -63,6 +84,23 @@ fetch("data.json")
         }
       });
     });
+  });
+
+// 載入 newcomers.json
+fetch("newcomers.json")
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById("newcomers-list");
+    list.innerHTML = "";
+    if (data && data.newcomers && data.newcomers.length > 0) {
+      data.newcomers.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.name ? `${item.name} (${item.stock_id})` : item.stock_id;
+        list.appendChild(li);
+      });
+    } else {
+      list.innerHTML = "<li class='text-gray-500'>暫無資料</li>";
+    }
   });
 
 const input = document.getElementById("search-input");
@@ -156,10 +194,8 @@ function renderEPS(stockId) {
   fetch("eps.json")
     .then(res => res.json())
     .then(data => {
-      const key = String(stockId).trim();   // 確保是字串
+      const key = String(stockId).trim();
       console.log("🔍 查詢 stockId:", stockId, "→ key:", key);
-      console.log("📂 eps.json keys:", Object.keys(data));
-
       const epsData = data[key];
       console.log("📊 epsData:", epsData);
 

@@ -10,13 +10,6 @@
         "ratio": 0.012763
       },
       {
-        "stock_id": "1303",
-        "name": "南亞",
-        "net_buy": 29141013,
-        "shares_issued": 7930821589,
-        "ratio": 0.003674
-      },
-      {
         "stock_id": "2312",
         "name": "金寶",
         "net_buy": 13367500,
@@ -45,6 +38,13 @@
         "net_buy": 394963,
         "shares_issued": 525291698,
         "ratio": 0.000752
+      },
+      {
+        "stock_id": "2327",
+        "name": "國巨*",
+        "net_buy": 381000,
+        "shares_issued": 2072965820,
+        "ratio": 0.000184
       },
       {
         "stock_id": "3406",

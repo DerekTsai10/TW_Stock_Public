@@ -1,5 +1,86 @@
 {
   "date": "20251007",
-  "foreign_newcomers": [],
-  "invest_newcomers": []
+  "newcomers": {
+    "foreign": [
+      {
+        "stock_id": "1605",
+        "name": "華新",
+        "net_buy": 56557817,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "1303",
+        "name": "南亞",
+        "net_buy": 29141013,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "2312",
+        "name": "金寶",
+        "net_buy": 13367500,
+        "shares_issued": 0,
+        "ratio": null
+      }
+    ],
+    "invest": [
+      {
+        "stock_id": "0056",
+        "name": "元大高股息",
+        "net_buy": 1000000,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "1301",
+        "name": "台塑",
+        "net_buy": 756000,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "8112",
+        "name": "至上",
+        "net_buy": 394963,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "2327",
+        "name": "國巨*",
+        "net_buy": 381000,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "3406",
+        "name": "玉晶光",
+        "net_buy": 170000,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "6442",
+        "name": "光聖",
+        "net_buy": 149000,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "8996",
+        "name": "高力",
+        "net_buy": 131000,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "3443",
+        "name": "創意",
+        "net_buy": 121000,
+        "shares_issued": 0,
+        "ratio": null
+      }
+    ]
+  }
 }

@@ -1,127 +1,96 @@
-<!DOCTYPE html>
-<html lang="zh-tw">
-<head>
-  <meta charset="utf-8">
-  <title>台股交易追蹤</title>
-  <link rel="icon" type="image/ico" href="/chart.ico">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; box-shadow: 1px 1px 5px #aaa; background: #fff; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
-    th { background: #f5f5f5; }
-    .section-title { font-weight: bold; margin-bottom: 6px; }
-    .highlight { color: darkblue; font-weight: bold; }
-  </style>
-</head>
-<body>
-  <h2>台股交易追蹤</h2>
-
-  <div class="container">
-    <!-- 左：指標觀察清單 -->
-    <div class="card">
-      <div class="section-title">指標觀察清單</div>
-      <div id="insights"></div>
-    </div>
-
-    <!-- 右：新上榜 -->
-    <div class="card">
-      <div class="section-title">新上榜 (近10日首次進榜)</div>
-      <ul id="newcomers"></ul>
-    </div>
+<div class="grid grid-cols-2 gap-4">
+  <!-- 左上：指標觀察清單 -->
+  <div class="p-4 border rounded">
+    <h3>指標觀察清單</h3>
+    <ul id="insights-list"></ul>
   </div>
 
-  <hr>
-
-  <!-- 股票查詢 -->
-  <div class="card">
-    <label>輸入股票代碼或名稱：<input id="searchInput" type="text"></label>
-    <button onclick="searchStock()">查詢</button>
-    <div id="result"></div>
+  <!-- 右上：新上榜 -->
+  <div class="p-4 border rounded">
+    <h3>新上榜 (近10日首次進榜)</h3>
+    <ul id="newcomers-list"></ul>
   </div>
+</div>
 
-  <hr>
+<!-- 搜尋框 -->
+<div class="my-4">
+  <label>輸入股票代碼或名稱：</label>
+  <input type="text" id="search-input" placeholder="台燿 (6274)">
+</div>
 
-  <!-- EPS 圖表 -->
-  <div class="card">
-    <div class="section-title">近五年 EPS</div>
-    <canvas id="epsChart"></canvas>
-  </div>
+<!-- 買賣超紀錄 -->
+<table id="trading-table" class="table-auto w-full text-center border-collapse border">
+  <thead>
+    <tr>
+      <th>日期</th>
+      <th>外資 (張)</th>
+      <th>投信 (張)</th>
+      <th>自營商 (張)</th>
+      <th>三大法人合計 (張)</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-  <script>
-    // ========== 全域變數 ==========
-    let dataJson = null, newcomersJson = null, insightsJson = null, epsJson = null;
+<!-- EPS 折線圖 -->
+<canvas id="epsChart"></canvas>
 
-    // ========== 載入 JSON ==========
-    async function loadData() {
-      dataJson = await fetch("docs/data.json").then(r => r.json());
-      newcomersJson = await fetch("docs/newcomers.json").then(r => r.json());
-      insightsJson = await fetch("docs/insights.json").then(r => r.json()).catch(() => null);
-      epsJson = await fetch("docs/eps.json").then(r => r.json()).catch(() => null);
-      renderInsights();
-      renderNewcomers();
-      if (epsJson) renderEPS();
-    }
+<script>
+// 指標觀察清單
+fetch("docs/insights.json")
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById("insights-list");
+    list.innerHTML = "";
+    data.insights.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  });
 
-    // ========== 指標觀察清單 ==========
-    function renderInsights() {
-      if (!insightsJson) { document.getElementById("insights").innerText = "尚無資料"; return; }
-      const html = `
-        <div>外本比排行：<span class="highlight">${insightsJson.foreign_ratio[0].name}</span></div>
-        <div>投本比排行：<span class="highlight">${insightsJson.invest_ratio[0].name}</span></div>
-        <div>爆量股：${insightsJson.volume_spike.map(s=>s.name).join(", ")}</div>
-        <div>族群統計：${Object.entries(insightsJson.industry_summary).map(([k,v])=>k+"("+v+")").join("、")}</div>
-      `;
-      document.getElementById("insights").innerHTML = html;
-    }
+// 新上榜
+fetch("docs/newcomers.json")
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById("newcomers-list");
+    list.innerHTML = "";
+    data.newcomers.forEach(stock => {
+      const li = document.createElement("li");
+      li.textContent = `${stock.name} (${stock.stock_id})`;
+      list.appendChild(li);
+    });
+  });
 
-    // ========== 新上榜 ==========
-    function renderNewcomers() {
-      const list = document.getElementById("newcomers");
-      list.innerHTML = newcomersJson.stocks.map(s => `<li>${s.stock_id} ${s.name}</li>`).join("");
-    }
+// 搜尋 + 買賣超
+let records = [];
+fetch("docs/data.json")
+  .then(res => res.json())
+  .then(data => records = data.records);
 
-    // ========== 查詢股票 ==========
-    function searchStock() {
-      const key = document.getElementById("searchInput").value.trim();
-      const resultDiv = document.getElementById("result");
-      if (!key) return;
-      let rows = [];
-      dataJson.records.forEach(rec => {
-        rec.stocks.forEach(s => {
-          if (s.stock_id === key || s.name.trim() === key) {
-            rows.push({date: rec.date, f: s.foreign_net, i: s.invest_net, d: s.get? s.get:"", v: (s.foreign_net+s.invest_net)});
-          }
-        });
-      });
-      if (rows.length === 0) {
-        resultDiv.innerHTML = "<p>查無此股票</p>";
-      } else {
-        let html = "<table><tr><th>日期</th><th>外資</th><th>投信</th><th>合計</th></tr>";
-        rows.forEach(r => {
-          html += `<tr><td>${r.date}</td><td>${r.f}</td><td>${r.i}</td><td>${r.v}</td></tr>`;
-        });
-        html += "</table>";
-        resultDiv.innerHTML = html;
+document.getElementById("search-input").addEventListener("input", e => {
+  const keyword = e.target.value.trim();
+  const tbody = document.querySelector("#trading-table tbody");
+  tbody.innerHTML = "";
+
+  if (!keyword) return;
+
+  records.forEach(day => {
+    day.stocks.forEach(stock => {
+      if (stock.name.includes(keyword) || stock.stock_id === keyword.replace(/\D/g, "")) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${day.date}</td>
+          <td class="${stock.foreign_net > 0 ? 'text-red-500' : 'text-green-500'}">${stock.foreign_net}</td>
+          <td>${stock.invest_net}</td>
+          <td>${stock.dealer_net || 0}</td>
+          <td>${stock.foreign_net + stock.invest_net + (stock.dealer_net || 0)}</td>
+        `;
+        tbody.appendChild(tr);
       }
-    }
+    });
+  });
+});
 
-    // ========== EPS 圖表 ==========
-    function renderEPS() {
-      const ctx = document.getElementById("epsChart");
-      const labels = Object.keys(epsJson).sort();
-      const values = labels.map(y => epsJson[y]);
-      new Chart(ctx, {
-        type: "line",
-        data: { labels: labels, datasets: [{ label: "EPS", data: values }] },
-        options: { responsive: true }
-      });
-    }
-
-    // 初始化
-    loadData();
-  </script>
-</body>
-</html>
+// EPS Chart.js 保持你現有版本
+</script>

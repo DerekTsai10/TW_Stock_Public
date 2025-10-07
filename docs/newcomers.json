@@ -1,13 +1,5 @@
 {
-  "date": "2025-10-07",
-  "newcomers": [
-    {
-      "stock_id": "2330",
-      "name": "台積電"
-    },
-    {
-      "stock_id": "2603",
-      "name": "長榮"
-    }
-  ]
+  "date": "20251007",
+  "foreign_newcomers": [],
+  "invest_newcomers": []
 }

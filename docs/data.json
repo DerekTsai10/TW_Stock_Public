@@ -11009,6 +11009,17 @@
           "invest_net": 0
         },
         {
+          "stock_id": "1437",
+          "name": "勤益控",
+          "market": "TWSE",
+          "foreign_buy": 25000,
+          "foreign_sell": 1000,
+          "foreign_net": 24000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
           "stock_id": "4545",
           "name": "銘鈺",
           "market": "TWSE",
@@ -11026,17 +11037,6 @@
           "foreign_buy": 44000,
           "foreign_sell": 24000,
           "foreign_net": 20000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
-          "stock_id": "1437",
-          "name": "勤益控",
-          "market": "TWSE",
-          "foreign_buy": 25000,
-          "foreign_sell": 1000,
-          "foreign_net": 24000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -11174,17 +11174,6 @@
           "invest_net": 0
         },
         {
-          "stock_id": "5283",
-          "name": "禾聯碩",
-          "market": "TWSE",
-          "foreign_buy": 22000,
-          "foreign_sell": 4000,
-          "foreign_net": 18000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "6790",
           "name": "永豐實",
           "market": "TWSE",
@@ -11235,6 +11224,17 @@
           "foreign_buy": 23000,
           "foreign_sell": 14000,
           "foreign_net": 9000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "5283",
+          "name": "禾聯碩",
+          "market": "TWSE",
+          "foreign_buy": 22000,
+          "foreign_sell": 4000,
+          "foreign_net": 18000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -11834,17 +11834,6 @@
           "invest_net": 0
         },
         {
-          "stock_id": "2438",
-          "name": "翔耀",
-          "market": "TWSE",
-          "foreign_buy": 22000,
-          "foreign_sell": 17000,
-          "foreign_net": 5000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "2243",
           "name": "宏旭-KY",
           "market": "TWSE",
@@ -11894,6 +11883,17 @@
           "market": "TWSE",
           "foreign_buy": 8000,
           "foreign_sell": 3000,
+          "foreign_net": 5000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "2438",
+          "name": "翔耀",
+          "market": "TWSE",
+          "foreign_buy": 22000,
+          "foreign_sell": 17000,
           "foreign_net": 5000,
           "invest_buy": 0,
           "invest_sell": 0,
@@ -12274,17 +12274,6 @@
           "invest_net": 0
         },
         {
-          "stock_id": "9136",
-          "name": "巨騰-DR",
-          "market": "TWSE",
-          "foreign_buy": 3000,
-          "foreign_sell": 2000,
-          "foreign_net": 1000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "6906",
           "name": "現觀科",
           "market": "TWSE",
@@ -12433,6 +12422,17 @@
           "market": "TWSE",
           "foreign_buy": 2000,
           "foreign_sell": 1000,
+          "foreign_net": 1000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "9136",
+          "name": "巨騰-DR",
+          "market": "TWSE",
+          "foreign_buy": 3000,
+          "foreign_sell": 2000,
           "foreign_net": 1000,
           "invest_buy": 0,
           "invest_sell": 0,
@@ -12648,22 +12648,22 @@
           "invest_net": 0
         },
         {
-          "stock_id": "2432",
-          "name": "倚天酷碁-創",
+          "stock_id": "7631",
+          "name": "聚賢研發-創",
           "market": "TWSE",
-          "foreign_buy": 0,
-          "foreign_sell": 0,
+          "foreign_buy": 1000,
+          "foreign_sell": 1000,
           "foreign_net": 0,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
         },
         {
-          "stock_id": "7631",
-          "name": "聚賢研發-創",
+          "stock_id": "2432",
+          "name": "倚天酷碁-創",
           "market": "TWSE",
-          "foreign_buy": 1000,
-          "foreign_sell": 1000,
+          "foreign_buy": 0,
+          "foreign_sell": 0,
           "foreign_net": 0,
           "invest_buy": 0,
           "invest_sell": 0,
@@ -12714,8 +12714,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "1413",
-          "name": "宏洲",
+          "stock_id": "6581",
+          "name": "鋼聯",
           "market": "TWSE",
           "foreign_buy": 0,
           "foreign_sell": 1000,
@@ -12901,8 +12901,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "6581",
-          "name": "鋼聯",
+          "stock_id": "1413",
+          "name": "宏洲",
           "market": "TWSE",
           "foreign_buy": 0,
           "foreign_sell": 1000,
@@ -13253,8 +13253,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "6951",
-          "name": "青新-創",
+          "stock_id": "1443",
+          "name": "立益物流",
           "market": "TWSE",
           "foreign_buy": 0,
           "foreign_sell": 2000,
@@ -13286,8 +13286,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "1443",
-          "name": "立益物流",
+          "stock_id": "6951",
+          "name": "青新-創",
           "market": "TWSE",
           "foreign_buy": 0,
           "foreign_sell": 2000,
@@ -13737,12 +13737,12 @@
           "invest_net": 0
         },
         {
-          "stock_id": "1516",
-          "name": "川飛",
+          "stock_id": "2702",
+          "name": "華園",
           "market": "TWSE",
-          "foreign_buy": 2000,
+          "foreign_buy": 0,
           "foreign_sell": 5000,
-          "foreign_net": -3000,
+          "foreign_net": -5000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -13759,12 +13759,12 @@
           "invest_net": 0
         },
         {
-          "stock_id": "2702",
-          "name": "華園",
+          "stock_id": "1516",
+          "name": "川飛",
           "market": "TWSE",
-          "foreign_buy": 0,
+          "foreign_buy": 2000,
           "foreign_sell": 5000,
-          "foreign_net": -5000,
+          "foreign_net": -3000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -13809,6 +13809,28 @@
           "foreign_buy": 9000,
           "foreign_sell": 16000,
           "foreign_net": -7000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "1457",
+          "name": "宜進",
+          "market": "TWSE",
+          "foreign_buy": 0,
+          "foreign_sell": 6000,
+          "foreign_net": -6000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "1460",
+          "name": "宏遠",
+          "market": "TWSE",
+          "foreign_buy": 0,
+          "foreign_sell": 6000,
+          "foreign_net": -6000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -13874,28 +13896,6 @@
           "market": "TWSE",
           "foreign_buy": 5000,
           "foreign_sell": 11000,
-          "foreign_net": -6000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
-          "stock_id": "1457",
-          "name": "宜進",
-          "market": "TWSE",
-          "foreign_buy": 0,
-          "foreign_sell": 6000,
-          "foreign_net": -6000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
-          "stock_id": "1460",
-          "name": "宏遠",
-          "market": "TWSE",
-          "foreign_buy": 0,
-          "foreign_sell": 6000,
           "foreign_net": -6000,
           "invest_buy": 0,
           "invest_sell": 0,
@@ -14870,22 +14870,22 @@
           "invest_net": 0
         },
         {
-          "stock_id": "2906",
-          "name": "高林",
+          "stock_id": "1110",
+          "name": "東泥",
           "market": "TWSE",
-          "foreign_buy": 0,
-          "foreign_sell": 23000,
+          "foreign_buy": 12000,
+          "foreign_sell": 35000,
           "foreign_net": -23000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
         },
         {
-          "stock_id": "1110",
-          "name": "東泥",
+          "stock_id": "2906",
+          "name": "高林",
           "market": "TWSE",
-          "foreign_buy": 12000,
-          "foreign_sell": 35000,
+          "foreign_buy": 0,
+          "foreign_sell": 23000,
           "foreign_net": -23000,
           "invest_buy": 0,
           "invest_sell": 0,
@@ -16520,23 +16520,23 @@
           "invest_net": 0
         },
         {
-          "stock_id": "1414",
-          "name": "東和",
-          "market": "TWSE",
-          "foreign_buy": 118000,
-          "foreign_sell": 207000,
-          "foreign_net": -89000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "2509",
           "name": "全坤建",
           "market": "TWSE",
           "foreign_buy": 17000,
           "foreign_sell": 104000,
           "foreign_net": -87000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "1414",
+          "name": "東和",
+          "market": "TWSE",
+          "foreign_buy": 118000,
+          "foreign_sell": 207000,
+          "foreign_net": -89000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -31331,23 +31331,23 @@
           "invest_net": 0
         },
         {
-          "stock_id": "1614",
-          "name": "三洋電",
-          "market": "TWSE",
-          "foreign_buy": 9000,
-          "foreign_sell": 3000,
-          "foreign_net": 6000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "1516",
           "name": "川飛",
           "market": "TWSE",
           "foreign_buy": 8000,
           "foreign_sell": 0,
           "foreign_net": 8000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "1614",
+          "name": "三洋電",
+          "market": "TWSE",
+          "foreign_buy": 9000,
+          "foreign_sell": 3000,
+          "foreign_net": 6000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -33113,8 +33113,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "6606",
-          "name": "建德工業",
+          "stock_id": "4930",
+          "name": "燦星網",
           "market": "TWSE",
           "foreign_buy": 0,
           "foreign_sell": 4000,
@@ -33124,8 +33124,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "4930",
-          "name": "燦星網",
+          "stock_id": "6606",
+          "name": "建德工業",
           "market": "TWSE",
           "foreign_buy": 0,
           "foreign_sell": 4000,
@@ -50256,12 +50256,12 @@
           "invest_net": 0
         },
         {
-          "stock_id": "6115",
-          "name": "鎰勝",
+          "stock_id": "1730",
+          "name": "花仙子",
           "market": "TWSE",
-          "foreign_buy": 11000,
+          "foreign_buy": 0,
           "foreign_sell": 1000,
-          "foreign_net": 10000,
+          "foreign_net": -1000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -50278,23 +50278,23 @@
           "invest_net": 0
         },
         {
-          "stock_id": "1730",
-          "name": "花仙子",
-          "market": "TWSE",
-          "foreign_buy": 0,
-          "foreign_sell": 1000,
-          "foreign_net": -1000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "6835",
           "name": "圓裕",
           "market": "TWSE",
           "foreign_buy": 37000,
           "foreign_sell": 25000,
           "foreign_net": 12000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "6115",
+          "name": "鎰勝",
+          "market": "TWSE",
+          "foreign_buy": 11000,
+          "foreign_sell": 1000,
+          "foreign_net": 10000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -51455,6 +51455,17 @@
           "invest_net": 0
         },
         {
+          "stock_id": "1323",
+          "name": "永裕",
+          "market": "TWSE",
+          "foreign_buy": 1000,
+          "foreign_sell": 0,
+          "foreign_net": 1000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
           "stock_id": "9943",
           "name": "好樂迪",
           "market": "TWSE",
@@ -51466,8 +51477,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "1323",
-          "name": "永裕",
+          "stock_id": "9931",
+          "name": "欣高",
           "market": "TWSE",
           "foreign_buy": 1000,
           "foreign_sell": 0,
@@ -51483,17 +51494,6 @@
           "foreign_buy": 38000,
           "foreign_sell": 18000,
           "foreign_net": 20000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
-          "stock_id": "9931",
-          "name": "欣高",
-          "market": "TWSE",
-          "foreign_buy": 1000,
-          "foreign_sell": 0,
-          "foreign_net": 1000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -51576,8 +51576,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "6807",
-          "name": "峰源-KY",
+          "stock_id": "5906",
+          "name": "台南-KY",
           "market": "TWSE",
           "foreign_buy": 1000,
           "foreign_sell": 0,
@@ -51587,8 +51587,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "5906",
-          "name": "台南-KY",
+          "stock_id": "6807",
+          "name": "峰源-KY",
           "market": "TWSE",
           "foreign_buy": 1000,
           "foreign_sell": 0,
@@ -52027,8 +52027,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "9136",
-          "name": "巨騰-DR",
+          "stock_id": "6951",
+          "name": "青新-創",
           "market": "TWSE",
           "foreign_buy": 0,
           "foreign_sell": 1000,
@@ -52038,8 +52038,8 @@
           "invest_net": 0
         },
         {
-          "stock_id": "6951",
-          "name": "青新-創",
+          "stock_id": "9136",
+          "name": "巨騰-DR",
           "market": "TWSE",
           "foreign_buy": 0,
           "foreign_sell": 1000,
@@ -52181,23 +52181,23 @@
           "invest_net": 0
         },
         {
-          "stock_id": "1531",
-          "name": "高林股",
-          "market": "TWSE",
-          "foreign_buy": 2000,
-          "foreign_sell": 4000,
-          "foreign_net": -2000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "1457",
           "name": "宜進",
           "market": "TWSE",
           "foreign_buy": 10000,
           "foreign_sell": 6000,
           "foreign_net": 4000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "1531",
+          "name": "高林股",
+          "market": "TWSE",
+          "foreign_buy": 2000,
+          "foreign_sell": 4000,
+          "foreign_net": -2000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -52346,23 +52346,23 @@
           "invest_net": 0
         },
         {
-          "stock_id": "9937",
-          "name": "全國",
-          "market": "TWSE",
-          "foreign_buy": 2000,
-          "foreign_sell": 5000,
-          "foreign_net": -3000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "8466",
           "name": "美吉吉-KY",
           "market": "TWSE",
           "foreign_buy": 5000,
           "foreign_sell": 7000,
           "foreign_net": -2000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "9937",
+          "name": "全國",
+          "market": "TWSE",
+          "foreign_buy": 2000,
+          "foreign_sell": 5000,
+          "foreign_net": -3000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -52566,23 +52566,23 @@
           "invest_net": 0
         },
         {
-          "stock_id": "8482",
-          "name": "商億-KY",
-          "market": "TWSE",
-          "foreign_buy": 1000,
-          "foreign_sell": 10000,
-          "foreign_net": -9000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "6573",
           "name": "虹揚-KY",
           "market": "TWSE",
           "foreign_buy": 2000,
           "foreign_sell": 5000,
           "foreign_net": -3000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "8482",
+          "name": "商億-KY",
+          "market": "TWSE",
+          "foreign_buy": 1000,
+          "foreign_sell": 10000,
+          "foreign_net": -9000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -52742,23 +52742,23 @@
           "invest_net": 0
         },
         {
-          "stock_id": "3043",
-          "name": "科風",
-          "market": "TWSE",
-          "foreign_buy": 10000,
-          "foreign_sell": 18000,
-          "foreign_net": -8000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "1446",
           "name": "宏和",
           "market": "TWSE",
           "foreign_buy": 11000,
           "foreign_sell": 20000,
           "foreign_net": -9000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "3043",
+          "name": "科風",
+          "market": "TWSE",
+          "foreign_buy": 10000,
+          "foreign_sell": 18000,
+          "foreign_net": -8000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0
@@ -72151,23 +72151,23 @@
           "invest_net": 0
         },
         {
-          "stock_id": "4104",
-          "name": "佳醫",
-          "market": "TWSE",
-          "foreign_buy": 16000,
-          "foreign_sell": 14000,
-          "foreign_net": 2000,
-          "invest_buy": 0,
-          "invest_sell": 0,
-          "invest_net": 0
-        },
-        {
           "stock_id": "4930",
           "name": "燦星網",
           "market": "TWSE",
           "foreign_buy": 5000,
           "foreign_sell": 2000,
           "foreign_net": 3000,
+          "invest_buy": 0,
+          "invest_sell": 0,
+          "invest_net": 0
+        },
+        {
+          "stock_id": "4104",
+          "name": "佳醫",
+          "market": "TWSE",
+          "foreign_buy": 16000,
+          "foreign_sell": 14000,
+          "foreign_net": 2000,
           "invest_buy": 0,
           "invest_sell": 0,
           "invest_net": 0

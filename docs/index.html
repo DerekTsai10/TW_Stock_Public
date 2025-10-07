@@ -11,13 +11,10 @@
 
   <!-- 上方：指標觀察清單 + 新上榜 -->
   <div class="grid grid-cols-2 gap-4 mb-6">
-    <!-- 指標觀察清單 -->
     <div class="p-4 border rounded bg-white shadow">
       <h3 class="font-bold mb-2">指標觀察清單</h3>
       <ul id="insights-list" class="list-disc list-inside space-y-1 text-gray-700"></ul>
     </div>
-
-    <!-- 新上榜 -->
     <div class="p-4 border rounded bg-white shadow">
       <h3 class="font-bold mb-2">新上榜 (近10日首次進榜)</h3>
       <ul id="newcomers-list" class="list-disc list-inside space-y-1 text-gray-700"></ul>
@@ -37,7 +34,6 @@
 
   <!-- 下方：法人買賣超 + EPS -->
   <div class="grid grid-cols-2 gap-4">
-    <!-- 左側：法人買賣超 -->
     <div class="p-4 border rounded bg-white shadow overflow-x-auto">
       <h3 class="font-bold mb-2">法人買賣超 (張)</h3>
       <table id="trading-table" class="table-auto w-full text-center border-collapse border">
@@ -53,8 +49,6 @@
         <tbody></tbody>
       </table>
     </div>
-
-    <!-- 右側：EPS -->
     <div class="p-4 border rounded bg-white shadow">
       <h3 class="font-bold mb-4">近五年 EPS</h3>
       <canvas id="epsChart"></canvas>
@@ -62,7 +56,7 @@
   </div>
 
 <script>
-// ------------------ Insights 指標觀察清單 ------------------
+// ------------------ Insights ------------------
 fetch("docs/insights.json")
   .then(res => res.json())
   .then(data => {
@@ -96,18 +90,18 @@ fetch("docs/data.json")
   .then(res => res.json())
   .then(data => {
     records = data.records;
-    // 建立股票清單
     records.forEach(day => {
       day.stocks.forEach(s => {
         stockList.set(s.stock_id, s.name.trim());
       });
     });
+    console.log("✅ 載入股票數量:", stockList.size);
   });
 
 const input = document.getElementById("search-input");
 const suggestions = document.getElementById("suggestions");
 
-// 🔍 自動完成：支援代號 & 名稱
+// 下拉建議
 input.addEventListener("input", () => {
   const keyword = input.value.trim();
   suggestions.innerHTML = "";
@@ -122,7 +116,11 @@ input.addEventListener("input", () => {
     .slice(0, 10);
 
   if (results.length === 0) {
-    suggestions.classList.add("hidden");
+    const li = document.createElement("li");
+    li.className = "p-2 text-gray-500";
+    li.textContent = "查無資料";
+    suggestions.appendChild(li);
+    suggestions.classList.remove("hidden");
     return;
   }
 
@@ -149,12 +147,10 @@ input.addEventListener("keydown", e => {
     const keyword = input.value.trim();
     let stockId = null;
 
-    // 嘗試解析代號
     const matchId = keyword.match(/\d{4}/);
     if (matchId) {
       stockId = matchId[0];
     } else {
-      // 嘗試名稱匹配
       for (let [id, name] of stockList.entries()) {
         if (name.includes(keyword)) {
           stockId = id;
@@ -166,11 +162,14 @@ input.addEventListener("keydown", e => {
     if (stockId) {
       renderTable(stockId);
       renderEPS(stockId);
+    } else {
+      alert("查無符合的股票");
     }
     suggestions.classList.add("hidden");
   }
 });
 
+// 顯示法人表格
 function renderTable(stockId) {
   const tbody = document.querySelector("#trading-table tbody");
   tbody.innerHTML = "";
@@ -178,14 +177,18 @@ function renderTable(stockId) {
   records.forEach(day => {
     day.stocks.forEach(stock => {
       if (stock.stock_id === stockId) {
-        const total = (stock.foreign_net || 0) + (stock.invest_net || 0) + (stock.dealer_net || 0);
+        const foreign = stock.foreign_net || 0;
+        const invest = stock.invest_net || 0;
+        const dealer = stock.dealer_net || 0;
+        const total = foreign + invest + dealer;
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td class="border px-2 py-1">${day.date}</td>
-          <td class="border px-2 py-1 ${stock.foreign_net > 0 ? 'text-red-500' : 'text-green-500'}">${stock.foreign_net}</td>
-          <td class="border px-2 py-1">${stock.invest_net}</td>
-          <td class="border px-2 py-1">${stock.dealer_net || 0}</td>
-          <td class="border px-2 py-1">${total}</td>
+          <td class="border px-2 py-1 ${foreign > 0 ? 'text-red-500' : 'text-green-500'}">${foreign}</td>
+          <td class="border px-2 py-1 ${invest > 0 ? 'text-red-500' : 'text-green-500'}">${invest}</td>
+          <td class="border px-2 py-1 ${dealer > 0 ? 'text-red-500' : 'text-green-500'}">${dealer}</td>
+          <td class="border px-2 py-1 ${total > 0 ? 'text-red-500' : 'text-green-500'}">${total}</td>
         `;
         tbody.appendChild(tr);
       }
@@ -193,7 +196,7 @@ function renderTable(stockId) {
   });
 }
 
-// ------------------ EPS 折線圖 ------------------
+// ------------------ EPS ------------------
 let epsChart;
 function renderEPS(stockId) {
   fetch("docs/eps.json")

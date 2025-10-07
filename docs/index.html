@@ -1,41 +1,94 @@
-<!-- 查詢輸入框 -->
-<div class="my-6 relative w-96">
-  <label class="block mb-2 font-bold">輸入股票代碼或名稱：</label>
-  <input type="text" id="search-input" 
-         placeholder="台積電 或 2330" 
-         class="w-full border p-2 rounded"
-         autocomplete="off">
-  <ul id="suggestions" 
-      class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10"></ul>
-</div>
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="utf-8">
+  <title>台股交易追蹤</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="p-6 bg-gray-50">
+  <h1 class="text-2xl font-bold mb-4">台股交易追蹤</h1>
 
-<!-- 下方兩塊：法人買賣超 + EPS -->
-<div class="grid grid-cols-2 gap-4">
-  <!-- 左側：法人買賣超 -->
-  <div class="p-4 border rounded bg-white shadow overflow-x-auto">
-    <h3 class="font-bold mb-2">法人買賣超 (張)</h3>
-    <table id="trading-table" class="table-auto w-full text-center border-collapse border">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="border px-2 py-1">日期</th>
-          <th class="border px-2 py-1">外資</th>
-          <th class="border px-2 py-1">投信</th>
-          <th class="border px-2 py-1">自營商</th>
-          <th class="border px-2 py-1">合計</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+  <!-- 上方：指標觀察清單 + 新上榜 -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <!-- 指標觀察清單 -->
+    <div class="p-4 border rounded bg-white shadow">
+      <h3 class="font-bold mb-2">指標觀察清單</h3>
+      <ul id="insights-list" class="list-disc list-inside space-y-1 text-gray-700"></ul>
+    </div>
+
+    <!-- 新上榜 -->
+    <div class="p-4 border rounded bg-white shadow">
+      <h3 class="font-bold mb-2">新上榜 (近10日首次進榜)</h3>
+      <ul id="newcomers-list" class="list-disc list-inside space-y-1 text-gray-700"></ul>
+    </div>
   </div>
 
-  <!-- 右側：EPS -->
-  <div class="p-4 border rounded bg-white shadow">
-    <h3 class="font-bold mb-4">近五年 EPS</h3>
-    <canvas id="epsChart"></canvas>
+  <!-- 搜尋框 -->
+  <div class="my-6 relative w-96">
+    <label class="block mb-2 font-bold">輸入股票代碼或名稱：</label>
+    <input type="text" id="search-input" 
+           placeholder="台積電 或 2330" 
+           class="w-full border p-2 rounded"
+           autocomplete="off">
+    <ul id="suggestions" 
+        class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10"></ul>
   </div>
-</div>
+
+  <!-- 下方：法人買賣超 + EPS -->
+  <div class="grid grid-cols-2 gap-4">
+    <!-- 左側：法人買賣超 -->
+    <div class="p-4 border rounded bg-white shadow overflow-x-auto">
+      <h3 class="font-bold mb-2">法人買賣超 (張)</h3>
+      <table id="trading-table" class="table-auto w-full text-center border-collapse border">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border px-2 py-1">日期</th>
+            <th class="border px-2 py-1">外資</th>
+            <th class="border px-2 py-1">投信</th>
+            <th class="border px-2 py-1">自營商</th>
+            <th class="border px-2 py-1">合計</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- 右側：EPS -->
+    <div class="p-4 border rounded bg-white shadow">
+      <h3 class="font-bold mb-4">近五年 EPS</h3>
+      <canvas id="epsChart"></canvas>
+    </div>
+  </div>
 
 <script>
+// ------------------ Insights 指標觀察清單 ------------------
+fetch("docs/insights.json")
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById("insights-list");
+    list.innerHTML = "";
+    data.insights.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  });
+
+// ------------------ 新上榜 ------------------
+fetch("docs/newcomers.json")
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById("newcomers-list");
+    list.innerHTML = "";
+    data.newcomers.forEach(stock => {
+      const li = document.createElement("li");
+      li.textContent = `${stock.name} (${stock.stock_id})`;
+      list.appendChild(li);
+    });
+  });
+
+// ------------------ 搜尋 + 買賣超 ------------------
 let records = [];
 let stockList = new Map();
 
@@ -140,6 +193,7 @@ function renderTable(stockId) {
   });
 }
 
+// ------------------ EPS 折線圖 ------------------
 let epsChart;
 function renderEPS(stockId) {
   fetch("docs/eps.json")
@@ -176,3 +230,5 @@ function renderEPS(stockId) {
     });
 }
 </script>
+</body>
+</html>

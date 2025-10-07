@@ -140,19 +140,21 @@ input.addEventListener("input", () => {
   suggestions.classList.remove("hidden");
 });
 
-// 按 Enter 查詢
+// 按 Enter 查詢 (修正版)
 input.addEventListener("keydown", e => {
   if (e.key === "Enter") {
     e.preventDefault();
     const keyword = input.value.trim();
     let stockId = null;
 
-    const matchId = keyword.match(/\d{4}/);
+    // ✅ 如果輸入的是純數字 4 位數
+    const matchId = keyword.match(/^\d{4}$/);
     if (matchId) {
       stockId = matchId[0];
     } else {
+      // ✅ 否則用名稱比對
       for (let [id, name] of stockList.entries()) {
-        if (name.includes(keyword)) {   // ✅ name 已經是 trim 過的
+        if (id === keyword || name.includes(keyword)) {
           stockId = id;
           break;
         }

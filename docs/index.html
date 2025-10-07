@@ -92,7 +92,7 @@ fetch("docs/data.json")
     records = data.records;
     records.forEach(day => {
       day.stocks.forEach(s => {
-        stockList.set(s.stock_id, s.name.trim());  // ✅ 去掉多餘空白
+        stockList.set(s.stock_id, s.name.trim());  // key=代號, value=名稱
       });
     });
     console.log("✅ 載入股票數量:", stockList.size);
@@ -147,15 +147,18 @@ input.addEventListener("keydown", e => {
     const keyword = input.value.trim();
     let stockId = null;
 
-    // ✅ 如果輸入的是純數字 4 位數
-    const matchId = keyword.match(/^\d{4}$/);
-    if (matchId) {
-      stockId = matchId[0];
+    console.log("👉 使用者輸入:", keyword);
+
+    // 1️⃣ 直接比對代號
+    if (stockList.has(keyword)) {
+      stockId = keyword;
+      console.log("✅ 命中代號:", stockId);
     } else {
-      // ✅ 否則用名稱比對
+      // 2️⃣ 比對名稱
       for (let [id, name] of stockList.entries()) {
-        if (id === keyword || name.includes(keyword)) {
+        if (name.includes(keyword)) {
           stockId = id;
+          console.log("✅ 由名稱找到代號:", stockId, name);
           break;
         }
       }
@@ -165,6 +168,7 @@ input.addEventListener("keydown", e => {
       renderTable(stockId);
       renderEPS(stockId);
     } else {
+      console.warn("❌ 查無符合的股票");
       alert("查無符合的股票");
     }
     suggestions.classList.add("hidden");

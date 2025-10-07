@@ -26,7 +26,7 @@
     <!-- 法人買賣超 -->
     <div class="p-4 border rounded bg-white shadow overflow-x-auto">
       <h3 class="font-bold mb-2">法人買賣超 (張)</h3>
-      <table id="trading-table" class="table-auto w-full text-center border-collapse border">
+      <table id="trading-table" class="table-auto w-full text-center border-collapse border text-sm">
         <thead class="bg-gray-100">
           <tr>
             <th class="border px-2 py-1">日期</th>
@@ -43,7 +43,7 @@
     <!-- EPS -->
     <div class="p-4 border rounded bg-white shadow">
       <h3 class="font-bold mb-2">近五年 EPS</h3>
-      <canvas id="epsChart" height="200"></canvas>
+      <canvas id="epsChart" class="w-full h-64"></canvas>
     </div>
   </div>
 
@@ -161,12 +161,14 @@ function renderEPS(stockId) {
       console.log("📂 eps.json keys:", Object.keys(data));
 
       const epsData = data[key];
+      console.log("📊 epsData:", epsData);
+
       const ctx = document.getElementById("epsChart").getContext("2d");
 
       if (!epsData || epsData.length === 0) {
         if (window.epsChart) window.epsChart.destroy();
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.font = "16px Arial";
+        ctx.font = "14px Arial";
         ctx.fillText("查無 EPS 資料", 10, 50);
         return;
       }
@@ -191,6 +193,7 @@ function renderEPS(stockId) {
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           scales: {
             y: { beginAtZero: true }
           }

@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <title>法人買賣超查詢</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="p-6 bg-gray-50">
   <!-- 動態標題 -->
@@ -40,7 +39,7 @@
     </div>
   </div>
 
-  <!-- 下方兩塊 (左：法人表格 / 右：EPS 圖表) -->
+  <!-- 下方兩塊 (左：法人表格 / 右：EPS 空白) -->
   <div class="grid grid-cols-2 gap-4">
     <!-- 法人買賣超 -->
     <div class="p-4 border rounded bg-white shadow overflow-x-auto">
@@ -59,13 +58,10 @@
       </table>
     </div>
 
-    <!-- EPS -->
+    <!-- EPS 先留空白 -->
     <div class="p-4 border rounded bg-white shadow">
       <h3 class="font-bold mb-2">近五年 EPS</h3>
-      <!-- 固定高度 200px -->
-      <div style="height:200px;">
-        <canvas id="epsChart" style="width:100%; height:100%;"></canvas>
-      </div>
+      <div class="text-gray-400 text-sm">（暫無顯示）</div>
     </div>
   </div>
 
@@ -158,23 +154,23 @@ input.addEventListener("keydown", e => {
   }
 });
 
-// 更新頁面 (法人表格 + EPS + 標題)
+// 更新頁面 (法人表格 + 標題)
 function updatePage(stockId, stockName) {
   document.getElementById("page-title").textContent = `法人買賣超查詢 - ${stockName}`;
   renderTable(stockId);
-  renderEPS(stockId);
 }
 
-// 顯示法人表格
+// 顯示法人表格（轉換成張數）
 function renderTable(stockId) {
   const tbody = document.querySelector("#trading-table tbody");
   tbody.innerHTML = "";
   records.forEach(day => {
     const stock = day.stocks.find(s => s.stock_id === stockId);
     if (stock) {
-      const foreign = stock.foreign_net || 0;
-      const invest = stock.invest_net || 0;
-      const dealer = stock.dealer_net || 0;
+      // 轉換成張數 (股數 ÷ 1000)
+      const foreign = Math.round((stock.foreign_net || 0) / 1000);
+      const invest = Math.round((stock.invest_net || 0) / 1000);
+      const dealer = Math.round((stock.dealer_net || 0) / 1000);
       const total = foreign + invest + dealer;
 
       const tr = document.createElement("tr");
@@ -188,54 +184,6 @@ function renderTable(stockId) {
       tbody.appendChild(tr);
     }
   });
-}
-
-// 顯示 EPS 折線圖
-function renderEPS(stockId) {
-  fetch("eps.json")
-    .then(res => res.json())
-    .then(data => {
-      const key = String(stockId).trim();
-      const epsData = data[key];
-      console.log("🔍 查詢 stockId:", stockId, "→ key:", key, "📊 epsData:", epsData);
-
-      const ctx = document.getElementById("epsChart").getContext("2d");
-
-      if (!epsData || epsData.length === 0) {
-        if (window.epsChart) window.epsChart.destroy();
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.font = "14px Arial";
-        ctx.fillText("查無 EPS 資料", 10, 50);
-        return;
-      }
-
-      const labels = epsData.map(e => e.date).reverse();
-      const values = epsData.map(e => e.eps).reverse();
-
-      if (window.epsChart) window.epsChart.destroy();
-
-      window.epsChart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: labels,
-          datasets: [{
-            label: "EPS",
-            data: values,
-            borderColor: "blue",
-            backgroundColor: "rgba(0,0,255,0.1)",
-            fill: true,
-            tension: 0.2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false, // 搭配外層固定高度
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
-      });
-    });
 }
 </script>
 </body>

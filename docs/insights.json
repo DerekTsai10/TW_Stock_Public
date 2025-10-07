@@ -1,28 +1,12 @@
 {
-  "date": "2025-10-06",
+  "date": "2025-10-07",
   "market_index": {
     "price": null,
     "change": null,
     "percent": null,
     "date": null
   },
-  "foreign_investors": [
-    {
-      "stock_id": "2344",
-      "name": "華邦電",
-      "days": 20
-    },
-    {
-      "stock_id": "00981A",
-      "name": "主動統一台股增長",
-      "days": 20
-    },
-    {
-      "stock_id": "00982A",
-      "name": "主動群益台灣強棒",
-      "days": 20
-    }
-  ],
+  "foreign_investors": [],
   "volume_spike": [],
   "hot_industries": [
     "半導體",

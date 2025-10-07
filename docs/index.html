@@ -14,7 +14,7 @@
 let records = [];
 let stockList = [];
 
-fetch("docs/data.json")
+fetch("data.json")
   .then(res => res.json())
   .then(data => {
     records = data.records;

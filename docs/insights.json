@@ -1,42 +1,71 @@
 {
-  "date": "2025-10-07",
-  "market_index": {
-    "price": null,
-    "change": null,
-    "percent": null,
-    "date": null
-  },
-  "foreign_investors": [
+  "date": "20250908",
+  "foreign_ratio_ranking": [],
+  "invest_ratio_ranking": [],
+  "explosive_buy": [],
+  "group_summary": [
     {
-      "stock_id": "6770",
-      "name": "力積電",
-      "foreign_net": 69831849
+      "industry": "其他",
+      "total_buy": 58727161,
+      "stocks": [
+        "0056",
+        "00878",
+        "0050",
+        "00753L",
+        "00940"
+      ]
     },
     {
-      "stock_id": "1605",
-      "name": "華新",
-      "foreign_net": 56557817
+      "industry": "24",
+      "total_buy": 51245482,
+      "stocks": [
+        "2344",
+        "2330"
+      ]
     },
     {
-      "stock_id": "00878",
-      "name": "國泰永續高股息",
-      "foreign_net": 45776248
+      "industry": "17",
+      "total_buy": 20943409,
+      "stocks": [
+        "2890",
+        "2887"
+      ]
     },
     {
-      "stock_id": "3481",
-      "name": "群創",
-      "foreign_net": 44131153
+      "industry": "15",
+      "total_buy": 13462918,
+      "stocks": [
+        "2610",
+        "2634"
+      ]
     },
     {
-      "stock_id": "00919",
-      "name": "群益台灣精選高息",
-      "foreign_net": 43175622
+      "industry": "03",
+      "total_buy": 10295060,
+      "stocks": [
+        "1314"
+      ]
+    },
+    {
+      "industry": "26",
+      "total_buy": 6928500,
+      "stocks": [
+        "3481"
+      ]
+    },
+    {
+      "industry": "10",
+      "total_buy": 6757391,
+      "stocks": [
+        "2027"
+      ]
+    },
+    {
+      "industry": "28",
+      "total_buy": 5310850,
+      "stocks": [
+        "3605"
+      ]
     }
-  ],
-  "volume_spike": [],
-  "hot_industries": [
-    "28",
-    "24",
-    "26"
   ]
 }

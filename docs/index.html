@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>法人買賣超查詢</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="p-6 bg-gray-50">
   <h1 class="text-2xl font-bold mb-4">法人買賣超查詢</h1>
@@ -19,21 +20,30 @@
         class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10"></ul>
   </div>
 
-  <!-- 法人買賣超表格 -->
-  <div class="p-4 border rounded bg-white shadow overflow-x-auto">
-    <h3 class="font-bold mb-2">法人買賣超 (張)</h3>
-    <table id="trading-table" class="table-auto w-full text-center border-collapse border">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="border px-2 py-1">日期</th>
-          <th class="border px-2 py-1">外資</th>
-          <th class="border px-2 py-1">投信</th>
-          <th class="border px-2 py-1">自營商</th>
-          <th class="border px-2 py-1">合計</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+  <!-- 下方：法人買賣超 + EPS -->
+  <div class="grid grid-cols-2 gap-4">
+    <!-- 左邊：法人買賣超 -->
+    <div class="p-4 border rounded bg-white shadow overflow-x-auto">
+      <h3 class="font-bold mb-2">法人買賣超 (張)</h3>
+      <table id="trading-table" class="table-auto w-full text-center border-collapse border">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border px-2 py-1">日期</th>
+            <th class="border px-2 py-1">外資</th>
+            <th class="border px-2 py-1">投信</th>
+            <th class="border px-2 py-1">自營商</th>
+            <th class="border px-2 py-1">合計</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- 右邊：EPS -->
+    <div class="p-4 border rounded bg-white shadow">
+      <h3 class="font-bold mb-4">近五年 EPS</h3>
+      <canvas id="epsChart"></canvas>
+    </div>
   </div>
 
 <script>
@@ -44,8 +54,7 @@ let stockList = [];
 fetch("data.json")
   .then(res => res.json())
   .then(data => {
-    records = data.records; // [{date, stocks:[]}, ...]
-    // 建立搜尋清單
+    records = data.records;
     records.forEach(day => {
       day.stocks.forEach(s => {
         if (!stockList.find(x => x.id === s.stock_id)) {
@@ -90,6 +99,7 @@ input.addEventListener("input", () => {
       input.value = `${s.name} (${s.id})`;
       suggestions.classList.add("hidden");
       renderTable(s.id);
+      renderEPS(s.id);
     });
     suggestions.appendChild(li);
   });
@@ -108,6 +118,7 @@ input.addEventListener("keydown", e => {
     }
     if (target) {
       renderTable(target.id);
+      renderEPS(target.id);
     } else {
       alert("查無符合的股票");
     }
@@ -120,7 +131,6 @@ function renderTable(stockId) {
   const tbody = document.querySelector("#trading-table tbody");
   tbody.innerHTML = "";
 
-  // 照 data.json 順序 (最新日期在最上面)
   records.forEach(day => {
     const stock = day.stocks.find(s => s.stock_id === stockId);
     if (stock) {
@@ -140,6 +150,44 @@ function renderTable(stockId) {
       tbody.appendChild(tr);
     }
   });
+}
+
+// EPS 折線圖
+let epsChart;
+function renderEPS(stockId) {
+  fetch("eps.json")
+    .then(res => res.json())
+    .then(data => {
+      const epsData = data[stockId];
+      if (!epsData) {
+        console.warn("❌ 查無 EPS 資料 for", stockId);
+        return;
+      }
+
+      const ctx = document.getElementById("epsChart").getContext("2d");
+      if (epsChart) epsChart.destroy();
+
+      epsChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: epsData.map(d => d.year),
+          datasets: [{
+            label: "EPS",
+            data: epsData.map(d => d.value),
+            borderColor: "blue",
+            fill: false,
+            tension: 0.1,
+            pointBackgroundColor: "white",
+            pointBorderColor: "blue",
+            pointRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+    });
 }
 </script>
 </body>

@@ -62,7 +62,7 @@
     <!-- EPS -->
     <div class="p-4 border rounded bg-white shadow">
       <h3 class="font-bold mb-2">近五年 EPS</h3>
-      <div class="h-64">
+      <div class="h-48"> <!-- 高度改成 192px -->
         <canvas id="epsChart"></canvas>
       </div>
     </div>
@@ -195,9 +195,8 @@ function renderEPS(stockId) {
     .then(res => res.json())
     .then(data => {
       const key = String(stockId).trim();
-      console.log("🔍 查詢 stockId:", stockId, "→ key:", key);
       const epsData = data[key];
-      console.log("📊 epsData:", epsData);
+      console.log("🔍 查詢 stockId:", stockId, "→ key:", key, "📊 epsData:", epsData);
 
       const ctx = document.getElementById("epsChart").getContext("2d");
 

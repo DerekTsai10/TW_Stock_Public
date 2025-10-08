@@ -3,39 +3,25 @@
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "00953B",
-        "name": "群益優選非投等債",
-        "net_buy": 9112000,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
-        "stock_id": "00885",
-        "name": "富邦越南",
-        "net_buy": 7958900,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
-        "stock_id": "1301",
-        "name": "台塑",
-        "net_buy": 7945594,
-        "shares_issued": 6365740781,
-        "ratio": 0.001248
-      },
-      {
-        "stock_id": "00985B",
-        "name": "群益ESG投等債0-5",
-        "net_buy": 7529000,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
         "stock_id": "2891",
         "name": "中信金",
         "net_buy": 7329194,
         "shares_issued": 19649766114,
         "ratio": 0.000373
+      },
+      {
+        "stock_id": "3189",
+        "name": "景碩",
+        "net_buy": 5687271,
+        "shares_issued": 456834860,
+        "ratio": 0.012449
+      },
+      {
+        "stock_id": "3715",
+        "name": "定穎投控",
+        "net_buy": 4522290,
+        "shares_issued": 277674584,
+        "ratio": 0.016286
       }
     ],
     "invest": [
@@ -61,6 +47,13 @@
         "ratio": 0.001829
       },
       {
+        "stock_id": "6274",
+        "name": "台燿",
+        "net_buy": 372000,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
         "stock_id": "3189",
         "name": "景碩",
         "net_buy": 253000,
@@ -75,9 +68,9 @@
         "ratio": 4.6e-05
       },
       {
-        "stock_id": "006208",
-        "name": "富邦台50",
-        "net_buy": 155000,
+        "stock_id": "5536",
+        "name": "聖暉*",
+        "net_buy": 159000,
         "shares_issued": 0,
         "ratio": null
       }

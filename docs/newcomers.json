@@ -3,25 +3,11 @@
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "1301",
-        "name": "台塑",
-        "net_buy": 7945594,
-        "shares_issued": 6365740781,
-        "ratio": 0.001248
-      },
-      {
         "stock_id": "2891",
         "name": "中信金",
         "net_buy": 7329194,
         "shares_issued": 19649766114,
         "ratio": 0.000373
-      },
-      {
-        "stock_id": "2027",
-        "name": "大成鋼",
-        "net_buy": 6550584,
-        "shares_issued": 2434260615,
-        "ratio": 0.002691
       },
       {
         "stock_id": "3189",

@@ -1,78 +1,85 @@
 {
-  "date": "20251007",
+  "date": "20251008",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "1605",
-        "name": "華新",
-        "net_buy": 56557817,
-        "shares_issued": 4431332948,
-        "ratio": 0.012763
+        "stock_id": "00953B",
+        "name": "群益優選非投等債",
+        "net_buy": 9112000,
+        "shares_issued": 0,
+        "ratio": null
       },
       {
-        "stock_id": "2312",
-        "name": "金寶",
-        "net_buy": 13367500,
-        "shares_issued": 1504839211,
-        "ratio": 0.008883
-      }
-    ],
-    "invest": [
-      {
-        "stock_id": "0056",
-        "name": "元大高股息",
-        "net_buy": 1000000,
+        "stock_id": "00885",
+        "name": "富邦越南",
+        "net_buy": 7958900,
         "shares_issued": 0,
         "ratio": null
       },
       {
         "stock_id": "1301",
         "name": "台塑",
-        "net_buy": 756000,
+        "net_buy": 7945594,
         "shares_issued": 6365740781,
-        "ratio": 0.000119
+        "ratio": 0.001248
       },
       {
-        "stock_id": "8112",
-        "name": "至上",
-        "net_buy": 394963,
-        "shares_issued": 525291698,
-        "ratio": 0.000752
+        "stock_id": "00985B",
+        "name": "群益ESG投等債0-5",
+        "net_buy": 7529000,
+        "shares_issued": 0,
+        "ratio": null
       },
       {
-        "stock_id": "2327",
-        "name": "國巨*",
-        "net_buy": 381000,
-        "shares_issued": 2072965820,
-        "ratio": 0.000184
+        "stock_id": "2891",
+        "name": "中信金",
+        "net_buy": 7329194,
+        "shares_issued": 19649766114,
+        "ratio": 0.000373
+      }
+    ],
+    "invest": [
+      {
+        "stock_id": "1802",
+        "name": "台玻",
+        "net_buy": 3291000,
+        "shares_issued": 2908060800,
+        "ratio": 0.001132
       },
       {
-        "stock_id": "3406",
-        "name": "玉晶光",
-        "net_buy": 170000,
-        "shares_issued": 112743063,
-        "ratio": 0.001508
+        "stock_id": "2455",
+        "name": "全新",
+        "net_buy": 511000,
+        "shares_issued": 184905918,
+        "ratio": 0.002764
       },
       {
-        "stock_id": "6442",
-        "name": "光聖",
-        "net_buy": 149000,
-        "shares_issued": 76000203,
-        "ratio": 0.001961
+        "stock_id": "3715",
+        "name": "定穎投控",
+        "net_buy": 508000,
+        "shares_issued": 277674584,
+        "ratio": 0.001829
       },
       {
-        "stock_id": "8996",
-        "name": "高力",
-        "net_buy": 131000,
-        "shares_issued": 91471435,
-        "ratio": 0.001432
+        "stock_id": "3189",
+        "name": "景碩",
+        "net_buy": 253000,
+        "shares_issued": 456834860,
+        "ratio": 0.000554
       },
       {
-        "stock_id": "3443",
-        "name": "創意",
-        "net_buy": 121000,
-        "shares_issued": 134011911,
-        "ratio": 0.000903
+        "stock_id": "6770",
+        "name": "力積電",
+        "net_buy": 194000,
+        "shares_issued": 4188913051,
+        "ratio": 4.6e-05
+      },
+      {
+        "stock_id": "006208",
+        "name": "富邦台50",
+        "net_buy": 155000,
+        "shares_issued": 0,
+        "ratio": null
       }
     ]
   }

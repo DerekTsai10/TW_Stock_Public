@@ -24,7 +24,7 @@
   <div class="grid grid-cols-2 gap-4 mb-6">
     <!-- 指標觀察清單 -->
     <div class="p-4 border rounded bg-white shadow">
-      <h3 class="font-bold mb-2">📊 指標觀察清單</h3>
+      <h3 id="insights-title" class="font-bold mb-2">📊 指標觀察清單</h3>
       <div id="insights-list" class="text-sm text-gray-700 space-y-3"></div>
     </div>
 
@@ -115,13 +115,19 @@ fetch("insights.json")
   .then(res => res.json())
   .then(data => {
     const container = document.getElementById("insights-list");
+    const title = document.getElementById("insights-title");
     container.innerHTML = "";
 
-    // 外資持股比率前 5
+    // 標題加上資料日期
+    if (data.date) {
+      title.textContent = `📊 指標觀察清單 (資料日期：${data.date})`;
+    }
+
+    // 外資買超投本比前 5
     if (data.foreign_ratio_ranking && data.foreign_ratio_ranking.length > 0) {
       const topForeign = data.foreign_ratio_ranking.slice(0, 5);
       const section = document.createElement("div");
-      section.innerHTML = `<h4 class="font-semibold mb-1">🌏 外資持股比率前 5</h4>`;
+      section.innerHTML = `<h4 class="font-semibold mb-1">🌏 外資買超投本比前 5 (資料日期：${data.date})</h4>`;
       const ul = document.createElement("ul");
       ul.className = "list-disc pl-6";
       topForeign.forEach(item => {
@@ -133,11 +139,11 @@ fetch("insights.json")
       container.appendChild(section);
     }
 
-    // 投信持股比率前 5
+    // 投信買超投本比前 5
     if (data.invest_ratio_ranking && data.invest_ratio_ranking.length > 0) {
       const topInvest = data.invest_ratio_ranking.slice(0, 5);
       const section = document.createElement("div");
-      section.innerHTML = `<h4 class="font-semibold mb-1">🏦 投信持股比率前 5</h4>`;
+      section.innerHTML = `<h4 class="font-semibold mb-1">🏦 投信買超投本比前 5 (資料日期：${data.date})</h4>`;
       const ul = document.createElement("ul");
       ul.className = "list-disc pl-6";
       topInvest.forEach(item => {
@@ -149,11 +155,11 @@ fetch("insights.json")
       container.appendChild(section);
     }
 
-    // 熱門產業買超排行 (前 5，代碼轉中文)
+    // 熱門產業買超排行 (前 5)
     if (data.group_summary && data.group_summary.length > 0) {
       const topGroups = data.group_summary.slice(0, 5);
       const section = document.createElement("div");
-      section.innerHTML = `<h4 class="font-semibold mb-1">🔥 熱門產業買超排行</h4>`;
+      section.innerHTML = `<h4 class="font-semibold mb-1">🔥 熱門產業買超排行 (資料日期：${data.date})</h4>`;
       const ul = document.createElement("ul");
       ul.className = "list-disc pl-6";
       topGroups.forEach(item => {

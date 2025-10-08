@@ -25,11 +25,7 @@
     <!-- 指標觀察清單 -->
     <div class="p-4 border rounded bg-white shadow">
       <h3 class="font-bold mb-2">📊 指標觀察清單</h3>
-      <ul id="insights-list" class="list-disc pl-6 text-sm">
-        <li>半導體：台積電、聯電</li>
-        <li>AI伺服器：廣達、緯創</li>
-        <li>金融股：國泰金、富邦金</li>
-      </ul>
+      <div id="insights-list" class="text-sm text-gray-700 space-y-3"></div>
     </div>
 
     <!-- 新上榜清單 -->
@@ -39,9 +35,8 @@
     </div>
   </div>
 
-  <!-- 下方：只留法人表格 -->
+  <!-- 下方：法人表格 -->
   <div>
-    <!-- 法人買賣超 -->
     <div class="p-4 border rounded bg-white shadow overflow-x-auto">
       <h3 class="font-bold mb-2">法人買賣超 (張)</h3>
       <table id="trading-table" class="table-auto w-full text-center border-collapse border text-sm">
@@ -63,7 +58,7 @@
 let records = [];
 let stockList = [];
 
-// 載入 data.json
+// 載入 data.json (法人買賣超)
 fetch("data.json")
   .then(res => res.json())
   .then(data => {
@@ -77,7 +72,7 @@ fetch("data.json")
     });
   });
 
-// 載入 newcomers.json
+// 載入 newcomers.json (新上榜)
 fetch("newcomers.json")
   .then(res => res.json())
   .then(data => {
@@ -91,6 +86,84 @@ fetch("newcomers.json")
       });
     } else {
       list.innerHTML = "<li class='text-gray-500'>暫無資料</li>";
+    }
+  });
+
+// 產業代碼對照表
+const industryMap = {
+  "01": "水泥工業",
+  "02": "食品工業",
+  "03": "塑膠工業",
+  "04": "紡織纖維",
+  "05": "電機機械",
+  "06": "電機機械",
+  "08": "玻璃陶瓷",
+  "17": "金融保險",
+  "20": "其他電子",
+  "23": "電腦及週邊設備",
+  "24": "半導體業",
+  "25": "電腦及週邊設備",
+  "26": "電子零組件",
+  "28": "電子通路",
+  "31": "通信網路",
+  "91": "存託憑證",
+  "其他": "其他"
+};
+
+// 載入 insights.json (混合展示)
+fetch("insights.json")
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("insights-list");
+    container.innerHTML = "";
+
+    // 外資持股比率前 5
+    if (data.foreign_ratio_ranking && data.foreign_ratio_ranking.length > 0) {
+      const topForeign = data.foreign_ratio_ranking.slice(0, 5);
+      const section = document.createElement("div");
+      section.innerHTML = `<h4 class="font-semibold mb-1">🌏 外資持股比率前 5</h4>`;
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6";
+      topForeign.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
+        ul.appendChild(li);
+      });
+      section.appendChild(ul);
+      container.appendChild(section);
+    }
+
+    // 投信持股比率前 5
+    if (data.invest_ratio_ranking && data.invest_ratio_ranking.length > 0) {
+      const topInvest = data.invest_ratio_ranking.slice(0, 5);
+      const section = document.createElement("div");
+      section.innerHTML = `<h4 class="font-semibold mb-1">🏦 投信持股比率前 5</h4>`;
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6";
+      topInvest.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
+        ul.appendChild(li);
+      });
+      section.appendChild(ul);
+      container.appendChild(section);
+    }
+
+    // 熱門產業買超排行 (前 5，代碼轉中文)
+    if (data.group_summary && data.group_summary.length > 0) {
+      const topGroups = data.group_summary.slice(0, 5);
+      const section = document.createElement("div");
+      section.innerHTML = `<h4 class="font-semibold mb-1">🔥 熱門產業買超排行</h4>`;
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6";
+      topGroups.forEach(item => {
+        const industryName = industryMap[item.industry] || `產業 ${item.industry}`;
+        const li = document.createElement("li");
+        li.textContent = `${industryName} - 買超 ${Math.round(item.total_buy / 1000)} 張 (含 ${item.stocks.join("、")})`;
+        ul.appendChild(li);
+      });
+      section.appendChild(ul);
+      container.appendChild(section);
     }
   });
 
@@ -161,7 +234,6 @@ function renderTable(stockId) {
   records.forEach(day => {
     const stock = day.stocks.find(s => s.stock_id === stockId);
     if (stock) {
-      // 轉換成張數 (股數 ÷ 1000)
       const foreign = Math.round((stock.foreign_net || 0) / 1000);
       const invest = Math.round((stock.invest_net || 0) / 1000);
       const dealer = Math.round((stock.dealer_net || 0) / 1000);

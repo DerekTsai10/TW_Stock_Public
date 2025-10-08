@@ -1,78 +1,50 @@
 {
-  "date": "20251008",
+  "date": "20250919",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "2891",
-        "name": "中信金",
-        "net_buy": 7329194,
-        "shares_issued": 19649766114,
-        "ratio": 0.000373
+        "stock_id": "1101",
+        "name": "台泥",
+        "net_buy": 144373823,
+        "shares_issued": 7551181742,
+        "ratio": 0.019119
       },
       {
-        "stock_id": "3189",
-        "name": "景碩",
-        "net_buy": 5687271,
-        "shares_issued": 456834860,
-        "ratio": 0.012449
+        "stock_id": "3037",
+        "name": "欣興",
+        "net_buy": 22280613,
+        "shares_issued": 1529664197,
+        "ratio": 0.014566
       },
       {
-        "stock_id": "3715",
-        "name": "定穎投控",
-        "net_buy": 4522290,
-        "shares_issued": 277674584,
-        "ratio": 0.016286
+        "stock_id": "2327",
+        "name": "國巨*",
+        "net_buy": 10231907,
+        "shares_issued": 2072965820,
+        "ratio": 0.004936
       }
     ],
     "invest": [
       {
-        "stock_id": "1802",
-        "name": "台玻",
-        "net_buy": 3291000,
-        "shares_issued": 2908060800,
-        "ratio": 0.001132
+        "stock_id": "2303",
+        "name": "聯電",
+        "net_buy": 3701945,
+        "shares_issued": 12556327419,
+        "ratio": 0.000295
       },
       {
-        "stock_id": "2455",
-        "name": "全新",
-        "net_buy": 511000,
-        "shares_issued": 184905918,
-        "ratio": 0.002764
+        "stock_id": "6177",
+        "name": "達麗",
+        "net_buy": 1482950,
+        "shares_issued": 471878411,
+        "ratio": 0.003143
       },
       {
-        "stock_id": "3715",
-        "name": "定穎投控",
-        "net_buy": 508000,
-        "shares_issued": 277674584,
-        "ratio": 0.001829
-      },
-      {
-        "stock_id": "3189",
-        "name": "景碩",
-        "net_buy": 253000,
-        "shares_issued": 456834860,
-        "ratio": 0.000554
-      },
-      {
-        "stock_id": "6770",
-        "name": "力積電",
-        "net_buy": 194000,
-        "shares_issued": 4188913051,
-        "ratio": 4.6e-05
-      },
-      {
-        "stock_id": "2313",
-        "name": "華通",
-        "net_buy": 136000,
-        "shares_issued": 1191820589,
-        "ratio": 0.000114
-      },
-      {
-        "stock_id": "2208",
-        "name": "台船",
-        "net_buy": 96000,
-        "shares_issued": 1274539449,
-        "ratio": 7.5e-05
+        "stock_id": "2542",
+        "name": "興富發",
+        "net_buy": 1153000,
+        "shares_issued": 2070555751,
+        "ratio": 0.000557
       }
     ]
   }

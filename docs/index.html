@@ -35,18 +35,6 @@
     </div>
   </div>
 
-  <!-- 熱門產業買超排行 -->
-  <div class="p-4 border rounded bg-white shadow mb-6">
-    <div class="flex justify-between items-center mb-2">
-      <h4 id="group-title" class="font-semibold">🔥 熱門產業買超排行 (依張數)</h4>
-      <div>
-        <button id="btn-shares" class="px-2 py-1 text-sm border rounded bg-blue-500 text-white mr-2">依張數</button>
-        <button id="btn-amount" class="px-2 py-1 text-sm border rounded bg-gray-200">依金額</button>
-      </div>
-    </div>
-    <ul id="group-list" class="list-disc pl-6 text-sm text-gray-700"></ul>
-  </div>
-
   <!-- 下方：法人表格 -->
   <div>
     <div class="p-4 border rounded bg-white shadow overflow-x-auto">
@@ -103,82 +91,98 @@ fetch("newcomers.json")
 
 // 產業代碼對照表
 const industryMap = {
-  "01": "水泥工業",
-  "02": "食品工業",
-  "03": "塑膠工業",
-  "04": "紡織纖維",
-  "05": "電機機械",
-  "06": "電機機械",
-  "08": "玻璃陶瓷",
-  "17": "金融保險",
-  "20": "其他電子",
-  "23": "電腦及週邊設備",
-  "24": "半導體業",
-  "25": "電腦及週邊設備",
-  "26": "電子零組件",
-  "28": "電子通路",
-  "31": "通信網路",
-  "91": "存託憑證",
-  "其他": "其他"
+  "01": "水泥工業", "02": "食品工業", "03": "塑膠工業", "04": "紡織纖維",
+  "05": "電機機械", "06": "電機機械", "08": "玻璃陶瓷", "17": "金融保險",
+  "20": "其他電子", "23": "電腦及週邊設備", "24": "半導體業", "25": "電腦及週邊設備",
+  "26": "電子零組件", "28": "電子通路", "31": "通信網路", "91": "存託憑證", "其他": "其他"
 };
 
-// 格式化數字
-function formatNumber(val, divisor, unit) {
-  return (val / divisor).toFixed(2) + unit;
-}
-
-// 顯示熱門產業排行
-function renderGroupSummary(data, mode = "shares") {
-  const list = document.getElementById("group-list");
-  const title = document.getElementById("group-title");
-  list.innerHTML = "";
-
-  let source = [];
-  if (mode === "shares" && data.group_summary_by_shares) {
-    source = data.group_summary_by_shares;
-    title.textContent = "🔥 熱門產業買超排行 (依張數)";
-  } else if (mode === "amount" && data.group_summary_by_amount) {
-    source = data.group_summary_by_amount;
-    title.textContent = "🔥 熱門產業買超排行 (依金額)";
-  }
-
-  if (source.length === 0) {
-    list.innerHTML = "<li class='text-gray-500'>暫無資料</li>";
-    return;
-  }
-
-  source.slice(0, 5).forEach(item => {
-    const industryName = industryMap[item.industry] || `產業 ${item.industry}`;
-    const li = document.createElement("li");
-    const sharesTxt = formatNumber(item.total_buy, 1_000_000, " 百萬張");
-    const amountTxt = formatNumber(item.total_amount, 100_000_000, " 億元");
-    li.textContent = `${industryName} - 買超 ${sharesTxt}，金額 ${amountTxt}`;
-    list.appendChild(li);
-  });
-}
-
-// 載入 insights.json
+// 載入 insights.json (指標 & 熱門產業)
 fetch("insights.json")
   .then(res => res.json())
   .then(data => {
-    renderGroupSummary(data, "shares");
+    const container = document.getElementById("insights-list");
+    const title = document.getElementById("insights-title");
+    container.innerHTML = "";
 
-    document.getElementById("btn-shares").addEventListener("click", () => {
-      document.getElementById("btn-shares").classList.add("bg-blue-500","text-white");
-      document.getElementById("btn-amount").classList.remove("bg-blue-500","text-white");
-      document.getElementById("btn-amount").classList.add("bg-gray-200");
-      renderGroupSummary(data, "shares");
-    });
+    if (data.date) {
+      title.textContent = `📊 指標觀察清單 (資料日期：${data.date})`;
+    }
 
-    document.getElementById("btn-amount").addEventListener("click", () => {
-      document.getElementById("btn-amount").classList.add("bg-blue-500","text-white");
-      document.getElementById("btn-shares").classList.remove("bg-blue-500","text-white");
-      document.getElementById("btn-shares").classList.add("bg-gray-200");
-      renderGroupSummary(data, "amount");
-    });
+    // 外資投本比前 5
+    if (data.foreign_ratio_ranking && data.foreign_ratio_ranking.length > 0) {
+      const section = document.createElement("div");
+      section.innerHTML = `<h4 class="font-semibold mb-1">🌏 外資買超投本比前 5</h4>`;
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6";
+      data.foreign_ratio_ranking.slice(0, 5).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
+        ul.appendChild(li);
+      });
+      section.appendChild(ul);
+      container.appendChild(section);
+    }
+
+    // 投信投本比前 5
+    if (data.invest_ratio_ranking && data.invest_ratio_ranking.length > 0) {
+      const section = document.createElement("div");
+      section.innerHTML = `<h4 class="font-semibold mb-1">🏦 投信買超投本比前 5</h4>`;
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6";
+      data.invest_ratio_ranking.slice(0, 5).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
+        ul.appendChild(li);
+      });
+      section.appendChild(ul);
+      container.appendChild(section);
+    }
+
+    // 熱門產業買超排行 (依張數 / 金額切換)
+    if (data.group_summary_by_shares && data.group_summary_by_shares.length > 0) {
+      const section = document.createElement("div");
+      section.className = "mt-4";
+
+      // 標題 + 切換按鈕
+      const header = document.createElement("div");
+      header.className = "flex items-center justify-between";
+      header.innerHTML = `
+        <h4 class="font-semibold">🔥 熱門產業買超排行</h4>
+        <div>
+          <button id="btn-shares" class="px-2 py-1 text-sm border rounded bg-blue-100">依張數</button>
+          <button id="btn-amount" class="px-2 py-1 text-sm border rounded ml-2">依金額</button>
+        </div>`;
+      section.appendChild(header);
+
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6 mt-2";
+      section.appendChild(ul);
+      container.appendChild(section);
+
+      function renderMode(mode) {
+        ul.innerHTML = "";
+        const list = mode === "shares" ? data.group_summary_by_shares : data.group_summary_by_amount;
+        list.slice(0, 5).forEach(item => {
+          const industryName = industryMap[item.industry] || `產業 ${item.industry}`;
+          const sharesText = (item.total_buy/1e6).toFixed(2) + " 百萬張";
+          const amountText = (item.total_amount/1e8).toFixed(2) + " 億元";
+          const li = document.createElement("li");
+          li.textContent = `${industryName} - ${sharesText}，金額 ${amountText}`;
+          ul.appendChild(li);
+        });
+        document.getElementById("btn-shares").classList.toggle("bg-blue-100", mode === "shares");
+        document.getElementById("btn-amount").classList.toggle("bg-blue-100", mode === "amount");
+      }
+
+      document.getElementById("btn-shares").addEventListener("click", () => renderMode("shares"));
+      document.getElementById("btn-amount").addEventListener("click", () => renderMode("amount"));
+
+      renderMode("shares"); // 預設顯示依張數
+    }
   });
 
-// 搜尋框候選邏輯
+// ===== 搜尋功能 =====
 const input = document.getElementById("search-input");
 const suggestions = document.getElementById("suggestions");
 
@@ -216,7 +220,6 @@ input.addEventListener("input", () => {
   suggestions.classList.remove("hidden");
 });
 
-// Enter 查詢
 input.addEventListener("keydown", e => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -232,7 +235,6 @@ input.addEventListener("keydown", e => {
   }
 });
 
-// 更新法人表格
 function updatePage(stockId, stockName) {
   document.getElementById("page-title").textContent = `法人買賣超查詢 - ${stockName}`;
   renderTable(stockId);

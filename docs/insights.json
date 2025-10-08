@@ -4,91 +4,91 @@
     {
       "stock_id": "6531",
       "name": "愛普*",
-      "foreign_ratio": 2769.2656826568264,
-      "invest_ratio": 8.61008610086101
+      "foreign_ratio": 2.7692656826568265,
+      "invest_ratio": 0.00861008610086101
     },
     {
       "stock_id": "6919",
       "name": "康霈*",
-      "foreign_ratio": 1955.803156917363,
-      "invest_ratio": -90.27132982564737
+      "foreign_ratio": 1.9558031569173628,
+      "invest_ratio": -0.09027132982564738
     },
     {
       "stock_id": "3715",
       "name": "定穎投控",
-      "foreign_ratio": 1628.632857235463,
-      "invest_ratio": 182.94834950337446
+      "foreign_ratio": 1.6286328572354631,
+      "invest_ratio": 0.18294834950337446
     },
     {
       "stock_id": "4968",
       "name": "立積",
-      "foreign_ratio": 1341.626088559685,
+      "foreign_ratio": 1.3416260885596851,
       "invest_ratio": 0.0
     },
     {
       "stock_id": "2486",
       "name": "一詮",
-      "foreign_ratio": 1316.4756067328324,
+      "foreign_ratio": 1.3164756067328323,
       "invest_ratio": 0.0
     },
     {
       "stock_id": "3189",
       "name": "景碩",
-      "foreign_ratio": 1244.9316381880508,
-      "invest_ratio": 55.381166900887415
+      "foreign_ratio": 1.2449316381880506,
+      "invest_ratio": 0.05538116690088741
     },
     {
       "stock_id": "2439",
       "name": "美律",
-      "foreign_ratio": 1015.7702987455444,
-      "invest_ratio": -41.58569487386518
+      "foreign_ratio": 1.0157702987455444,
+      "invest_ratio": -0.04158569487386518
     },
     {
       "stock_id": "2313",
       "name": "華通",
-      "foreign_ratio": 945.9440183920391,
-      "invest_ratio": 11.411119128727492
+      "foreign_ratio": 0.945944018392039,
+      "invest_ratio": 0.011411119128727493
     },
     {
       "stock_id": "3443",
       "name": "創意",
-      "foreign_ratio": 893.0184835573199,
-      "invest_ratio": 0.7462074008850019
+      "foreign_ratio": 0.8930184835573198,
+      "invest_ratio": 0.000746207400885002
     },
     {
       "stock_id": "6515",
       "name": "穎崴",
-      "foreign_ratio": 850.900163666121,
-      "invest_ratio": -33.28802463313823
+      "foreign_ratio": 0.850900163666121,
+      "invest_ratio": -0.03328802463313823
     },
     {
       "stock_id": "4989",
       "name": "榮科",
-      "foreign_ratio": 804.8208686563697,
+      "foreign_ratio": 0.8048208686563698,
       "invest_ratio": 0.0
     },
     {
       "stock_id": "6706",
       "name": "惠特",
-      "foreign_ratio": 800.7076672436616,
+      "foreign_ratio": 0.8007076672436615,
       "invest_ratio": 0.0
     },
     {
       "stock_id": "3026",
       "name": "禾伸堂",
-      "foreign_ratio": 669.7208993911628,
+      "foreign_ratio": 0.6697208993911627,
       "invest_ratio": 0.0
     },
     {
       "stock_id": "1590",
       "name": "亞德客-KY",
-      "foreign_ratio": 639.4456972284861,
-      "invest_ratio": 1.5000075000375002
+      "foreign_ratio": 0.6394456972284862,
+      "invest_ratio": 0.0015000075000375002
     },
     {
       "stock_id": "2465",
       "name": "麗臺",
-      "foreign_ratio": 581.3260905820408,
+      "foreign_ratio": 0.5813260905820408,
       "invest_ratio": 0.0
     }
   ],
@@ -96,92 +96,92 @@
     {
       "stock_id": "6442",
       "name": "光聖",
-      "foreign_ratio": -45.86578947368421,
-      "invest_ratio": 575.0
+      "foreign_ratio": -0.04586578947368421,
+      "invest_ratio": 0.575
     },
     {
       "stock_id": "6805",
       "name": "富世達",
-      "foreign_ratio": 46.93157119309148,
-      "invest_ratio": 398.23202485668025
+      "foreign_ratio": 0.04693157119309148,
+      "invest_ratio": 0.39823202485668024
     },
     {
       "stock_id": "2455",
       "name": "全新",
-      "foreign_ratio": 277.4397663665126,
-      "invest_ratio": 276.35812985046374
+      "foreign_ratio": 0.2774397663665126,
+      "invest_ratio": 0.27635812985046376
     },
     {
       "stock_id": "3715",
       "name": "定穎投控",
-      "foreign_ratio": 1628.632857235463,
-      "invest_ratio": 182.94834950337446
+      "foreign_ratio": 1.6286328572354631,
+      "invest_ratio": 0.18294834950337446
     },
     {
       "stock_id": "8046",
       "name": "南電",
-      "foreign_ratio": 194.61995001276765,
-      "invest_ratio": 128.55694752888195
+      "foreign_ratio": 0.19461995001276766,
+      "invest_ratio": 0.12855694752888194
     },
     {
       "stock_id": "2327",
       "name": "國巨*",
-      "foreign_ratio": -907.9011502370518,
-      "invest_ratio": 125.03835088308335
+      "foreign_ratio": -0.9079011502370518,
+      "invest_ratio": 0.12503835088308335
     },
     {
       "stock_id": "1802",
       "name": "台玻",
-      "foreign_ratio": -664.0738843077515,
-      "invest_ratio": 113.16822899114874
+      "foreign_ratio": -0.6640738843077516,
+      "invest_ratio": 0.11316822899114873
     },
     {
       "stock_id": "3413",
       "name": "京鼎",
-      "foreign_ratio": -651.5316278383957,
-      "invest_ratio": 81.09702152757299
+      "foreign_ratio": -0.6515316278383958,
+      "invest_ratio": 0.08109702152757299
     },
     {
       "stock_id": "8112",
       "name": "至上",
-      "foreign_ratio": -160.25813492385075,
-      "invest_ratio": 69.53777388792543
+      "foreign_ratio": -0.16025813492385074,
+      "invest_ratio": 0.06953777388792542
     },
     {
       "stock_id": "2344",
       "name": "華邦電",
-      "foreign_ratio": -1557.1318444444444,
-      "invest_ratio": 66.75555555555556
+      "foreign_ratio": -1.5571318444444446,
+      "invest_ratio": 0.06675555555555555
     },
     {
       "stock_id": "6449",
       "name": "鈺邦",
-      "foreign_ratio": -353.496568152894,
-      "invest_ratio": 65.26492119260766
+      "foreign_ratio": -0.353496568152894,
+      "invest_ratio": 0.06526492119260766
     },
     {
       "stock_id": "3004",
       "name": "豐達科",
-      "foreign_ratio": -739.876088713298,
-      "invest_ratio": 62.853551225644246
+      "foreign_ratio": -0.739876088713298,
+      "invest_ratio": 0.06285355122564425
     },
     {
       "stock_id": "3189",
       "name": "景碩",
-      "foreign_ratio": 1244.9316381880508,
-      "invest_ratio": 55.381166900887415
+      "foreign_ratio": 1.2449316381880506,
+      "invest_ratio": 0.05538116690088741
     },
     {
       "stock_id": "6768",
       "name": "志強-KY",
-      "foreign_ratio": -113.9458757090382,
-      "invest_ratio": 26.98718108898273
+      "foreign_ratio": -0.1139458757090382,
+      "invest_ratio": 0.026987181088982733
     },
     {
       "stock_id": "6139",
       "name": "亞翔",
-      "foreign_ratio": 266.26984636590515,
-      "invest_ratio": 26.112231225947852
+      "foreign_ratio": 0.2662698463659051,
+      "invest_ratio": 0.02611223122594785
     }
   ]
 }

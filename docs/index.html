@@ -35,6 +35,18 @@
     </div>
   </div>
 
+  <!-- 熱門產業買超排行 -->
+  <div class="p-4 border rounded bg-white shadow mb-6">
+    <div class="flex justify-between items-center mb-2">
+      <h4 id="group-title" class="font-semibold">🔥 熱門產業買超排行 (依張數)</h4>
+      <div>
+        <button id="btn-shares" class="px-2 py-1 text-sm border rounded bg-blue-500 text-white mr-2">依張數</button>
+        <button id="btn-amount" class="px-2 py-1 text-sm border rounded bg-gray-200">依金額</button>
+      </div>
+    </div>
+    <ul id="group-list" class="list-disc pl-6 text-sm text-gray-700"></ul>
+  </div>
+
   <!-- 下方：法人表格 -->
   <div>
     <div class="p-4 border rounded bg-white shadow overflow-x-auto">
@@ -110,73 +122,66 @@ const industryMap = {
   "其他": "其他"
 };
 
-// 載入 insights.json (混合展示)
+// 格式化數字
+function formatNumber(val, divisor, unit) {
+  return (val / divisor).toFixed(2) + unit;
+}
+
+// 顯示熱門產業排行
+function renderGroupSummary(data, mode = "shares") {
+  const list = document.getElementById("group-list");
+  const title = document.getElementById("group-title");
+  list.innerHTML = "";
+
+  let source = [];
+  if (mode === "shares" && data.group_summary_by_shares) {
+    source = data.group_summary_by_shares;
+    title.textContent = "🔥 熱門產業買超排行 (依張數)";
+  } else if (mode === "amount" && data.group_summary_by_amount) {
+    source = data.group_summary_by_amount;
+    title.textContent = "🔥 熱門產業買超排行 (依金額)";
+  }
+
+  if (source.length === 0) {
+    list.innerHTML = "<li class='text-gray-500'>暫無資料</li>";
+    return;
+  }
+
+  source.slice(0, 5).forEach(item => {
+    const industryName = industryMap[item.industry] || `產業 ${item.industry}`;
+    const li = document.createElement("li");
+    const sharesTxt = formatNumber(item.total_buy, 1_000_000, " 百萬張");
+    const amountTxt = formatNumber(item.total_amount, 100_000_000, " 億元");
+    li.textContent = `${industryName} - 買超 ${sharesTxt}，金額 ${amountTxt}`;
+    list.appendChild(li);
+  });
+}
+
+// 載入 insights.json
 fetch("insights.json")
   .then(res => res.json())
   .then(data => {
-    const container = document.getElementById("insights-list");
-    const title = document.getElementById("insights-title");
-    container.innerHTML = "";
+    renderGroupSummary(data, "shares");
 
-    // 標題加上資料日期
-    if (data.date) {
-      title.textContent = `📊 指標觀察清單 (資料日期：${data.date})`;
-    }
+    document.getElementById("btn-shares").addEventListener("click", () => {
+      document.getElementById("btn-shares").classList.add("bg-blue-500","text-white");
+      document.getElementById("btn-amount").classList.remove("bg-blue-500","text-white");
+      document.getElementById("btn-amount").classList.add("bg-gray-200");
+      renderGroupSummary(data, "shares");
+    });
 
-    // 外資買超投本比前 5
-    if (data.foreign_ratio_ranking && data.foreign_ratio_ranking.length > 0) {
-      const topForeign = data.foreign_ratio_ranking.slice(0, 5);
-      const section = document.createElement("div");
-      section.innerHTML = `<h4 class="font-semibold mb-1">🌏 外資買超投本比前 5 (資料日期：${data.date})</h4>`;
-      const ul = document.createElement("ul");
-      ul.className = "list-disc pl-6";
-      topForeign.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
-        ul.appendChild(li);
-      });
-      section.appendChild(ul);
-      container.appendChild(section);
-    }
-
-    // 投信買超投本比前 5
-    if (data.invest_ratio_ranking && data.invest_ratio_ranking.length > 0) {
-      const topInvest = data.invest_ratio_ranking.slice(0, 5);
-      const section = document.createElement("div");
-      section.innerHTML = `<h4 class="font-semibold mb-1">🏦 投信買超投本比前 5 (資料日期：${data.date})</h4>`;
-      const ul = document.createElement("ul");
-      ul.className = "list-disc pl-6";
-      topInvest.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
-        ul.appendChild(li);
-      });
-      section.appendChild(ul);
-      container.appendChild(section);
-    }
-
-    // 熱門產業買超排行 (前 5)
-    if (data.group_summary && data.group_summary.length > 0) {
-      const topGroups = data.group_summary.slice(0, 5);
-      const section = document.createElement("div");
-      section.innerHTML = `<h4 class="font-semibold mb-1">🔥 熱門產業買超排行 (資料日期：${data.date})</h4>`;
-      const ul = document.createElement("ul");
-      ul.className = "list-disc pl-6";
-      topGroups.forEach(item => {
-        const industryName = industryMap[item.industry] || `產業 ${item.industry}`;
-        const li = document.createElement("li");
-        li.textContent = `${industryName} - 買超 ${Math.round(item.total_buy / 1000)} 張 (含 ${item.stocks.join("、")})`;
-        ul.appendChild(li);
-      });
-      section.appendChild(ul);
-      container.appendChild(section);
-    }
+    document.getElementById("btn-amount").addEventListener("click", () => {
+      document.getElementById("btn-amount").classList.add("bg-blue-500","text-white");
+      document.getElementById("btn-shares").classList.remove("bg-blue-500","text-white");
+      document.getElementById("btn-shares").classList.add("bg-gray-200");
+      renderGroupSummary(data, "amount");
+    });
   });
 
+// 搜尋框候選邏輯
 const input = document.getElementById("search-input");
 const suggestions = document.getElementById("suggestions");
 
-// 監聽輸入事件 → 顯示候選
 input.addEventListener("input", () => {
   const keyword = input.value.trim();
   suggestions.innerHTML = "";
@@ -211,7 +216,7 @@ input.addEventListener("input", () => {
   suggestions.classList.remove("hidden");
 });
 
-// 按 Enter 查詢
+// Enter 查詢
 input.addEventListener("keydown", e => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -227,13 +232,12 @@ input.addEventListener("keydown", e => {
   }
 });
 
-// 更新頁面 (法人表格 + 標題)
+// 更新法人表格
 function updatePage(stockId, stockName) {
   document.getElementById("page-title").textContent = `法人買賣超查詢 - ${stockName}`;
   renderTable(stockId);
 }
 
-// 顯示法人表格（轉換成張數）
 function renderTable(stockId) {
   const tbody = document.querySelector("#trading-table tbody");
   tbody.innerHTML = "";

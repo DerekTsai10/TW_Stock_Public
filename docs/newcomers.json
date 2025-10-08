@@ -3,11 +3,25 @@
   "newcomers": {
     "foreign": [
       {
+        "stock_id": "1301",
+        "name": "台塑",
+        "net_buy": 7945594,
+        "shares_issued": 6365740781,
+        "ratio": 0.001248
+      },
+      {
         "stock_id": "2891",
         "name": "中信金",
         "net_buy": 7329194,
         "shares_issued": 19649766114,
         "ratio": 0.000373
+      },
+      {
+        "stock_id": "2027",
+        "name": "大成鋼",
+        "net_buy": 6550584,
+        "shares_issued": 2434260615,
+        "ratio": 0.002691
       },
       {
         "stock_id": "3189",
@@ -47,13 +61,6 @@
         "ratio": 0.001829
       },
       {
-        "stock_id": "6274",
-        "name": "台燿",
-        "net_buy": 372000,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
         "stock_id": "3189",
         "name": "景碩",
         "net_buy": 253000,
@@ -68,11 +75,18 @@
         "ratio": 4.6e-05
       },
       {
-        "stock_id": "5536",
-        "name": "聖暉*",
-        "net_buy": 159000,
-        "shares_issued": 0,
-        "ratio": null
+        "stock_id": "2313",
+        "name": "華通",
+        "net_buy": 136000,
+        "shares_issued": 1191820589,
+        "ratio": 0.000114
+      },
+      {
+        "stock_id": "2208",
+        "name": "台船",
+        "net_buy": 96000,
+        "shares_issued": 1274539449,
+        "ratio": 7.5e-05
       }
     ]
   }

@@ -11,12 +11,17 @@
 
   <div class="container mx-auto p-4 space-y-6">
 
-    <!-- 搜尋區 -->
+    <!-- 標題區 -->
+    <div class="bg-white shadow rounded-2xl p-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">法人買賣超查詢</h1>
+      <span id="selectedStock" class="text-lg text-gray-700 font-semibold"></span>
+    </div>
+
+    <!-- 搜尋框 -->
     <div class="bg-white shadow rounded-2xl p-4">
-      <h1 class="text-xl font-bold mb-4">法人買賣超查詢</h1>
-      <input id="searchBox" type="text" placeholder="輸入股票代碼或名稱"
+      <label for="searchBox" class="block text-sm font-medium text-gray-700 mb-2">輸入股票代碼或名稱：</label>
+      <input id="searchBox" type="text" placeholder="例如 台積電 或 2330"
              class="w-full p-2 border rounded-md" />
-      <p id="searchTitle" class="mt-2 text-sm text-gray-600"></p>
     </div>
 
     <!-- 指標觀察清單 -->
@@ -34,6 +39,135 @@
           <ul id="invest_ratio_list" class="list-disc list-inside text-sm space-y-1"></ul>
         </div>
       </div>
+    </div>
+
+    <!-- 新上榜 -->
+    <div class="bg-white shadow rounded-2xl p-4">
+      <h2 class="text-lg font-bold mb-2">🚀 新上榜</h2>
+      <ul id="newcomers" class="list-disc list-inside text-sm"></ul>
+    </div>
+
+    <!-- 法人買賣超 & EPS -->
+    <div class="grid grid-cols-2 gap-4">
+      <!-- 法人買賣超 -->
+      <div class="bg-white shadow rounded-2xl p-4">
+        <h2 class="text-lg font-bold mb-2">法人買賣超紀錄</h2>
+        <div id="records" class="overflow-y-auto max-h-96 text-sm"></div>
+      </div>
+
+      <!-- EPS -->
+      <div class="bg-white shadow rounded-2xl p-4">
+        <h2 class="text-lg font-bold mb-2">近五年 EPS</h2>
+        <canvas id="epsChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 輸入框 → 更新標題右邊顯示的股票名稱
+    const searchBox = document.getElementById("searchBox");
+    const selectedStock = document.getElementById("selectedStock");
+    searchBox.addEventListener("input", () => {
+      const value = searchBox.value.trim();
+      if (value) {
+        selectedStock.textContent = value;
+      } else {
+        selectedStock.textContent = "";
+      }
+    });
+
+    // 載入 newcomers.json
+    fetch('newcomers.json')
+      .then(response => response.json())
+      .then(data => {
+        const list = document.getElementById("newcomers");
+        if (data.stocks && data.stocks.length > 0) {
+          data.stocks.forEach(stock => {
+            const li = document.createElement("li");
+            li.textContent = `${stock.name} (${stock.stock_id})`;
+            list.appendChild(li);
+          });
+        } else {
+          list.innerHTML = "<li>暫無資料</li>";
+        }
+      });
+
+    // 載入 insights.json
+    fetch('insights.json')
+      .then(response => response.json())
+      .then(data => {
+        // 顯示資料日期
+        document.getElementById("insights_date").textContent = data.date;
+
+        // 外資投本比前10
+        const foreignList = document.getElementById("foreign_ratio_list");
+        data.foreign_ratio_ranking.slice(0, 10).forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
+          foreignList.appendChild(li);
+        });
+
+        // 投信投本比前10
+        const investList = document.getElementById("invest_ratio_list");
+        data.invest_ratio_ranking.slice(0, 10).forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
+          investList.appendChild(li);
+        });
+      });
+
+    // 載入 data.json (法人買賣超紀錄)
+    fetch('data.json')
+      .then(response => response.json())
+      .then(data => {
+        const recordsDiv = document.getElementById("records");
+        data.records.forEach(record => {
+          const dateDiv = document.createElement("div");
+          dateDiv.className = "mb-2";
+          dateDiv.innerHTML = `<h3 class="font-semibold">${record.date}</h3>`;
+          const ul = document.createElement("ul");
+          ul.className = "list-disc list-inside ml-4 text-xs";
+          record.stocks.slice(0, 15).forEach(stock => {
+            const li = document.createElement("li");
+            li.textContent = `${stock.name.trim()} (${stock.stock_id}) 外資:${stock.foreign_net} 投信:${stock.invest_net}`;
+            ul.appendChild(li);
+          });
+          dateDiv.appendChild(ul);
+          recordsDiv.appendChild(dateDiv);
+        });
+      });
+
+    // EPS 圖表
+    fetch('eps.json')
+      .then(response => response.json())
+      .then(data => {
+        const ctx = document.getElementById('epsChart').getContext('2d');
+        const stockId = "2330"; // 預設台積電
+        const epsData = data[stockId];
+        if (epsData) {
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: epsData.map(item => item.date),
+              datasets: [{
+                label: 'EPS',
+                data: epsData.map(item => item.eps),
+                borderWidth: 2,
+                fill: false
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: { beginAtZero: false }
+              }
+            }
+          });
+        }
+      });
+  </script>
+</body>
+</html>
     </div>
 
     <!-- 新上榜 -->

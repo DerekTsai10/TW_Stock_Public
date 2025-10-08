@@ -5,64 +5,66 @@
   <title>法人買賣超查詢</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="p-6 bg-gray-50 text-base">
-  <!-- 動態標題 -->
-  <h1 id="page-title" class="text-3xl font-bold mb-6">法人買賣超查詢</h1>
+<body class="p-6 bg-gray-50 text-lg">
+  <div class="max-w-7xl mx-auto">
+    <!-- 動態標題 -->
+    <h1 id="page-title" class="text-3xl font-bold mb-8">法人買賣超查詢</h1>
 
-  <!-- 搜尋框 -->
-  <div class="my-6 relative w-96">
-    <label class="block mb-2 font-bold text-lg">輸入股票代碼或名稱：</label>
-    <input type="text" id="search-input" 
-           placeholder="台積電 或 2330" 
-           class="w-full border p-2 rounded text-lg"
-           autocomplete="off">
-    <ul id="suggestions" 
-        class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-base"></ul>
-  </div>
+    <!-- 搜尋框 -->
+    <div class="my-6 relative w-96">
+      <label class="block mb-2 font-bold text-xl">輸入股票代碼或名稱：</label>
+      <input type="text" id="search-input" 
+             placeholder="台積電 或 2330" 
+             class="w-full border p-3 rounded text-lg"
+             autocomplete="off">
+      <ul id="suggestions" 
+          class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
+    </div>
 
-  <!-- 上方兩塊 (左：指標觀察 / 右：新上榜) -->
-  <div class="grid grid-cols-2 gap-4 mb-6">
-    <!-- 指標觀察清單 -->
-    <div class="p-4 border rounded bg-white shadow">
-      <h3 id="insights-title" class="font-bold text-xl mb-4">📊 指標觀察清單</h3>
-      <div class="grid grid-cols-2 gap-4 text-gray-700">
-        <!-- 外資投本比 -->
-        <div>
-          <h4 class="font-semibold mb-2">🌏 外資買超投本比前 10</h4>
-          <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-1 text-base"></ul>
+    <!-- 上方兩塊 (左：指標觀察 / 右：新上榜) -->
+    <div class="grid grid-cols-2 gap-6 mb-8">
+      <!-- 指標觀察清單 -->
+      <div class="p-6 border rounded bg-white shadow">
+        <h3 id="insights-title" class="font-bold text-2xl mb-6">📊 指標觀察清單</h3>
+        <div class="grid grid-cols-2 gap-6 text-gray-700">
+          <!-- 外資投本比 -->
+          <div>
+            <h4 class="font-semibold mb-3">🌏 外資買超投本比前 10</h4>
+            <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
+          </div>
+          <!-- 投信投本比 -->
+          <div>
+            <h4 class="font-semibold mb-3">🏦 投信買超投本比前 10</h4>
+            <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
+          </div>
         </div>
-        <!-- 投信投本比 -->
-        <div>
-          <h4 class="font-semibold mb-2">🏦 投信買超投本比前 10</h4>
-          <ul id="invest_ratio_list" class="list-disc pl-6 space-y-1 text-base"></ul>
-        </div>
+        <!-- 熱門產業排行放在下面 -->
+        <div id="industry-section" class="mt-8"></div>
       </div>
-      <!-- 熱門產業排行放在下面 -->
-      <div id="industry-section" class="mt-6"></div>
+
+      <!-- 新上榜清單 -->
+      <div class="p-6 border rounded bg-white shadow">
+        <h3 class="font-bold text-2xl mb-4">🚀 新上榜</h3>
+        <p class="text-gray-500 text-lg">（此區塊暫不顯示內容）</p>
+      </div>
     </div>
 
-    <!-- 新上榜清單 -->
-    <div class="p-4 border rounded bg-white shadow">
-      <h3 class="font-bold text-xl mb-2">🚀 新上榜</h3>
-      <p class="text-gray-500 text-base">（此區塊暫不顯示內容）</p>
+    <!-- 下方：法人表格 -->
+    <div class="p-6 border rounded bg-white shadow overflow-x-auto">
+      <h3 class="font-bold text-2xl mb-4">法人買賣超 (張)</h3>
+      <table id="trading-table" class="table-auto w-full text-center border-collapse border text-lg">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border px-6 py-3">日期</th>
+            <th class="border px-6 py-3">外資</th>
+            <th class="border px-6 py-3">投信</th>
+            <th class="border px-6 py-3">自營商</th>
+            <th class="border px-6 py-3">合計</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
-  </div>
-
-  <!-- 下方：法人表格 -->
-  <div class="p-4 border rounded bg-white shadow overflow-x-auto">
-    <h3 class="font-bold text-xl mb-2">法人買賣超 (張)</h3>
-    <table id="trading-table" class="table-auto w-full text-center border-collapse border text-base">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="border px-4 py-2">日期</th>
-          <th class="border px-4 py-2">外資</th>
-          <th class="border px-4 py-2">投信</th>
-          <th class="border px-4 py-2">自營商</th>
-          <th class="border px-4 py-2">合計</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
   </div>
 
 <script>
@@ -129,15 +131,15 @@ fetch("insights.json")
       const header = document.createElement("div");
       header.className = "flex items-center justify-between";
       header.innerHTML = `
-        <h4 class="font-semibold text-lg">🔥 熱門產業買超排行</h4>
+        <h4 class="font-semibold text-xl">🔥 熱門產業買超排行</h4>
         <div>
-          <button id="btn-shares" class="px-2 py-1 text-base border rounded bg-blue-100">依張數</button>
-          <button id="btn-amount" class="px-2 py-1 text-base border rounded ml-2">依金額</button>
+          <button id="btn-shares" class="px-3 py-1 text-lg border rounded bg-blue-100">依張數</button>
+          <button id="btn-amount" class="px-3 py-1 text-lg border rounded ml-2">依金額</button>
         </div>`;
       section.appendChild(header);
 
       const ul = document.createElement("ul");
-      ul.className = "list-disc pl-6 mt-2 text-base";
+      ul.className = "list-disc pl-6 mt-3 text-lg space-y-2";
       section.appendChild(ul);
       container.appendChild(section);
 
@@ -233,11 +235,11 @@ function renderTable(stockId) {
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td class="border px-4 py-2">${day.date}</td>
-        <td class="border px-4 py-2 ${foreign > 0 ? 'text-red-500' : 'text-green-500'}">${foreign}</td>
-        <td class="border px-4 py-2 ${invest > 0 ? 'text-red-500' : 'text-green-500'}">${invest}</td>
-        <td class="border px-4 py-2 ${dealer > 0 ? 'text-red-500' : 'text-green-500'}">${dealer}</td>
-        <td class="border px-4 py-2 ${total > 0 ? 'text-red-500' : 'text-green-500'}">${total}</td>
+        <td class="border px-6 py-3">${day.date}</td>
+        <td class="border px-6 py-3 ${foreign > 0 ? 'text-red-500' : 'text-green-500'}">${foreign}</td>
+        <td class="border px-6 py-3 ${invest > 0 ? 'text-red-500' : 'text-green-500'}">${invest}</td>
+        <td class="border px-6 py-3 ${dealer > 0 ? 'text-red-500' : 'text-green-500'}">${dealer}</td>
+        <td class="border px-6 py-3 ${total > 0 ? 'text-red-500' : 'text-green-500'}">${total}</td>
       `;
       tbody.appendChild(tr);
     }

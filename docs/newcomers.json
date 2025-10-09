@@ -1,76 +1,62 @@
 {
-  "date": "20251008",
+  "date": "20251009",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "2891",
-        "name": "中信金",
-        "net_buy": 7329194,
+        "stock_id": "2329",
+        "name": "華泰",
+        "net_buy": 11184000,
         "shares_issued": 0,
         "ratio": null
       },
       {
-        "stock_id": "3189",
-        "name": "景碩",
-        "net_buy": 5687271,
+        "stock_id": "6919",
+        "name": "康霈*",
+        "net_buy": 8830122,
         "shares_issued": 0,
         "ratio": null
       },
       {
-        "stock_id": "3715",
-        "name": "定穎投控",
-        "net_buy": 4522290,
+        "stock_id": "3711",
+        "name": "日月光投控",
+        "net_buy": 7784781,
         "shares_issued": 0,
         "ratio": null
       }
     ],
     "invest": [
       {
-        "stock_id": "1802",
-        "name": "台玻",
-        "net_buy": 3291000,
+        "stock_id": "2408",
+        "name": "南亞科",
+        "net_buy": 8586792,
         "shares_issued": 0,
         "ratio": null
       },
       {
-        "stock_id": "2455",
-        "name": "全新",
-        "net_buy": 511000,
+        "stock_id": "9802",
+        "name": "鈺齊-KY",
+        "net_buy": 400000,
         "shares_issued": 0,
         "ratio": null
       },
       {
-        "stock_id": "3715",
-        "name": "定穎投控",
-        "net_buy": 508000,
+        "stock_id": "2377",
+        "name": "微星",
+        "net_buy": 351651,
         "shares_issued": 0,
         "ratio": null
       },
       {
-        "stock_id": "3189",
-        "name": "景碩",
-        "net_buy": 253000,
+        "stock_id": "6269",
+        "name": "台郡",
+        "net_buy": 325000,
         "shares_issued": 0,
         "ratio": null
       },
       {
-        "stock_id": "6770",
-        "name": "力積電",
-        "net_buy": 194000,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
-        "stock_id": "2313",
-        "name": "華通",
-        "net_buy": 136000,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
-        "stock_id": "2208",
-        "name": "台船",
-        "net_buy": 96000,
+        "stock_id": "4958",
+        "name": "臻鼎-KY",
+        "net_buy": 260523,
         "shares_issued": 0,
         "ratio": null
       }

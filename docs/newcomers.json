@@ -3,16 +3,23 @@
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "00953B",
-        "name": "群益優選非投等債",
-        "net_buy": 9112000,
+        "stock_id": "2891",
+        "name": "中信金",
+        "net_buy": 7329194,
         "shares_issued": 0,
         "ratio": null
       },
       {
-        "stock_id": "00885",
-        "name": "富邦越南",
-        "net_buy": 7958900,
+        "stock_id": "3189",
+        "name": "景碩",
+        "net_buy": 5687271,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "3715",
+        "name": "定穎投控",
+        "net_buy": 4522290,
         "shares_issued": 0,
         "ratio": null
       }
@@ -54,9 +61,16 @@
         "ratio": null
       },
       {
-        "stock_id": "006208",
-        "name": "富邦台50",
-        "net_buy": 155000,
+        "stock_id": "2313",
+        "name": "華通",
+        "net_buy": 136000,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "2208",
+        "name": "台船",
+        "net_buy": 96000,
         "shares_issued": 0,
         "ratio": null
       }

@@ -46,7 +46,7 @@
       <!-- 新上榜清單 -->
       <div class="p-6 border rounded bg-white shadow">
         <h3 class="font-bold text-2xl mb-4">🚀 新上榜</h3>
-        <p class="text-gray-500 text-lg">（此區塊暫不顯示內容）</p>
+        <div id="newcomers-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
       </div>
     </div>
 
@@ -163,6 +163,62 @@ fetch("insights.json")
       document.getElementById("btn-amount").addEventListener("click", () => renderMode("amount"));
       renderMode("shares");
     }
+  });
+
+// 載入 newcomers.json (新上榜)
+fetch("newcomers.json")
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("newcomers-container");
+    container.innerHTML = "";
+
+    if (data.date) {
+      const title = document.createElement("p");
+      title.className = "font-semibold mb-2";
+      title.textContent = `資料日期：${data.date}`;
+      container.appendChild(title);
+    }
+
+    if (data.newcomers.foreign && data.newcomers.foreign.length > 0) {
+      const foreignHeader = document.createElement("p");
+      foreignHeader.className = "font-semibold mt-2";
+      foreignHeader.textContent = "📌 外資新上榜：";
+      container.appendChild(foreignHeader);
+
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6 space-y-1";
+      data.newcomers.foreign.forEach(stock => {
+        const li = document.createElement("li");
+        li.textContent = `${stock.name} (${stock.stock_id})`;
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    }
+
+    if (data.newcomers.invest && data.newcomers.invest.length > 0) {
+      const investHeader = document.createElement("p");
+      investHeader.className = "font-semibold mt-2";
+      investHeader.textContent = "📌 投信新上榜：";
+      container.appendChild(investHeader);
+
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6 space-y-1";
+      data.newcomers.invest.forEach(stock => {
+        const li = document.createElement("li");
+        li.textContent = `${stock.name} (${stock.stock_id})`;
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    }
+
+    if ((!data.newcomers.foreign || data.newcomers.foreign.length === 0) &&
+        (!data.newcomers.invest || data.newcomers.invest.length === 0)) {
+      container.textContent = "（今日無新上榜股票）";
+    }
+  })
+  .catch(err => {
+    console.error("載入 newcomers.json 失敗", err);
+    document.getElementById("newcomers-container").textContent = "無法載入資料";
   });
 
 // ===== 搜尋功能 =====

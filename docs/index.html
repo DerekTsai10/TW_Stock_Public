@@ -5,74 +5,63 @@
   <title>法人買賣超查詢</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="p-6 bg-gray-50 text-lg">
-  <!-- 外層容器 + 縮放 -->
-  <div class="max-w-7xl mx-auto transform scale-125 origin-top">
-    <!-- 動態標題 -->
-    <h1 id="page-title" class="text-3xl font-bold mb-8">法人買賣超查詢</h1>
+<body class="p-6 bg-gray-50 text-base">
+  <!-- 動態標題 -->
+  <h1 id="page-title" class="text-3xl font-bold mb-6">法人買賣超查詢</h1>
 
-    <!-- 搜尋框 -->
-    <div class="my-6 relative w-96">
-      <label class="block mb-2 font-bold text-xl">輸入股票代碼或名稱：</label>
-      <input type="text" id="search-input" 
-             placeholder="台積電 或 2330" 
-             class="w-full border p-3 rounded text-lg"
-             autocomplete="off">
-      <ul id="suggestions" 
-          class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- 左側：法人買賣超表格 -->
+    <div id="trading-table" class="p-4 bg-white rounded shadow">
+      <!-- 表格內容由 JS 動態產生 -->
     </div>
 
-    <!-- 上方兩塊 (左：指標觀察 / 右：新上榜) -->
-    <div class="grid grid-cols-2 gap-6 mb-8">
-      <!-- 指標觀察清單 -->
-      <div class="p-6 border rounded bg-white shadow">
-        <h3 id="insights-title" class="font-bold text-2xl mb-6">📊 指標觀察清單</h3>
-        <div class="grid grid-cols-2 gap-6 text-gray-700">
-          <!-- 外資投本比 -->
-          <div>
-            <h4 class="font-semibold mb-3">🌏 外資買超投本比前 10</h4>
-            <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
-          </div>
-          <!-- 投信投本比 -->
-          <div>
-            <h4 class="font-semibold mb-3">🏦 投信買超投本比前 10</h4>
-            <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
-          </div>
-        </div>
-        <!-- 熱門產業排行放在下面 -->
-        <div id="industry-section" class="mt-8"></div>
+    <!-- 右側：EPS 折線圖 + 新上榜清單 -->
+    <div class="space-y-6">
+      <!-- EPS 圖表 -->
+      <div id="eps-chart-container" class="p-4 bg-white rounded shadow">
+        <canvas id="eps-chart"></canvas>
       </div>
 
-      <!-- 新上榜清單 (保留新版，右邊有說明文字) -->
-      <div class="p-6 border rounded bg-white shadow">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-bold text-2xl">🚀 新上榜</h3>
-          <span class="text-gray-500 text-base">投本比/外本比十個交易日內第一次上榜</span>
-        </div>
-        <div id="newcomers-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
+      <!-- 🔥 新增的新上榜清單 -->
+      <div id="newcomers-list" class="p-4 bg-white rounded shadow">
+        <!-- JS 動態載入 newcomers.json -->
       </div>
-    </div>
-
-    <!-- 下方：法人表格 -->
-    <div class="p-6 border rounded bg-white shadow overflow-x-auto">
-      <h3 class="font-bold text-2xl mb-4">法人買賣超 (張)</h3>
-      <table id="trading-table" class="table-auto w-full text-center border-collapse border text-lg">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="border px-6 py-3">日期</th>
-            <th class="border px-6 py-3">外資</th>
-            <th class="border px-6 py-3">投信</th>
-            <th class="border px-6 py-3">自營商</th>
-            <th class="border px-6 py-3">合計</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
     </div>
   </div>
 
-<script>
-// （JS 保持不變）
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+  // === 載入 newcomers.json 並顯示 ===
+  async function loadNewcomers() {
+    try {
+      const response = await fetch("newcomers.json");
+      const newcomersData = await response.json();
+
+      const container = document.getElementById("newcomers-list");
+      container.innerHTML = ""; // 清空
+
+      const date = newcomersData.date || "";
+      container.innerHTML += `<h2 class="text-lg font-bold mb-2">【新上榜】 (${date})</h2>`;
+
+      if (newcomersData.newcomers.foreign.length > 0) {
+        container.innerHTML += "<p class='font-semibold mt-2'>📌 外資新上榜：</p>";
+        newcomersData.newcomers.foreign.forEach(stock => {
+          container.innerHTML += `<div>- ${stock.name}</div>`;
+        });
+      }
+
+      if (newcomersData.newcomers.invest.length > 0) {
+        container.innerHTML += "<p class='font-semibold mt-2'>📌 投信新上榜：</p>";
+        newcomersData.newcomers.invest.forEach(stock => {
+          container.innerHTML += `<div>- ${stock.name}</div>`;
+        });
+      }
+    } catch (e) {
+      console.error("無法載入 newcomers.json", e);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadNewcomers);
+  </script>
 </body>
 </html>

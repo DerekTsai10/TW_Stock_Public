@@ -3,23 +3,30 @@
   "newcomers": {
     "foreign": [
       {
+        "stock_id": "00785B",
+        "name": "富邦金融投等債",
+        "net_buy": 21498000,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "2882",
+        "name": "國泰金",
+        "net_buy": 16502072,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "2881",
+        "name": "富邦金",
+        "net_buy": 12910650,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
         "stock_id": "2329",
         "name": "華泰",
         "net_buy": 11184000,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
-        "stock_id": "6919",
-        "name": "康霈*",
-        "net_buy": 8830122,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
-        "stock_id": "3711",
-        "name": "日月光投控",
-        "net_buy": 7784781,
         "shares_issued": 0,
         "ratio": null
       }
@@ -29,6 +36,13 @@
         "stock_id": "2408",
         "name": "南亞科",
         "net_buy": 8586792,
+        "shares_issued": 0,
+        "ratio": null
+      },
+      {
+        "stock_id": "2313",
+        "name": "華通",
+        "net_buy": 2409000,
         "shares_issued": 0,
         "ratio": null
       },

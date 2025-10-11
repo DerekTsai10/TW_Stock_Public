@@ -160,13 +160,6 @@ fetch("newcomers.json")
     const container = document.getElementById("newcomers-container");
     container.innerHTML = "";
 
-    if (data.date) {
-      const title = document.createElement("p");
-      title.className = "font-semibold mb-2";
-      title.textContent = `資料日期：${data.date}`;
-      container.appendChild(title);
-    }
-
     if (data.newcomers?.foreign?.length) {
       const foreignHeader = document.createElement("p");
       foreignHeader.className = "font-semibold mt-2";
@@ -199,7 +192,6 @@ fetch("newcomers.json")
 
     // 成交量暴增
     if (data.volume_spike && data.volume_spike.length > 0) {
-      console.log("✅ 成交量暴增資料筆數:", data.volume_spike.length);
       const spikeHeader = document.createElement("h3");
       spikeHeader.className = "font-bold text-2xl mt-6 mb-2";
       spikeHeader.textContent = "🔥 成交量暴增";
@@ -208,14 +200,12 @@ fetch("newcomers.json")
       const ul = document.createElement("ul");
       ul.className = "list-disc pl-6 space-y-1";
       data.volume_spike.slice(0, 10).forEach(stock => {
-        console.log(`  ${stock.stock_id} ${stock.name} → 倍數=${stock.ratio}`);
         const li = document.createElement("li");
         li.textContent = `${stock.name} (${stock.stock_id}) - ${stock.ratio.toFixed(2)} 倍`;
         ul.appendChild(li);
       });
       container.appendChild(ul);
     } else {
-      console.warn("⚠️ 今日無成交量暴增股票 (volume_spike 空)");
       const spikeHeader = document.createElement("h3");
       spikeHeader.className = "font-bold text-2xl mt-6 mb-2";
       spikeHeader.textContent = "🔥 成交量暴增";

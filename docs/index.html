@@ -96,7 +96,7 @@ const industryMap = {
   "26": "電子零組件", "28": "電子通路", "31": "通信網路", "91": "存託憑證", "其他": "其他"
 };
 
-// 載入 newcomers.json (新上榜)
+// 載入 newcomers.json (新上榜 + 爆量)
 fetch("newcomers.json")
   .then(res => res.json())
   .then(data => {
@@ -185,9 +185,16 @@ fetch("insights.json")
         const li = document.createElement("li");
         li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
 
-        if (newForeignSet.has(item.stock_id)) {
+        let fire = "";
+        if (newForeignSet.has(item.stock_id) && newInvestSet.has(item.stock_id)) {
+          fire = " 🔥🔥";
+        } else if (newForeignSet.has(item.stock_id)) {
+          fire = " 🔥";
+        }
+
+        if (fire) {
           li.classList.add("text-red-500", "font-bold");
-          li.textContent += " 🔥";
+          li.textContent += fire;
         }
 
         foreignList.appendChild(li);
@@ -202,9 +209,16 @@ fetch("insights.json")
         const li = document.createElement("li");
         li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
 
-        if (newInvestSet.has(item.stock_id)) {
+        let fire = "";
+        if (newForeignSet.has(item.stock_id) && newInvestSet.has(item.stock_id)) {
+          fire = " 🔥🔥";
+        } else if (newInvestSet.has(item.stock_id)) {
+          fire = " 🔥";
+        }
+
+        if (fire) {
           li.classList.add("text-red-500", "font-bold");
-          li.textContent += " 🔥";
+          li.textContent += fire;
         }
 
         investList.appendChild(li);

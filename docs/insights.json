@@ -6,35 +6,35 @@
       "name": "康霈*",
       "market": "TWSE",
       "foreign_ratio": 11.387240792324357,
-      "invest_ratio": 0.005177705560713917
+      "invest_ratio": -0.005177705560713917
     },
     {
       "stock_id": "3706",
       "name": "神達",
       "market": "TWSE",
       "foreign_ratio": 2.436506221012535,
-      "invest_ratio": 0.0307984047155706
+      "invest_ratio": -0.024748126071230843
     },
     {
       "stock_id": "8021",
       "name": "尖點",
       "market": "TWSE",
       "foreign_ratio": 2.0569981713321144,
-      "invest_ratio": 0.0323533549022366
+      "invest_ratio": -0.030243353495568996
     },
     {
       "stock_id": "6139",
       "name": "亞翔",
       "market": "TWSE",
       "foreign_ratio": 1.5692838827603626,
-      "invest_ratio": 0.04965604626573689
+      "invest_ratio": -0.04353337014729867
     },
     {
       "stock_id": "2329",
       "name": "華泰",
       "market": "TWSE",
       "foreign_ratio": 1.5105185249213946,
-      "invest_ratio": 0.09994489524694493
+      "invest_ratio": -0.09994489524694493
     },
     {
       "stock_id": "4968",
@@ -69,149 +69,149 @@
       "name": "創意",
       "market": "TWSE",
       "foreign_ratio": 0.9613763049301923,
-      "invest_ratio": 0.002291602928117841
+      "invest_ratio": 0.10590847020020744
     },
     {
       "stock_id": "2344",
       "name": "華邦電",
       "market": "TWSE",
       "foreign_ratio": 0.8767248222222221,
-      "invest_ratio": 0.053288888888888886
+      "invest_ratio": -0.027266666666666665
     },
     {
       "stock_id": "2313",
       "name": "華通",
       "market": "TWSE",
       "foreign_ratio": 0.7841396351798089,
-      "invest_ratio": 0.0
+      "invest_ratio": 0.20212783809635684
     },
     {
       "stock_id": "8033",
       "name": "雷虎",
       "market": "TWSE",
       "foreign_ratio": 0.7616508003066258,
-      "invest_ratio": 0.0
+      "invest_ratio": 0.0006551834841347319
     },
     {
       "stock_id": "6269",
       "name": "台郡",
       "market": "TWSE",
       "foreign_ratio": 0.6374413229073513,
-      "invest_ratio": 0.0
+      "invest_ratio": 0.10056719900237339
     },
     {
       "stock_id": "3715",
       "name": "定穎投控",
       "market": "TWSE",
       "foreign_ratio": 0.5896590966385041,
-      "invest_ratio": 0.0
+      "invest_ratio": 0.6179908813932885
     }
   ],
   "invest_ratio_ranking": [
     {
-      "stock_id": "6706",
-      "name": "惠特",
+      "stock_id": "3715",
+      "name": "定穎投控",
       "market": "TWSE",
-      "foreign_ratio": -0.29274004683840754,
-      "invest_ratio": 0.45183789838102023
+      "foreign_ratio": 0.5896590966385041,
+      "invest_ratio": 0.6179908813932885
     },
     {
-      "stock_id": "3450",
-      "name": "聯鈞",
+      "stock_id": "8996",
+      "name": "高力",
       "market": "TWSE",
-      "foreign_ratio": 0.12592651066371044,
-      "invest_ratio": 0.3219362854455969
+      "foreign_ratio": 0.2526975762810071,
+      "invest_ratio": 0.3389052267931913
     },
     {
-      "stock_id": "6191",
-      "name": "精成科",
+      "stock_id": "6515",
+      "name": "穎崴",
       "market": "TWSE",
-      "foreign_ratio": -0.5825204334842771,
-      "invest_ratio": 0.19507193027079747
+      "foreign_ratio": 0.41075203195650367,
+      "invest_ratio": 0.33842825043690533
     },
     {
-      "stock_id": "3533",
-      "name": "嘉澤",
+      "stock_id": "8046",
+      "name": "南電",
       "market": "TWSE",
-      "foreign_ratio": 0.09375211047327918,
-      "invest_ratio": 0.19371923152114026
+      "foreign_ratio": -0.4273892891134617,
+      "invest_ratio": 0.3298030688755968
     },
     {
-      "stock_id": "3376",
-      "name": "新日興",
+      "stock_id": "6805",
+      "name": "富世達",
       "market": "TWSE",
-      "foreign_ratio": 0.18016938849527234,
-      "invest_ratio": 0.18542829850380305
+      "foreign_ratio": -0.17131124823129548,
+      "invest_ratio": 0.31216722827593246
     },
     {
-      "stock_id": "2520",
-      "name": "冠德",
+      "stock_id": "2408",
+      "name": "南亞科",
       "market": "TWSE",
-      "foreign_ratio": -0.1612667702510472,
-      "invest_ratio": 0.17178381163174933
+      "foreign_ratio": -0.6001842428920939,
+      "invest_ratio": 0.27711602590437634
     },
     {
-      "stock_id": "6239",
-      "name": "力成",
+      "stock_id": "6442",
+      "name": "光聖",
       "market": "TWSE",
-      "foreign_ratio": 0.08614943634030871,
-      "invest_ratio": 0.16894708000832515
+      "foreign_ratio": -0.7195921052631579,
+      "invest_ratio": 0.23157894736842108
     },
     {
-      "stock_id": "6669",
-      "name": "緯穎",
+      "stock_id": "2313",
+      "name": "華通",
       "market": "TWSE",
-      "foreign_ratio": 0.23765497201894104,
-      "invest_ratio": 0.15398514851485148
+      "foreign_ratio": 0.7841396351798089,
+      "invest_ratio": 0.20212783809635684
     },
     {
-      "stock_id": "8070",
-      "name": "長華*",
+      "stock_id": "9802",
+      "name": "鈺齊-KY",
       "market": "TWSE",
-      "foreign_ratio": -2.735309519872113,
-      "invest_ratio": 0.1518259743123312
+      "foreign_ratio": 0.03432989536844933,
+      "invest_ratio": 0.1990138861939092
     },
     {
-      "stock_id": "3653",
-      "name": "健策",
+      "stock_id": "8112",
+      "name": "至上",
       "market": "TWSE",
-      "foreign_ratio": 0.1905374959768265,
-      "invest_ratio": 0.13437679293600704
+      "foreign_ratio": -0.4469368313190742,
+      "invest_ratio": 0.14506465979099245
     },
     {
-      "stock_id": "2421",
-      "name": "建準",
+      "stock_id": "3004",
+      "name": "豐達科",
       "market": "TWSE",
-      "foreign_ratio": 0.45753045424457744,
-      "invest_ratio": 0.13202020165080108
+      "foreign_ratio": -0.22447696866301517,
+      "invest_ratio": 0.14007362844572147
     },
     {
-      "stock_id": "6768",
-      "name": "志強-KY",
+      "stock_id": "3515",
+      "name": "華擎",
       "market": "TWSE",
-      "foreign_ratio": 0.5292486069117169,
-      "invest_ratio": 0.12911866863239962
+      "foreign_ratio": 0.47266017028715723,
+      "invest_ratio": 0.12059309139175757
     },
     {
-      "stock_id": "3406",
-      "name": "玉晶光",
+      "stock_id": "3443",
+      "name": "創意",
       "market": "TWSE",
-      "foreign_ratio": -1.1130624517708416,
-      "invest_ratio": 0.12328925077388396
+      "foreign_ratio": 0.9613763049301923,
+      "invest_ratio": 0.10590847020020744
     },
     {
-      "stock_id": "6177",
-      "name": "達麗",
+      "stock_id": "2233",
+      "name": "宇隆",
       "market": "TWSE",
-      "foreign_ratio": 0.01886080724254998,
-      "invest_ratio": 0.10638342961528191
+      "foreign_ratio": -0.15258426220806795,
+      "invest_ratio": 0.10283970276008493
     },
     {
-      "stock_id": "2329",
-      "name": "華泰",
+      "stock_id": "6269",
+      "name": "台郡",
       "market": "TWSE",
-      "foreign_ratio": 1.5105185249213946,
-      "invest_ratio": 0.09994489524694493
+      "foreign_ratio": 0.6374413229073513,
+      "invest_ratio": 0.10056719900237339
     }
   ]
 }

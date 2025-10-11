@@ -33,37 +33,16 @@
     ],
     "invest": [
       {
-        "stock_id": "2408",
-        "name": "南亞科",
-        "net_buy": 8586792,
+        "stock_id": "1314",
+        "name": "中石化",
+        "net_buy": 0,
         "shares_issued": 0,
         "ratio": null
       },
       {
-        "stock_id": "2313",
-        "name": "華通",
-        "net_buy": 2409000,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
-        "stock_id": "9802",
-        "name": "鈺齊-KY",
-        "net_buy": 400000,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
-        "stock_id": "2377",
-        "name": "微星",
-        "net_buy": 351651,
-        "shares_issued": 0,
-        "ratio": null
-      },
-      {
-        "stock_id": "6269",
-        "name": "台郡",
-        "net_buy": 325000,
+        "stock_id": "2883",
+        "name": "凱基金",
+        "net_buy": 0,
         "shares_issued": 0,
         "ratio": null
       }

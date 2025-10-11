@@ -70,41 +70,6 @@
       "market": "TWSE",
       "foreign_ratio": 0.9613763049301923,
       "invest_ratio": 0.10590847020020744
-    },
-    {
-      "stock_id": "2344",
-      "name": "華邦電",
-      "market": "TWSE",
-      "foreign_ratio": 0.8767248222222221,
-      "invest_ratio": -0.027266666666666665
-    },
-    {
-      "stock_id": "2313",
-      "name": "華通",
-      "market": "TWSE",
-      "foreign_ratio": 0.7841396351798089,
-      "invest_ratio": 0.20212783809635684
-    },
-    {
-      "stock_id": "8033",
-      "name": "雷虎",
-      "market": "TWSE",
-      "foreign_ratio": 0.7616508003066258,
-      "invest_ratio": 0.0006551834841347319
-    },
-    {
-      "stock_id": "6269",
-      "name": "台郡",
-      "market": "TWSE",
-      "foreign_ratio": 0.6374413229073513,
-      "invest_ratio": 0.10056719900237339
-    },
-    {
-      "stock_id": "3715",
-      "name": "定穎投控",
-      "market": "TWSE",
-      "foreign_ratio": 0.5896590966385041,
-      "invest_ratio": 0.6179908813932885
     }
   ],
   "invest_ratio_ranking": [
@@ -177,41 +142,6 @@
       "market": "TWSE",
       "foreign_ratio": -0.4469368313190742,
       "invest_ratio": 0.14506465979099245
-    },
-    {
-      "stock_id": "3004",
-      "name": "豐達科",
-      "market": "TWSE",
-      "foreign_ratio": -0.22447696866301517,
-      "invest_ratio": 0.14007362844572147
-    },
-    {
-      "stock_id": "3515",
-      "name": "華擎",
-      "market": "TWSE",
-      "foreign_ratio": 0.47266017028715723,
-      "invest_ratio": 0.12059309139175757
-    },
-    {
-      "stock_id": "3443",
-      "name": "創意",
-      "market": "TWSE",
-      "foreign_ratio": 0.9613763049301923,
-      "invest_ratio": 0.10590847020020744
-    },
-    {
-      "stock_id": "2233",
-      "name": "宇隆",
-      "market": "TWSE",
-      "foreign_ratio": -0.15258426220806795,
-      "invest_ratio": 0.10283970276008493
-    },
-    {
-      "stock_id": "6269",
-      "name": "台郡",
-      "market": "TWSE",
-      "foreign_ratio": 0.6374413229073513,
-      "invest_ratio": 0.10056719900237339
     }
   ]
 }

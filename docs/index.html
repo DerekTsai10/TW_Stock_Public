@@ -22,28 +22,34 @@
           class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
     </div>
 
-    <!-- 上方兩塊 (左：指標觀察 / 右：新上榜 & 爆量) -->
+    <!-- 上方兩塊 (左：指標觀察 / 右：新上榜 + 爆量) -->
     <div class="grid grid-cols-2 gap-6 mb-8">
       <!-- 指標觀察清單 -->
       <div class="p-6 border rounded bg-white shadow">
-        <h3 id="insights-title" class="font-bold text-2xl mb-6">📊 指標觀察清單</h3>
+        <h3 id="insights-title" class="text-2xl font-bold mb-6">📊 指標觀察清單</h3>
         <div class="grid grid-cols-2 gap-6 text-gray-700">
+          <!-- 外資投本比 -->
           <div>
-            <h4 class="font-semibold mb-3">🌏 外資買超投本比前 10</h4>
+            <h4 class="text-xl font-semibold mb-3">🌏 外資買超投本比前 10</h4>
             <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
           </div>
+          <!-- 投信投本比 -->
           <div>
-            <h4 class="font-semibold mb-3">🏦 投信買超投本比前 10</h4>
+            <h4 class="text-xl font-semibold mb-3">🏦 投信買超投本比前 10</h4>
             <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
           </div>
         </div>
+        <!-- 熱門產業排行放在下面 -->
         <div id="industry-section" class="mt-8"></div>
       </div>
 
       <!-- 新上榜 + 成交量暴增 -->
       <div class="p-6 border rounded bg-white shadow">
-        <h3 class="font-bold text-2xl mb-4">🚀 新上榜</h3>
-        <div id="newcomers-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
+        <h3 class="text-2xl font-bold mb-4">🚀 新上榜</h3>
+        <div id="newcomers-container" class="text-gray-700 text-lg mb-6">（此區塊暫不顯示內容）</div>
+
+        <h3 class="text-2xl font-bold mb-4">🔥 成交量暴增 (前 10 檔)</h3>
+        <div id="volume-spike-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
       </div>
     </div>
 
@@ -69,7 +75,7 @@
 let records = [];
 let stockList = [];
 
-// 載入 data.json
+// 載入 data.json (法人買賣超)
 fetch("data.json")
   .then(res => res.json())
   .then(data => {
@@ -85,13 +91,13 @@ fetch("data.json")
 
 // 產業代碼對照表
 const industryMap = {
-  "01": "水泥工業","02": "食品工業","03": "塑膠工業","04": "紡織纖維",
-  "05": "電機機械","06": "電機機械","08": "玻璃陶瓷","17": "金融保險",
-  "20": "其他電子","23": "電腦及週邊設備","24": "半導體業","25": "電腦及週邊設備",
-  "26": "電子零組件","28": "電子通路","31": "通信網路","91": "存託憑證","其他": "其他"
+  "01": "水泥工業", "02": "食品工業", "03": "塑膠工業", "04": "紡織纖維",
+  "05": "電機機械", "06": "電機機械", "08": "玻璃陶瓷", "17": "金融保險",
+  "20": "其他電子", "23": "電腦及週邊設備", "24": "半導體業", "25": "電腦及週邊設備",
+  "26": "電子零組件", "28": "電子通路", "31": "通信網路", "91": "存託憑證", "其他": "其他"
 };
 
-// 載入 insights.json
+// 載入 insights.json (指標 & 熱門產業)
 fetch("insights.json")
   .then(res => res.json())
   .then(data => {
@@ -99,25 +105,31 @@ fetch("insights.json")
       document.getElementById("insights-title").textContent =
         `📊 指標觀察清單 (資料日期：${data.date})`;
     }
+
+    // 外資投本比前 10
     const foreignList = document.getElementById("foreign_ratio_list");
     foreignList.innerHTML = "";
-    if (data.foreign_ratio_ranking?.length) {
+    if (data.foreign_ratio_ranking && data.foreign_ratio_ranking.length > 0) {
       data.foreign_ratio_ranking.slice(0, 10).forEach(item => {
         const li = document.createElement("li");
         li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
         foreignList.appendChild(li);
       });
     }
+
+    // 投信投本比前 10
     const investList = document.getElementById("invest_ratio_list");
     investList.innerHTML = "";
-    if (data.invest_ratio_ranking?.length) {
+    if (data.invest_ratio_ranking && data.invest_ratio_ranking.length > 0) {
       data.invest_ratio_ranking.slice(0, 10).forEach(item => {
         const li = document.createElement("li");
         li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
         investList.appendChild(li);
       });
     }
-    if (data.group_summary_by_shares?.length) {
+
+    // 熱門產業排行
+    if (data.group_summary_by_shares && data.group_summary_by_shares.length > 0) {
       const container = document.getElementById("industry-section");
       const section = document.createElement("div");
       const header = document.createElement("div");
@@ -129,10 +141,12 @@ fetch("insights.json")
           <button id="btn-amount" class="px-3 py-1 text-lg border rounded ml-2">依金額</button>
         </div>`;
       section.appendChild(header);
+
       const ul = document.createElement("ul");
       ul.className = "list-disc pl-6 mt-3 text-lg space-y-2";
       section.appendChild(ul);
       container.appendChild(section);
+
       function renderMode(mode) {
         ul.innerHTML = "";
         const list = mode === "shares" ? data.group_summary_by_shares : data.group_summary_by_amount;
@@ -147,24 +161,26 @@ fetch("insights.json")
         document.getElementById("btn-shares").classList.toggle("bg-blue-100", mode === "shares");
         document.getElementById("btn-amount").classList.toggle("bg-blue-100", mode === "amount");
       }
+
       document.getElementById("btn-shares").addEventListener("click", () => renderMode("shares"));
       document.getElementById("btn-amount").addEventListener("click", () => renderMode("amount"));
       renderMode("shares");
     }
   });
 
-// 載入 newcomers.json
+// 載入 newcomers.json (新上榜 + 成交量暴增)
 fetch("newcomers.json")
   .then(res => res.json())
   .then(data => {
     const container = document.getElementById("newcomers-container");
     container.innerHTML = "";
 
-    if (data.newcomers?.foreign?.length) {
+    if (data.newcomers.foreign && data.newcomers.foreign.length > 0) {
       const foreignHeader = document.createElement("p");
-      foreignHeader.className = "font-semibold mt-2";
-      foreignHeader.textContent = "📌 外資新上榜：";
+      foreignHeader.className = "text-xl font-semibold mt-2";
+      foreignHeader.textContent = "🌏 外資新上榜：";
       container.appendChild(foreignHeader);
+
       const ul = document.createElement("ul");
       ul.className = "list-disc pl-6 space-y-1";
       data.newcomers.foreign.forEach(stock => {
@@ -175,11 +191,12 @@ fetch("newcomers.json")
       container.appendChild(ul);
     }
 
-    if (data.newcomers?.invest?.length) {
+    if (data.newcomers.invest && data.newcomers.invest.length > 0) {
       const investHeader = document.createElement("p");
-      investHeader.className = "font-semibold mt-2";
-      investHeader.textContent = "📌 投信新上榜：";
+      investHeader.className = "text-xl font-semibold mt-2";
+      investHeader.textContent = "🏦 投信新上榜：";
       container.appendChild(investHeader);
+
       const ul = document.createElement("ul");
       ul.className = "list-disc pl-6 space-y-1";
       data.newcomers.invest.forEach(stock => {
@@ -190,31 +207,19 @@ fetch("newcomers.json")
       container.appendChild(ul);
     }
 
-    // 成交量暴增
     if (data.volume_spike && data.volume_spike.length > 0) {
-      const spikeHeader = document.createElement("h3");
-      spikeHeader.className = "font-bold text-2xl mt-6 mb-2";
-      spikeHeader.textContent = "🔥 成交量暴增";
-      container.appendChild(spikeHeader);
-
+      const volumeContainer = document.getElementById("volume-spike-container");
+      volumeContainer.innerHTML = "";
       const ul = document.createElement("ul");
       ul.className = "list-disc pl-6 space-y-1";
       data.volume_spike.slice(0, 10).forEach(stock => {
         const li = document.createElement("li");
-        li.textContent = `${stock.name} (${stock.stock_id}) - ${stock.ratio.toFixed(2)} 倍`;
+        li.textContent = `${stock.name} (${stock.stock_id})`;
         ul.appendChild(li);
       });
-      container.appendChild(ul);
+      volumeContainer.appendChild(ul);
     } else {
-      const spikeHeader = document.createElement("h3");
-      spikeHeader.className = "font-bold text-2xl mt-6 mb-2";
-      spikeHeader.textContent = "🔥 成交量暴增";
-      container.appendChild(spikeHeader);
-
-      const noData = document.createElement("p");
-      noData.className = "text-gray-500 mt-2";
-      noData.textContent = "（今日無成交量暴增股票）";
-      container.appendChild(noData);
+      document.getElementById("volume-spike-container").textContent = "（今日無爆量股票）";
     }
   })
   .catch(err => {

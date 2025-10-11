@@ -3,30 +3,30 @@
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "3479",
-        "name": "安勤"
+        "stock_id": "3706",
+        "name": "神達"
       },
       {
-        "stock_id": "5386",
-        "name": "青雲"
+        "stock_id": "00785B",
+        "name": "富邦金融投等債"
       },
       {
-        "stock_id": "6788",
-        "name": "華景電"
+        "stock_id": "1314",
+        "name": "中石化"
       },
       {
-        "stock_id": "3128",
-        "name": "昇銳"
+        "stock_id": "2882",
+        "name": "國泰金"
       }
     ],
     "invest": [
       {
-        "stock_id": "6488",
-        "name": "環球晶"
+        "stock_id": "2408",
+        "name": "南亞科"
       },
       {
-        "stock_id": "8155",
-        "name": "博智"
+        "stock_id": "2313",
+        "name": "華通"
       }
     ]
   }

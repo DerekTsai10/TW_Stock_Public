@@ -22,7 +22,7 @@
           class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
     </div>
 
-    <!-- 上方兩塊 (左：指標觀察 / 右：新上榜) -->
+    <!-- 上方兩塊 (左：指標觀察 / 右：新上榜 & 爆量) -->
     <div class="grid grid-cols-2 gap-6 mb-8">
       <!-- 指標觀察清單 -->
       <div class="p-6 border rounded bg-white shadow">
@@ -40,7 +40,7 @@
         <div id="industry-section" class="mt-8"></div>
       </div>
 
-      <!-- 新上榜清單 -->
+      <!-- 新上榜 + 成交量暴增 -->
       <div class="p-6 border rounded bg-white shadow">
         <h3 class="font-bold text-2xl mb-4">🚀 新上榜</h3>
         <div id="newcomers-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
@@ -200,9 +200,9 @@ fetch("newcomers.json")
     // 成交量暴增
     if (data.volume_spike && data.volume_spike.length > 0) {
       console.log("✅ 成交量暴增資料筆數:", data.volume_spike.length);
-      const spikeHeader = document.createElement("p");
-      spikeHeader.className = "font-semibold mt-4";
-      spikeHeader.textContent = "🔥 成交量暴增 (前 10 檔)";
+      const spikeHeader = document.createElement("h3");
+      spikeHeader.className = "font-bold text-2xl mt-6 mb-2";
+      spikeHeader.textContent = "🔥 成交量暴增";
       container.appendChild(spikeHeader);
 
       const ul = document.createElement("ul");
@@ -216,6 +216,11 @@ fetch("newcomers.json")
       container.appendChild(ul);
     } else {
       console.warn("⚠️ 今日無成交量暴增股票 (volume_spike 空)");
+      const spikeHeader = document.createElement("h3");
+      spikeHeader.className = "font-bold text-2xl mt-6 mb-2";
+      spikeHeader.textContent = "🔥 成交量暴增";
+      container.appendChild(spikeHeader);
+
       const noData = document.createElement("p");
       noData.className = "text-gray-500 mt-2";
       noData.textContent = "（今日無成交量暴增股票）";

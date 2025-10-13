@@ -4,28 +4,28 @@
   <meta charset="utf-8">
   <title>法人買賣超查詢</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="p-6 bg-gray-50 text-lg">
-  <div class="max-w-7xl mx-auto">
+  <!-- 外層容器 + 縮放 -->
+  <div class="max-w-7xl mx-auto transform scale-150 origin-top">
     <!-- 動態標題 -->
     <h1 id="page-title" class="text-3xl font-bold mb-8">法人買賣超查詢</h1>
 
     <!-- 搜尋框 -->
     <div class="my-6 relative w-96">
       <label class="block mb-2 font-bold text-xl">輸入股票代碼或名稱：</label>
-      <input type="text" id="search-input"
-             placeholder="台積電 或 2330"
+      <input type="text" id="search-input" 
+             placeholder="台積電 或 2330" 
              class="w-full border p-3 rounded text-lg"
              autocomplete="off">
-      <ul id="suggestions"
+      <ul id="suggestions" 
           class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
     </div>
 
-    <!-- 上方：指標觀察 + 新上榜 -->
-    <div class="grid grid-cols-3 gap-6 mb-8">
-      <!-- 左：指標觀察清單 -->
-      <div class="col-span-2 p-6 border rounded bg-white shadow">
+    <!-- 上方兩塊 (左：指標觀察 / 右：新上榜+爆量) -->
+    <div class="grid grid-cols-2 gap-6 mb-8">
+      <!-- 指標觀察清單 -->
+      <div class="p-6 border rounded bg-white shadow">
         <h3 id="insights-title" class="font-bold text-2xl mb-6">📊 指標觀察清單</h3>
         <div class="grid grid-cols-2 gap-6 text-gray-700">
           <div>
@@ -37,14 +37,10 @@
             <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
           </div>
         </div>
-        <!-- EPS 區塊 -->
-        <div class="mt-8">
-          <h4 class="font-semibold mb-3">📈 EPS 趨勢</h4>
-          <canvas id="epsChart" height="120"></canvas>
-        </div>
+        <div id="industry-section" class="mt-8"></div>
       </div>
 
-      <!-- 右：新上榜 + 爆量 -->
+      <!-- 新上榜 + 爆量 -->
       <div class="p-6 border rounded bg-white shadow">
         <h3 class="font-bold text-2xl mb-4">🚀 新上榜</h3>
         <div id="newcomers-container" class="text-gray-700 text-lg mb-6">（此區塊暫不顯示內容）</div>
@@ -120,7 +116,7 @@ fetch("insights.json")
     }
   });
 
-// newcomers.json
+// newcomers.json (新上榜 + 爆量)
 fetch("newcomers.json")
   .then(res => res.json())
   .then(data => {
@@ -180,33 +176,11 @@ fetch("newcomers.json")
     } else {
       volumeContainer.textContent = "（今日無成交量暴增股票）";
     }
+  })
+  .catch(err => {
+    document.getElementById("newcomers-container").textContent = "無法載入資料";
+    document.getElementById("volume-container").textContent = "無法載入資料";
   });
-
-// EPS chart
-function renderEPS(stockId) {
-  fetch("eps.json")
-    .then(res => res.json())
-    .then(data => {
-      const epsData = data[stockId] || [];
-      const labels = epsData.map(e => e.date);
-      const values = epsData.map(e => e.value);
-
-      const ctx = document.getElementById("epsChart").getContext("2d");
-      new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: labels,
-          datasets: [{
-            label: "EPS",
-            data: values,
-            borderColor: "blue",
-            fill: false
-          }]
-        },
-        options: { responsive: true }
-      });
-    });
-}
 </script>
 </body>
 </html>

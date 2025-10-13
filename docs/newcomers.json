@@ -3,50 +3,31 @@
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "3167",
-        "name": "大量",
-        "foreign_ratio": 2.78560224533448,
+        "stock_id": "8936",
+        "name": "國統",
+        "foreign_ratio": 1.0577069870766576,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "2375",
-        "name": "凱美",
-        "foreign_ratio": 0.967287784679089,
+        "stock_id": "4979",
+        "name": "華星光",
+        "foreign_ratio": 0.9290186834553309,
+        "invest_ratio": -1.1310723729118777
+      },
+      {
+        "stock_id": "5314",
+        "name": "世紀*",
+        "foreign_ratio": 0.8231167808219179,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "6257",
-        "name": "矽格",
-        "foreign_ratio": 0.9654647952520292,
-        "invest_ratio": -0.09488874010150607
-      },
-      {
-        "stock_id": "3708",
-        "name": "上緯投控",
-        "foreign_ratio": 0.9176822593592643,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "2630",
-        "name": "亞航",
-        "foreign_ratio": 0.8971461721368614,
-        "invest_ratio": 0.0
+        "stock_id": "4749",
+        "name": "新應材",
+        "foreign_ratio": 0.794755990769831,
+        "invest_ratio": 0.18979247540772087
       }
     ],
-    "invest": [
-      {
-        "stock_id": "5222",
-        "name": "全訊",
-        "foreign_ratio": 0.08657033433847643,
-        "invest_ratio": 0.3653731868905861
-      },
-      {
-        "stock_id": "2645",
-        "name": "長榮航太",
-        "foreign_ratio": -0.10436180153242385,
-        "invest_ratio": 0.13989374482740208
-      }
-    ]
+    "invest": []
   },
   "volume_spike": []
 }

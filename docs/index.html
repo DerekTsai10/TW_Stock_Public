@@ -187,7 +187,7 @@ fetch("newcomers.json")
   });
 
 /* ===========================
-   🔎 Google式搜尋 + 表格渲染
+   🔎 Google式搜尋 + 表格渲染 + 紅/綠顯示
    =========================== */
 
 // 即時建議
@@ -235,9 +235,15 @@ input.addEventListener("keyup", function(e) {
   }
 });
 
-// 顯示法人數據
+// 顯示法人數據（紅：買超 / 綠：賣超）
 function showStockData(keyword) {
   tableBody.innerHTML = "";
+
+  const colorize = (val) => {
+    if (val > 0) return `<span class="text-red-600">${val}</span>`;
+    if (val < 0) return `<span class="text-green-600">${val}</span>`;
+    return val;
+  };
 
   records.forEach(day => {
     const stock = day.stocks.find(s =>
@@ -245,13 +251,18 @@ function showStockData(keyword) {
     );
 
     if (stock) {
+      const foreign = (stock.foreign_net/1000).toFixed(0);
+      const invest  = (stock.invest_net/1000).toFixed(0);
+      const dealer  = (stock.dealer_net/1000).toFixed(0);
+      const total   = ((stock.foreign_net + stock.invest_net + stock.dealer_net)/1000).toFixed(0);
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td class="border px-4 py-2">${day.date}</td>
-        <td class="border px-4 py-2">${(stock.foreign_net/1000).toFixed(0)}</td>
-        <td class="border px-4 py-2">${(stock.invest_net/1000).toFixed(0)}</td>
-        <td class="border px-4 py-2">${(stock.dealer_net/1000).toFixed(0)}</td>
-        <td class="border px-4 py-2">${((stock.foreign_net + stock.invest_net + stock.dealer_net)/1000).toFixed(0)}</td>
+        <td class="border px-4 py-2">${colorize(foreign)}</td>
+        <td class="border px-4 py-2">${colorize(invest)}</td>
+        <td class="border px-4 py-2">${colorize(dealer)}</td>
+        <td class="border px-4 py-2">${colorize(total)}</td>
       `;
       tableBody.appendChild(tr);
     }

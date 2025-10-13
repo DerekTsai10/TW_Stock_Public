@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   <title>法人買賣超查詢</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="p-6 bg-gray-50 text-lg">
+<body class="p-3 md:p-6 bg-gray-50 text-base md:text-lg">
   <!-- 外層容器 + 縮放 -->
   <div class="max-w-7xl mx-auto md:transform md:scale-150 md:origin-top">
     <!-- 動態標題 -->
     <h1 id="page-title" class="text-3xl font-bold mb-8">法人買賣超查詢</h1>
 
     <!-- 搜尋框 -->
-    <div class="my-6 relative w-96">
+    <div class="my-6 relative w-full md:w-96">
       <label class="block mb-2 font-bold text-xl">輸入股票代碼或名稱：</label>
       <input type="text" id="search-input" 
              placeholder="台積電 或 2330" 
@@ -23,11 +24,11 @@
     </div>
 
     <!-- 上方兩塊 (左：指標觀察 / 右：新上榜+爆量) -->
-    <div class="grid grid-cols-2 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       <!-- 指標觀察清單 -->
       <div class="p-6 border rounded bg-white shadow">
         <h3 id="insights-title" class="font-bold text-2xl mb-6">📊 指標觀察清單</h3>
-        <div class="grid grid-cols-2 gap-6 text-gray-700">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
           <div>
             <h4 class="font-semibold mb-3">🌏 外資買超投本比前 10</h4>
             <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>

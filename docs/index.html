@@ -72,6 +72,10 @@
 let records = [];
 let stockList = [];
 
+const input = document.getElementById("search-input");
+const suggestions = document.getElementById("suggestions");
+const tableBody = document.querySelector("#trading-table tbody");
+
 // 載入 data.json
 fetch("data.json")
   .then(res => res.json())
@@ -116,7 +120,7 @@ fetch("insights.json")
     }
   });
 
-// newcomers.json (新上榜 + 爆量)
+// newcomers.json
 fetch("newcomers.json")
   .then(res => res.json())
   .then(data => {
@@ -181,6 +185,84 @@ fetch("newcomers.json")
     document.getElementById("newcomers-container").textContent = "無法載入資料";
     document.getElementById("volume-container").textContent = "無法載入資料";
   });
+
+/* ===========================
+   🔎 Google式搜尋 + 表格渲染
+   =========================== */
+
+// 即時建議
+input.addEventListener("input", function() {
+  const keyword = this.value.trim();
+  suggestions.innerHTML = "";
+
+  if (!keyword) {
+    suggestions.classList.add("hidden");
+    return;
+  }
+
+  const matched = stockList.filter(s =>
+    s.id.includes(keyword) || s.name.includes(keyword)
+  ).slice(0, 10);
+
+  if (matched.length === 0) {
+    suggestions.classList.add("hidden");
+    return;
+  }
+
+  matched.forEach(s => {
+    const li = document.createElement("li");
+    li.textContent = `${s.name} (${s.id})`;
+    li.className = "p-2 hover:bg-gray-200 cursor-pointer";
+    li.addEventListener("click", () => {
+      input.value = s.id;
+      suggestions.classList.add("hidden");
+      showStockData(s.id);
+    });
+    suggestions.appendChild(li);
+  });
+
+  suggestions.classList.remove("hidden");
+});
+
+// Enter 鍵查詢
+input.addEventListener("keyup", function(e) {
+  if (e.key === "Enter") {
+    const keyword = this.value.trim();
+    if (keyword) {
+      showStockData(keyword);
+      suggestions.classList.add("hidden");
+    }
+  }
+});
+
+// 顯示法人數據
+function showStockData(keyword) {
+  tableBody.innerHTML = "";
+
+  records.forEach(day => {
+    const stock = day.stocks.find(s =>
+      s.stock_id === keyword || s.name.includes(keyword)
+    );
+
+    if (stock) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="border px-4 py-2">${day.date}</td>
+        <td class="border px-4 py-2">${(stock.foreign_net/1000).toFixed(0)}</td>
+        <td class="border px-4 py-2">${(stock.invest_net/1000).toFixed(0)}</td>
+        <td class="border px-4 py-2">${(stock.dealer_net/1000).toFixed(0)}</td>
+        <td class="border px-4 py-2">${((stock.foreign_net + stock.invest_net + stock.dealer_net)/1000).toFixed(0)}</td>
+      `;
+      tableBody.appendChild(tr);
+    }
+  });
+
+  if (!tableBody.innerHTML) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="5" class="border px-4 py-2 text-red-500">找不到相關資料</td>`;
+    tableBody.appendChild(tr);
+  }
+}
 </script>
 </body>
 </html>

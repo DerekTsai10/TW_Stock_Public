@@ -1,8 +1,40 @@
 {
   "date": "20251009",
   "newcomers": {
-    "foreign": [],
-    "invest": []
+    "foreign": [
+      {
+        "stock_id": "6139",
+        "name": "亞翔",
+        "foreign_ratio": 1.5692838827603626,
+        "invest_ratio": -0.04353337014729867
+      },
+      {
+        "stock_id": "2329",
+        "name": "華泰",
+        "foreign_ratio": 1.5105185249213946,
+        "invest_ratio": -0.09994489524694493
+      }
+    ],
+    "invest": [
+      {
+        "stock_id": "2408",
+        "name": "南亞科",
+        "foreign_ratio": -0.6001842428920939,
+        "invest_ratio": 0.27711602590437634
+      },
+      {
+        "stock_id": "2313",
+        "name": "華通",
+        "foreign_ratio": 0.7841396351798089,
+        "invest_ratio": 0.20212783809635684
+      },
+      {
+        "stock_id": "9802",
+        "name": "鈺齊-KY",
+        "foreign_ratio": 0.03432989536844933,
+        "invest_ratio": 0.1990138861939092
+      }
+    ]
   },
   "volume_spike": []
 }

@@ -5,30 +5,35 @@
       {
         "stock_id": "3167",
         "name": "大量",
+        "market": "TWSE",
         "foreign_ratio": 2.78560224533448,
         "invest_ratio": 0.0
       },
       {
         "stock_id": "2375",
         "name": "凱美",
+        "market": "TWSE",
         "foreign_ratio": 0.967287784679089,
         "invest_ratio": 0.0
       },
       {
         "stock_id": "6257",
         "name": "矽格",
+        "market": "TWSE",
         "foreign_ratio": 0.9654647952520292,
         "invest_ratio": -0.09488874010150607
       },
       {
         "stock_id": "3708",
         "name": "上緯投控",
+        "market": "TWSE",
         "foreign_ratio": 0.9176822593592643,
         "invest_ratio": 0.0
       },
       {
         "stock_id": "2630",
         "name": "亞航",
+        "market": "TWSE",
         "foreign_ratio": 0.8971461721368614,
         "invest_ratio": 0.0
       }
@@ -37,12 +42,14 @@
       {
         "stock_id": "5222",
         "name": "全訊",
+        "market": "TWSE",
         "foreign_ratio": 0.08657033433847643,
         "invest_ratio": 0.3653731868905861
       },
       {
         "stock_id": "2645",
         "name": "長榮航太",
+        "market": "TWSE",
         "foreign_ratio": -0.10436180153242385,
         "invest_ratio": 0.13989374482740208
       }

@@ -3,30 +3,61 @@
 <head>
   <meta charset="utf-8">
   <title>法人買賣超查詢</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* 手機排版微調 */
+    @media (max-width: 768px) {
+      .mobile-reset {
+        transform: scale(1) !important;      /* 手機取消縮放 */
+        padding: 1rem !important;
+      }
+      .mobile-col {
+        grid-template-columns: 1fr !important; /* 手機改單欄 */
+        gap: 1.5rem !important;
+      }
+      .mobile-center {
+        text-align: center !important;
+      }
+      input, select, button {
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      h3 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
+
 <body class="p-6 bg-gray-50 text-lg">
-  <!-- 外層容器 + 縮放 -->
-  <div class="max-w-7xl mx-auto transform scale-150 origin-top">
-    <!-- 動態標題 -->
-    <h1 id="page-title" class="text-3xl font-bold mb-8">法人買賣超查詢</h1>
+  <!-- 外層容器：桌機放大、手機正常 -->
+  <div class="max-w-7xl mx-auto transform scale-150 origin-top mobile-reset transition-transform duration-300">
+
+    <!-- 頁面標題 -->
+    <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">
+      法人買賣超查詢
+    </h1>
 
     <!-- 搜尋框 -->
-    <div class="my-6 relative w-96">
-      <label class="block mb-2 font-bold text-xl">輸入股票代碼或名稱：</label>
-      <input type="text" id="search-input" 
-             placeholder="台積電 或 2330" 
+    <div class="my-6 relative w-full md:w-96 mx-auto md:mx-0">
+      <label class="block mb-2 font-bold text-xl mobile-center">輸入股票代碼或名稱：</label>
+      <input type="text" id="search-input"
+             placeholder="台積電 或 2330"
              class="w-full border p-3 rounded text-lg"
              autocomplete="off">
-      <ul id="suggestions" 
+      <ul id="suggestions"
           class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
     </div>
 
     <!-- 上方兩塊 (左：指標觀察 / 右：新上榜+爆量) -->
-    <div class="grid grid-cols-2 gap-6 mb-8">
+    <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
       <!-- 指標觀察清單 -->
       <div class="p-6 border rounded bg-white shadow">
-        <h3 id="insights-title" class="font-bold text-2xl mb-6">📊 指標觀察清單</h3>
+        <h3 id="insights-title" class="font-bold text-2xl mb-6 mobile-center">📊 指標觀察清單</h3>
         <div class="grid grid-cols-2 gap-6 text-gray-700">
           <div>
             <h4 class="font-semibold mb-3">🌏 外資買超投本比前 10</h4>
@@ -42,17 +73,17 @@
 
       <!-- 新上榜 + 爆量 -->
       <div class="p-6 border rounded bg-white shadow">
-        <h3 class="font-bold text-2xl mb-4">🚀 新上榜</h3>
+        <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
         <div id="newcomers-container" class="text-gray-700 text-lg mb-6">（此區塊暫不顯示內容）</div>
 
-        <h3 class="font-bold text-2xl mb-4">🔥 成交量暴增</h3>
+        <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 成交量暴增</h3>
         <div id="volume-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
       </div>
     </div>
 
     <!-- 下方：法人表格 -->
     <div class="p-6 border rounded bg-white shadow overflow-x-auto">
-      <h3 class="font-bold text-2xl mb-4">法人買賣超 (張)</h3>
+      <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超 (張)</h3>
       <table id="trading-table" class="table-auto w-full text-center border-collapse border text-lg">
         <thead class="bg-gray-100">
           <tr>
@@ -68,219 +99,213 @@
     </div>
   </div>
 
-<script>
-let records = [];
-let stockList = [];
+  <!-- 保留原完整 JS，不改功能 -->
+  <script>
+  let records = [];
+  let stockList = [];
 
-const input = document.getElementById("search-input");
-const suggestions = document.getElementById("suggestions");
-const tableBody = document.querySelector("#trading-table tbody");
-const pageTitle = document.getElementById("page-title");
+  const input = document.getElementById("search-input");
+  const suggestions = document.getElementById("suggestions");
+  const tableBody = document.querySelector("#trading-table tbody");
+  const pageTitle = document.getElementById("page-title");
 
-// 載入 data.json
-fetch("data.json")
-  .then(res => res.json())
-  .then(data => {
-    records = data.records;
-    records.forEach(day => {
-      day.stocks.forEach(s => {
-        if (!stockList.find(x => x.id === s.stock_id)) {
-          stockList.push({ id: s.stock_id, name: s.name.trim() });
-        }
+  // 載入 data.json
+  fetch("data.json")
+    .then(res => res.json())
+    .then(data => {
+      records = data.records;
+      records.forEach(day => {
+        day.stocks.forEach(s => {
+          if (!stockList.find(x => x.id === s.stock_id)) {
+            stockList.push({ id: s.stock_id, name: s.name.trim() });
+          }
+        });
       });
     });
-  });
 
-// insights.json
-fetch("insights.json")
-  .then(res => res.json())
-  .then(data => {
-    if (data.date) {
-      document.getElementById("insights-title").textContent =
-        `📊 指標觀察清單 (資料日期：${data.date})`;
-    }
+  // insights.json
+  fetch("insights.json")
+    .then(res => res.json())
+    .then(data => {
+      if (data.date) {
+        document.getElementById("insights-title").textContent =
+          `📊 指標觀察清單 (資料日期：${data.date})`;
+      }
 
-    const foreignList = document.getElementById("foreign_ratio_list");
-    foreignList.innerHTML = "";
-    if (data.foreign_ratio_ranking) {
-      data.foreign_ratio_ranking.slice(0, 10).forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
-        foreignList.appendChild(li);
-      });
-    }
+      const foreignList = document.getElementById("foreign_ratio_list");
+      foreignList.innerHTML = "";
+      if (data.foreign_ratio_ranking) {
+        data.foreign_ratio_ranking.slice(0, 10).forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
+          foreignList.appendChild(li);
+        });
+      }
 
-    const investList = document.getElementById("invest_ratio_list");
-    investList.innerHTML = "";
-    if (data.invest_ratio_ranking) {
-      data.invest_ratio_ranking.slice(0, 10).forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
-        investList.appendChild(li);
-      });
-    }
-  });
-
-// newcomers.json
-fetch("newcomers.json")
-  .then(res => res.json())
-  .then(data => {
-    const newcomers = data.newcomers || {};
-    const container = document.getElementById("newcomers-container");
-    container.innerHTML = "";
-
-    if (newcomers.foreign && newcomers.foreign.length > 0) {
-      const header = document.createElement("p");
-      header.className = "font-semibold mt-2";
-      header.textContent = "🌏 外資新上榜：";
-      container.appendChild(header);
-
-      const ul = document.createElement("ul");
-      ul.className = "list-disc pl-6 space-y-1";
-      newcomers.foreign.forEach(stock => {
-        const li = document.createElement("li");
-        li.textContent = `${stock.name} (${stock.stock_id})`;
-        ul.appendChild(li);
-      });
-      container.appendChild(ul);
-    }
-
-    if (newcomers.invest && newcomers.invest.length > 0) {
-      const header = document.createElement("p");
-      header.className = "font-semibold mt-2";
-      header.textContent = "🏦 投信新上榜：";
-      container.appendChild(header);
-
-      const ul = document.createElement("ul");
-      ul.className = "list-disc pl-6 space-y-1";
-      newcomers.invest.forEach(stock => {
-        const li = document.createElement("li");
-        li.textContent = `${stock.name} (${stock.stock_id})`;
-        ul.appendChild(li);
-      });
-      container.appendChild(ul);
-    }
-
-    if ((!newcomers.foreign || newcomers.foreign.length === 0) &&
-        (!newcomers.invest || newcomers.invest.length === 0)) {
-      container.textContent = "（今日無新上榜股票）";
-    }
-
-    // 成交量暴增
-    const volumeContainer = document.getElementById("volume-container");
-    volumeContainer.innerHTML = "";
-    if (data.volume_spike && data.volume_spike.length > 0) {
-      const ul = document.createElement("ul");
-      ul.className = "list-disc pl-6 space-y-1";
-      data.volume_spike.forEach(stock => {
-        const li = document.createElement("li");
-        li.textContent = `${stock.name} (${stock.stock_id})`;
-        ul.appendChild(li);
-      });
-      volumeContainer.appendChild(ul);
-    } else {
-      volumeContainer.textContent = "（今日無成交量暴增股票）";
-    }
-  })
-  .catch(err => {
-    document.getElementById("newcomers-container").textContent = "無法載入資料";
-    document.getElementById("volume-container").textContent = "無法載入資料";
-  });
-
-/* ===========================
-   🔎 Google式搜尋 + 表格渲染 + 紅/綠顯示 + 標題更新
-   =========================== */
-
-// 即時建議
-input.addEventListener("input", function() {
-  const keyword = this.value.trim();
-  suggestions.innerHTML = "";
-
-  if (!keyword) {
-    suggestions.classList.add("hidden");
-    return;
-  }
-
-  const matched = stockList.filter(s =>
-    s.id.includes(keyword) || s.name.includes(keyword)
-  ).slice(0, 10);
-
-  if (matched.length === 0) {
-    suggestions.classList.add("hidden");
-    return;
-  }
-
-  matched.forEach(s => {
-    const li = document.createElement("li");
-    li.textContent = `${s.name} (${s.id})`;
-    li.className = "p-2 hover:bg-gray-200 cursor-pointer";
-    li.addEventListener("click", () => {
-      input.value = s.id;
-      suggestions.classList.add("hidden");
-      showStockData(s.id);
+      const investList = document.getElementById("invest_ratio_list");
+      investList.innerHTML = "";
+      if (data.invest_ratio_ranking) {
+        data.invest_ratio_ranking.slice(0, 10).forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
+          investList.appendChild(li);
+        });
+      }
     });
-    suggestions.appendChild(li);
-  });
 
-  suggestions.classList.remove("hidden");
-});
+  // newcomers.json
+  fetch("newcomers.json")
+    .then(res => res.json())
+    .then(data => {
+      const newcomers = data.newcomers || {};
+      const container = document.getElementById("newcomers-container");
+      container.innerHTML = "";
 
-// Enter 鍵查詢
-input.addEventListener("keyup", function(e) {
-  if (e.key === "Enter") {
+      if (newcomers.foreign && newcomers.foreign.length > 0) {
+        const header = document.createElement("p");
+        header.className = "font-semibold mt-2";
+        header.textContent = "🌏 外資新上榜：";
+        container.appendChild(header);
+
+        const ul = document.createElement("ul");
+        ul.className = "list-disc pl-6 space-y-1";
+        newcomers.foreign.forEach(stock => {
+          const li = document.createElement("li");
+          li.textContent = `${stock.name} (${stock.stock_id})`;
+          ul.appendChild(li);
+        });
+        container.appendChild(ul);
+      }
+
+      if (newcomers.invest && newcomers.invest.length > 0) {
+        const header = document.createElement("p");
+        header.className = "font-semibold mt-2";
+        header.textContent = "🏦 投信新上榜：";
+        container.appendChild(header);
+
+        const ul = document.createElement("ul");
+        ul.className = "list-disc pl-6 space-y-1";
+        newcomers.invest.forEach(stock => {
+          const li = document.createElement("li");
+          li.textContent = `${stock.name} (${stock.stock_id})`;
+          ul.appendChild(li);
+        });
+        container.appendChild(ul);
+      }
+
+      if ((!newcomers.foreign || newcomers.foreign.length === 0) &&
+          (!newcomers.invest || newcomers.invest.length === 0)) {
+        container.textContent = "（今日無新上榜股票）";
+      }
+
+      // 成交量暴增
+      const volumeContainer = document.getElementById("volume-container");
+      volumeContainer.innerHTML = "";
+      if (data.volume_spike && data.volume_spike.length > 0) {
+        const ul = document.createElement("ul");
+        ul.className = "list-disc pl-6 space-y-1";
+        data.volume_spike.forEach(stock => {
+          const li = document.createElement("li");
+          li.textContent = `${stock.name} (${stock.stock_id})`;
+          ul.appendChild(li);
+        });
+        volumeContainer.appendChild(ul);
+      } else {
+        volumeContainer.textContent = "（今日無成交量暴增股票）";
+      }
+    })
+    .catch(err => {
+      document.getElementById("newcomers-container").textContent = "無法載入資料";
+      document.getElementById("volume-container").textContent = "無法載入資料";
+    });
+
+  /* ===========================
+     🔎 Google式搜尋 + 表格渲染
+     =========================== */
+
+  input.addEventListener("input", function() {
     const keyword = this.value.trim();
-    if (keyword) {
-      showStockData(keyword);
+    suggestions.innerHTML = "";
+
+    if (!keyword) {
       suggestions.classList.add("hidden");
+      return;
     }
-  }
-});
 
-// 顯示法人數據（紅：買超 / 綠：賣超）並更新標題
-function showStockData(keyword) {
-  tableBody.innerHTML = "";
+    const matched = stockList.filter(s =>
+      s.id.includes(keyword) || s.name.includes(keyword)
+    ).slice(0, 10);
 
-  const colorize = (val) => {
-    if (val > 0) return `<span class="text-red-600">${val}</span>`;
-    if (val < 0) return `<span class="text-green-600">${val}</span>`;
-    return val;
-  };
+    if (matched.length === 0) {
+      suggestions.classList.add("hidden");
+      return;
+    }
 
-  let foundStock = null;
+    matched.forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = `${s.name} (${s.id})`;
+      li.className = "p-2 hover:bg-gray-200 cursor-pointer";
+      li.addEventListener("click", () => {
+        input.value = s.id;
+        suggestions.classList.add("hidden");
+        showStockData(s.id);
+      });
+      suggestions.appendChild(li);
+    });
 
-  records.forEach(day => {
-    const stock = day.stocks.find(s =>
-      s.stock_id === keyword || s.name.includes(keyword)
-    );
+    suggestions.classList.remove("hidden");
+  });
 
-    if (stock) {
-      if (!foundStock) foundStock = stock; // 記錄第一次找到的，拿來更新標題
-      const foreign = (stock.foreign_net/1000).toFixed(0);
-      const invest  = (stock.invest_net/1000).toFixed(0);
-      const dealer  = (stock.dealer_net/1000).toFixed(0);
-      const total   = ((stock.foreign_net + stock.invest_net + stock.dealer_net)/1000).toFixed(0);
+  input.addEventListener("keyup", function(e) {
+    if (e.key === "Enter") {
+      const keyword = this.value.trim();
+      if (keyword) {
+        showStockData(keyword);
+        suggestions.classList.add("hidden");
+      }
+    }
+  });
 
+  function showStockData(keyword) {
+    tableBody.innerHTML = "";
+    const colorize = (val) => {
+      if (val > 0) return `<span class="text-red-600">${val}</span>`;
+      if (val < 0) return `<span class="text-green-600">${val}</span>`;
+      return val;
+    };
+
+    let foundStock = null;
+    records.forEach(day => {
+      const stock = day.stocks.find(s =>
+        s.stock_id === keyword || s.name.includes(keyword)
+      );
+      if (stock) {
+        if (!foundStock) foundStock = stock;
+        const foreign = (stock.foreign_net/1000).toFixed(0);
+        const invest  = (stock.invest_net/1000).toFixed(0);
+        const dealer  = (stock.dealer_net/1000).toFixed(0);
+        const total   = ((stock.foreign_net + stock.invest_net + stock.dealer_net)/1000).toFixed(0);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="border px-4 py-2">${day.date}</td>
+          <td class="border px-4 py-2">${colorize(foreign)}</td>
+          <td class="border px-4 py-2">${colorize(invest)}</td>
+          <td class="border px-4 py-2">${colorize(dealer)}</td>
+          <td class="border px-4 py-2">${colorize(total)}</td>
+        `;
+        tableBody.appendChild(tr);
+      }
+    });
+
+    if (foundStock) {
+      pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
+    } else {
+      pageTitle.textContent = "法人買賣超查詢";
       const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="border px-4 py-2">${day.date}</td>
-        <td class="border px-4 py-2">${colorize(foreign)}</td>
-        <td class="border px-4 py-2">${colorize(invest)}</td>
-        <td class="border px-4 py-2">${colorize(dealer)}</td>
-        <td class="border px-4 py-2">${colorize(total)}</td>
-      `;
+      tr.innerHTML = `<td colspan="5" class="border px-4 py-2 text-red-500">找不到相關資料</td>`;
       tableBody.appendChild(tr);
     }
-  });
-
-  if (foundStock) {
-    pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
-  } else {
-    pageTitle.textContent = "法人買賣超查詢";
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="5" class="border px-4 py-2 text-red-500">找不到相關資料</td>`;
-    tableBody.appendChild(tr);
   }
-}
-</script>
+  </script>
 </body>
 </html>

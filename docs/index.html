@@ -75,6 +75,7 @@ let stockList = [];
 const input = document.getElementById("search-input");
 const suggestions = document.getElementById("suggestions");
 const tableBody = document.querySelector("#trading-table tbody");
+const pageTitle = document.getElementById("page-title");
 
 // 載入 data.json
 fetch("data.json")
@@ -187,7 +188,7 @@ fetch("newcomers.json")
   });
 
 /* ===========================
-   🔎 Google式搜尋 + 表格渲染 + 紅/綠顯示
+   🔎 Google式搜尋 + 表格渲染 + 紅/綠顯示 + 標題更新
    =========================== */
 
 // 即時建議
@@ -235,7 +236,7 @@ input.addEventListener("keyup", function(e) {
   }
 });
 
-// 顯示法人數據（紅：買超 / 綠：賣超）
+// 顯示法人數據（紅：買超 / 綠：賣超）並更新標題
 function showStockData(keyword) {
   tableBody.innerHTML = "";
 
@@ -245,12 +246,15 @@ function showStockData(keyword) {
     return val;
   };
 
+  let foundStock = null;
+
   records.forEach(day => {
     const stock = day.stocks.find(s =>
       s.stock_id === keyword || s.name.includes(keyword)
     );
 
     if (stock) {
+      if (!foundStock) foundStock = stock; // 記錄第一次找到的，拿來更新標題
       const foreign = (stock.foreign_net/1000).toFixed(0);
       const invest  = (stock.invest_net/1000).toFixed(0);
       const dealer  = (stock.dealer_net/1000).toFixed(0);
@@ -268,7 +272,10 @@ function showStockData(keyword) {
     }
   });
 
-  if (!tableBody.innerHTML) {
+  if (foundStock) {
+    pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
+  } else {
+    pageTitle.textContent = "法人買賣超查詢";
     const tr = document.createElement("tr");
     tr.innerHTML = `<td colspan="5" class="border px-4 py-2 text-red-500">找不到相關資料</td>`;
     tableBody.appendChild(tr);

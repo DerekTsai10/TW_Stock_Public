@@ -1,38 +1,44 @@
 {
-  "date": "20251015",
+  "date": "20251016",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "2316",
-        "name": "楠梓電",
-        "foreign_ratio": 1.353996247444519,
-        "invest_ratio": -0.020794510529398905
+        "stock_id": "8028",
+        "name": "昇陽半導體",
+        "foreign_ratio": 1.9328581465053687,
+        "invest_ratio": 0.02664655338475353
       },
       {
-        "stock_id": "3324",
-        "name": "雙鴻",
-        "foreign_ratio": 1.159428372051572,
-        "invest_ratio": 0.03465016717234663
+        "stock_id": "6187",
+        "name": "萬潤",
+        "foreign_ratio": 1.6821927468273163,
+        "invest_ratio": 0.0
       },
       {
-        "stock_id": "2455",
-        "name": "全新",
-        "foreign_ratio": 1.096323482734609,
-        "invest_ratio": -0.9891516830737672
+        "stock_id": "6462",
+        "name": "神盾",
+        "foreign_ratio": 1.4739604233845565,
+        "invest_ratio": 0.0
       },
       {
-        "stock_id": "4772",
-        "name": "台特化",
-        "foreign_ratio": 1.0722977775856526,
-        "invest_ratio": 0.005213921370490473
+        "stock_id": "2344",
+        "name": "華邦電",
+        "foreign_ratio": 1.4532446043386205,
+        "invest_ratio": 0.043244442589738356
+      },
+      {
+        "stock_id": "8064",
+        "name": "東捷",
+        "foreign_ratio": 1.3572560193060659,
+        "invest_ratio": 0.0
       }
     ],
     "invest": [
       {
-        "stock_id": "1590",
-        "name": "亞德客-KY",
-        "foreign_ratio": -0.05172800051728001,
-        "invest_ratio": 0.21150000211500003
+        "stock_id": "7751",
+        "name": "竑騰",
+        "foreign_ratio": -0.1970537699991818,
+        "invest_ratio": 0.33471433990613125
       }
     ]
   },

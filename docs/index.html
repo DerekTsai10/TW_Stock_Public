@@ -7,18 +7,19 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-900">
 
+<body class="bg-gray-50 text-gray-900">
   <div class="max-w-6xl mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4 text-center">法人買賣超查詢</h1>
 
-    <!-- 🔍 搜尋區塊 -->
-    <div class="flex items-center space-x-2 mb-6">
+    <!-- 🔍 搜尋框 + 查看K線 -->
+    <div class="flex flex-wrap items-center justify-center gap-2 mb-6">
+      <label for="search-input" class="font-medium">輸入股票代碼或名稱：</label>
       <input
         id="search-input"
         type="text"
-        placeholder="輸入股票代碼或名稱"
-        class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+        placeholder="例如：2330 或 台積電"
+        class="w-60 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
       />
       <button
         id="search-button"
@@ -26,7 +27,7 @@
       >
         查詢
       </button>
-      <!-- 📈 K線新增區塊 -->
+      <!-- 📈 新增查看K線按鈕 -->
       <button
         id="kline-button"
         class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
@@ -36,12 +37,12 @@
       </button>
     </div>
 
-    <!-- 雙欄佈局 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 transform md:scale-150 md:origin-top">
-      <!-- 左側：法人買賣超表格 -->
-      <div id="table-section" class="bg-white p-4 rounded-2xl shadow-md">
+    <!-- 🧩 雙欄排版 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:scale-150 md:origin-top">
+      <!-- 左側法人買賣超 -->
+      <div class="bg-white p-4 rounded-2xl shadow-md">
         <h2 class="text-xl font-semibold mb-2">法人買超前15名</h2>
-        <table id="foreign-table" class="w-full text-sm border-t border-gray-200">
+        <table class="w-full text-sm border-t border-gray-200">
           <thead>
             <tr class="bg-gray-100">
               <th class="p-2 text-left">股票</th>
@@ -49,19 +50,19 @@
               <th class="p-2 text-right">投信買超</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody id="foreign-table-body"></tbody>
         </table>
       </div>
 
-      <!-- 右側：EPS + 新上榜 -->
+      <!-- 右側 EPS + 新上榜 -->
       <div class="flex flex-col space-y-4">
-        <!-- EPS 圖表 -->
+        <!-- EPS 區塊 -->
         <div class="bg-white p-4 rounded-2xl shadow-md flex-1">
           <h2 id="eps-title" class="text-xl font-semibold mb-2">EPS 趨勢圖</h2>
           <canvas id="eps-chart"></canvas>
         </div>
 
-        <!-- 新上榜清單 -->
+        <!-- 新上榜區塊 -->
         <div class="bg-white p-4 rounded-2xl shadow-md flex-1">
           <h2 class="text-xl font-semibold mb-2">【新上榜】投信/外資買超前15</h2>
           <ul id="newcomers-list" class="list-disc pl-5 text-sm text-gray-700"></ul>
@@ -70,7 +71,7 @@
     </div>
   </div>
 
-  <!-- 📈 K線 Modal -->
+  <!-- 📈 Yahoo K線彈出視窗 -->
   <div id="kline-modal" class="fixed inset-0 hidden bg-black bg-opacity-50 items-center justify-center z-50">
     <div class="bg-white rounded-2xl shadow-xl w-11/12 md:w-3/4 lg:w-1/2 h-[80vh] flex flex-col">
       <div class="flex justify-between items-center p-3 border-b">
@@ -87,54 +88,20 @@
     const klineClose = document.getElementById("kline-close");
     const klineFrame = document.getElementById("kline-frame");
     const klineTitle = document.getElementById("kline-title");
-    const searchInput = document.getElementById("search-input");
-    const searchButton = document.getElementById("search-button");
 
     let selectedStock = null;
     let selectedMarket = null;
 
-    // 🔹 模擬搜尋邏輯（你可以改成實際 data.json 搜尋結果邏輯）
-    const mockStocks = {
-      "2330": { name: "台積電", market: "TWSE" },
-      "2603": { name: "長榮", market: "TWSE" },
-      "6515": { name: "穎崴", market: "TPEX" },
-    };
-
-    // 查詢按鈕事件
-    searchButton.addEventListener("click", () => {
-      const input = searchInput.value.trim();
-      if (!input) return alert("請輸入股票代碼或名稱");
-      let found = null;
-
-      // 嘗試以代碼或名稱搜尋
-      for (const [id, info] of Object.entries(mockStocks)) {
-        if (input.includes(id) || input.includes(info.name)) {
-          found = { id, market: info.market, name: info.name };
-          break;
-        }
-      }
-
-      if (!found) {
-        alert("查無此股票");
-        return;
-      }
-
-      // 成功選定股票
-      setSelectedStock(found.id, found.market, found.name);
-    });
-
-    // 🔹 設定已選股票並啟用按鈕
-    function setSelectedStock(stockId, market, name) {
+    // ✅ 這是暫時測試用，可改成你的搜尋事件裡呼叫
+    function setSelectedStock(stockId, market) {
       selectedStock = stockId;
       selectedMarket = market;
       klineButton.disabled = false;
-      klineButton.classList.remove("bg-gray-500", "hover:bg-gray-600");
+      klineButton.classList.remove("bg-gray-500");
       klineButton.classList.add("bg-green-600", "hover:bg-green-700");
-      document.title = `${name} (${stockId})｜法人買賣超查詢`;
-      console.log(`✅ 選擇股票：${stockId} (${market})`);
     }
 
-    // 🔹 點擊查看K線
+    // 點擊查看K線
     klineButton.addEventListener("click", () => {
       if (!selectedStock) return;
       const suffix = selectedMarket === "TPEX" ? "TWO" : "TW";
@@ -145,12 +112,15 @@
       klineModal.classList.add("flex");
     });
 
-    // 🔹 關閉視窗
+    // 關閉視窗
     klineClose.addEventListener("click", () => {
       klineModal.classList.add("hidden");
       klineModal.classList.remove("flex");
       klineFrame.src = "";
     });
+
+    // 測試：預設載入2330（可刪）
+    setSelectedStock("2330", "TWSE");
   </script>
 </body>
 </html>

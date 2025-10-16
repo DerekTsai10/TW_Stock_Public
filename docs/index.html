@@ -103,7 +103,7 @@
     </div>
   </div>
 
-  <!-- JS 保持原樣 -->
+  <!-- JS -->
   <script>
   let records = [];
   let stockList = [];
@@ -127,7 +127,7 @@
       });
     });
 
-  // insights.json
+  // insights.json：加上「同時上榜紅字」功能
   fetch("insights.json")
     .then(res => res.json())
     .then(data => {
@@ -137,24 +137,39 @@
       }
 
       const foreignList = document.getElementById("foreign_ratio_list");
-      foreignList.innerHTML = "";
-      if (data.foreign_ratio_ranking) {
-        data.foreign_ratio_ranking.slice(0, 10).forEach(item => {
-          const li = document.createElement("li");
-          li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
-          foreignList.appendChild(li);
-        });
-      }
-
       const investList = document.getElementById("invest_ratio_list");
+      foreignList.innerHTML = "";
       investList.innerHTML = "";
-      if (data.invest_ratio_ranking) {
-        data.invest_ratio_ranking.slice(0, 10).forEach(item => {
-          const li = document.createElement("li");
-          li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
-          investList.appendChild(li);
-        });
-      }
+
+      const foreignTop = data.foreign_ratio_ranking || [];
+      const investTop = data.invest_ratio_ranking || [];
+
+      // 找出同時上榜股票
+      const bothTop = new Set(
+        foreignTop.map(i => i.stock_id).filter(id => investTop.some(j => j.stock_id === id))
+      );
+
+      // 外資榜
+      foreignTop.slice(0, 10).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
+        if (bothTop.has(item.stock_id)) {
+          li.classList.add("text-red-600", "font-bold");
+          li.title = "同時上榜外資與投信";
+        }
+        foreignList.appendChild(li);
+      });
+
+      // 投信榜
+      investTop.slice(0, 10).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
+        if (bothTop.has(item.stock_id)) {
+          li.classList.add("text-red-600", "font-bold");
+          li.title = "同時上榜外資與投信";
+        }
+        investList.appendChild(li);
+      });
     });
 
   // newcomers.json

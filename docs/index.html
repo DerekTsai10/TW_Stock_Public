@@ -9,11 +9,11 @@
     /* 手機排版微調 */
     @media (max-width: 768px) {
       .mobile-reset {
-        transform: scale(1) !important;      /* 手機取消縮放 */
+        transform: scale(1) !important;
         padding: 1rem !important;
       }
       .mobile-col {
-        grid-template-columns: 1fr !important; /* 手機改單欄 */
+        grid-template-columns: 1fr !important;
         gap: 1.5rem !important;
       }
       .mobile-center {
@@ -43,14 +43,18 @@
     </h1>
 
     <!-- 搜尋框 -->
-    <div class="my-6 relative w-full md:w-96 mx-auto md:mx-0">
-      <label class="block mb-2 font-bold text-xl mobile-center">輸入股票代碼或名稱：</label>
-      <input type="text" id="search-input"
-             placeholder="台積電 或 2330"
-             class="w-full border p-3 rounded text-lg"
-             autocomplete="off">
-      <ul id="suggestions"
-          class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
+    <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-auto mx-auto md:mx-0">
+      <label class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">
+        輸入股票代碼或名稱：
+      </label>
+      <div class="relative w-full md:w-80">
+        <input type="text" id="search-input"
+               placeholder="台積電 或 2330"
+               class="w-full border p-3 rounded text-lg"
+               autocomplete="off">
+        <ul id="suggestions"
+            class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
+      </div>
     </div>
 
     <!-- 上方兩塊 (左：指標觀察 / 右：新上榜+爆量) -->
@@ -99,7 +103,7 @@
     </div>
   </div>
 
-  <!-- 保留原完整 JS，不改功能 -->
+  <!-- JS 保持原樣 -->
   <script>
   let records = [];
   let stockList = [];
@@ -219,28 +223,21 @@
       document.getElementById("volume-container").textContent = "無法載入資料";
     });
 
-  /* ===========================
-     🔎 Google式搜尋 + 表格渲染
-     =========================== */
-
+  // 搜尋功能保持原樣
   input.addEventListener("input", function() {
     const keyword = this.value.trim();
     suggestions.innerHTML = "";
-
     if (!keyword) {
       suggestions.classList.add("hidden");
       return;
     }
-
     const matched = stockList.filter(s =>
       s.id.includes(keyword) || s.name.includes(keyword)
     ).slice(0, 10);
-
     if (matched.length === 0) {
       suggestions.classList.add("hidden");
       return;
     }
-
     matched.forEach(s => {
       const li = document.createElement("li");
       li.textContent = `${s.name} (${s.id})`;
@@ -252,7 +249,6 @@
       });
       suggestions.appendChild(li);
     });
-
     suggestions.classList.remove("hidden");
   });
 

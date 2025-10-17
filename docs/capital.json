@@ -5196,7 +5196,7 @@
     "abbreviation": "佳醫",
     "industry": "22",
     "market": "TWSE",
-    "share_capital": 1633975770,
+    "share_capital": 1715674560,
     "shares_issued": 0
   },
   "4106": {
@@ -5532,7 +5532,7 @@
     "abbreviation": "華廣",
     "industry": "22",
     "market": "TWSE",
-    "share_capital": 610883940,
+    "share_capital": 672214530,
     "shares_issued": 0
   },
   "4739": {
@@ -6708,7 +6708,7 @@
     "abbreviation": "保瑞",
     "industry": "22",
     "market": "TWSE",
-    "share_capital": 1244001840,
+    "share_capital": 1244480230,
     "shares_issued": 0
   },
   "6477": {
@@ -7193,7 +7193,7 @@
   },
   "6794": {
     "company_name": "向榮生醫科技股份有限公司",
-    "abbreviation": "向榮生技-創",
+    "abbreviation": "向榮生技",
     "industry": "22",
     "market": "TWSE",
     "share_capital": 606790000,
@@ -7655,6 +7655,14 @@
     "share_capital": 810024170,
     "shares_issued": 0
   },
+  "7788": {
+    "company_name": "松川精密股份有限公司",
+    "abbreviation": "松川精密",
+    "industry": "28",
+    "market": "TWSE",
+    "share_capital": 797459930,
+    "shares_issued": 0
+  },
   "7799": {
     "company_name": "禾榮科技股份有限公司",
     "abbreviation": "禾榮科",
@@ -7756,7 +7764,7 @@
     "abbreviation": "華冠",
     "industry": "27",
     "market": "TWSE",
-    "share_capital": 384662160,
+    "share_capital": 444662160,
     "shares_issued": 0
   },
   "8103": {
@@ -11644,8 +11652,8 @@
     "abbreviation": "寶得利",
     "industry": "16",
     "market": "TPEX",
-    "share_capital": 1427525710,
-    "shares_issued": 142752571
+    "share_capital": 658903040,
+    "shares_issued": 65890304
   },
   "5302": {
     "company_name": "太欣半導體股份有限公司",
@@ -14350,6 +14358,14 @@
     "market": "TPEX",
     "share_capital": 280000000,
     "shares_issued": 28000000
+  },
+  "7738": {
+    "company_name": "東聯互動股份有限公司",
+    "abbreviation": "東聯互動",
+    "industry": "36",
+    "market": "TPEX",
+    "share_capital": 248557990,
+    "shares_issued": 24855799
   },
   "7743": {
     "company_name": "金利食安科技股份有限公司",

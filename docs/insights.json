@@ -1,147 +1,147 @@
 {
-  "date": "20251016",
+  "date": "20251017",
   "foreign_ratio_ranking": [
-    {
-      "stock_id": "8271",
-      "name": "宇瞻",
-      "market": "TWSE",
-      "foreign_ratio": 5.273962156311736,
-      "invest_ratio": 0.0
-    },
-    {
-      "stock_id": "8028",
-      "name": "昇陽半導體",
-      "market": "TWSE",
-      "foreign_ratio": 1.9328581465053687,
-      "invest_ratio": 0.02664655338475353
-    },
-    {
-      "stock_id": "6187",
-      "name": "萬潤",
-      "market": "TPEX",
-      "foreign_ratio": 1.6821927468273163,
-      "invest_ratio": 0.0
-    },
-    {
-      "stock_id": "4967",
-      "name": "十銓",
-      "market": "TWSE",
-      "foreign_ratio": 1.5846138157930048,
-      "invest_ratio": 0.0
-    },
-    {
-      "stock_id": "2455",
-      "name": "全新",
-      "market": "TWSE",
-      "foreign_ratio": 1.484863237314016,
-      "invest_ratio": -1.0032128879725741
-    },
-    {
-      "stock_id": "6462",
-      "name": "神盾",
-      "market": "TPEX",
-      "foreign_ratio": 1.4739604233845565,
-      "invest_ratio": 0.0
-    },
-    {
-      "stock_id": "2344",
-      "name": "華邦電",
-      "market": "TWSE",
-      "foreign_ratio": 1.4532446043386205,
-      "invest_ratio": 0.043244442589738356
-    },
     {
       "stock_id": "8088",
       "name": "品安",
       "market": "TPEX",
-      "foreign_ratio": 1.3583030913968013,
+      "foreign_ratio": 4.491745632581887,
       "invest_ratio": 0.0
     },
     {
-      "stock_id": "8064",
-      "name": "東捷",
-      "market": "TPEX",
-      "foreign_ratio": 1.3572560193060659,
+      "stock_id": "2327",
+      "name": "國巨*",
+      "market": "TWSE",
+      "foreign_ratio": 2.265591238740251,
+      "invest_ratio": -0.03492580499952479
+    },
+    {
+      "stock_id": "3006",
+      "name": "晶豪科",
+      "market": "TWSE",
+      "foreign_ratio": 1.3184018220523543,
       "invest_ratio": 0.0
     },
     {
-      "stock_id": "8054",
-      "name": "安國",
+      "stock_id": "8112",
+      "name": "至上",
+      "market": "TWSE",
+      "foreign_ratio": 1.2622645044478948,
+      "invest_ratio": 0.06252263472521788
+    },
+    {
+      "stock_id": "6227",
+      "name": "茂綸",
       "market": "TPEX",
-      "foreign_ratio": 1.1278633440735475,
+      "foreign_ratio": 1.2017691977429095,
       "invest_ratio": 0.0
-    }
-  ],
-  "invest_ratio_ranking": [
+    },
+    {
+      "stock_id": "8021",
+      "name": "尖點",
+      "market": "TWSE",
+      "foreign_ratio": 1.1414929450189526,
+      "invest_ratio": -0.31860916591306454
+    },
+    {
+      "stock_id": "6770",
+      "name": "力積電",
+      "market": "TWSE",
+      "foreign_ratio": 1.044052203221537,
+      "invest_ratio": 0.0011936270672427475
+    },
     {
       "stock_id": "8996",
       "name": "高力",
       "market": "TWSE",
-      "foreign_ratio": 0.7970040045835073,
-      "invest_ratio": 1.2430110011939794
+      "foreign_ratio": 0.9989621350096891,
+      "invest_ratio": 0.1333749711043672
+    },
+    {
+      "stock_id": "8110",
+      "name": "華東",
+      "market": "TWSE",
+      "foreign_ratio": 0.9039288293104162,
+      "invest_ratio": 0.0
     },
     {
       "stock_id": "3189",
       "name": "景碩",
       "market": "TWSE",
-      "foreign_ratio": 0.7922558711916161,
-      "invest_ratio": 0.9502339641944137
-    },
+      "foreign_ratio": 0.8910589704121967,
+      "invest_ratio": 0.49251933182156893
+    }
+  ],
+  "invest_ratio_ranking": [
     {
-      "stock_id": "3131",
-      "name": "弘塑",
-      "market": "TPEX",
-      "foreign_ratio": -0.2635027398500446,
-      "invest_ratio": 0.814621706622207
-    },
-    {
-      "stock_id": "3324",
-      "name": "雙鴻",
-      "market": "TPEX",
-      "foreign_ratio": 0.11881193642470139,
-      "invest_ratio": 0.537186553961223
-    },
-    {
-      "stock_id": "5289",
-      "name": "宜鼎",
-      "market": "TPEX",
-      "foreign_ratio": 0.2493810408078971,
-      "invest_ratio": 0.4643190247434645
-    },
-    {
-      "stock_id": "2481",
-      "name": "強茂",
+      "stock_id": "8210",
+      "name": "勤誠",
       "market": "TWSE",
-      "foreign_ratio": 0.38006471283441906,
-      "invest_ratio": 0.38993504171586574
+      "foreign_ratio": -0.04587737043122088,
+      "invest_ratio": 0.7180548323942813
     },
     {
-      "stock_id": "7751",
-      "name": "竑騰",
-      "market": "TPEX",
-      "foreign_ratio": -0.1970537699991818,
-      "invest_ratio": 0.33471433990613125
-    },
-    {
-      "stock_id": "8046",
-      "name": "南電",
+      "stock_id": "3189",
+      "name": "景碩",
       "market": "TWSE",
-      "foreign_ratio": 0.03566810741781385,
-      "invest_ratio": 0.2205291103701427
+      "foreign_ratio": 0.8910589704121967,
+      "invest_ratio": 0.49251933182156893
+    },
+    {
+      "stock_id": "2408",
+      "name": "南亞科",
+      "market": "TWSE",
+      "foreign_ratio": 0.8506557386590157,
+      "invest_ratio": 0.4237682112597674
+    },
+    {
+      "stock_id": "3587",
+      "name": "閎康",
+      "market": "TPEX",
+      "foreign_ratio": -0.5116483229555242,
+      "invest_ratio": 0.29833721455132606
+    },
+    {
+      "stock_id": "3260",
+      "name": "威剛",
+      "market": "TPEX",
+      "foreign_ratio": -0.14980033742922894,
+      "invest_ratio": 0.25407043099700943
+    },
+    {
+      "stock_id": "3665",
+      "name": "貿聯-KY",
+      "market": "TWSE",
+      "foreign_ratio": 0.1567850579328093,
+      "invest_ratio": 0.24492215463482095
     },
     {
       "stock_id": "5536",
       "name": "聖暉*",
       "market": "TPEX",
-      "foreign_ratio": -0.9914658118697209,
-      "invest_ratio": 0.21577127121790593
+      "foreign_ratio": -1.1129832763181258,
+      "invest_ratio": 0.1495394981323883
     },
     {
-      "stock_id": "6274",
-      "name": "台燿",
+      "stock_id": "3324",
+      "name": "雙鴻",
       "market": "TPEX",
-      "foreign_ratio": -0.07183156427304292,
-      "invest_ratio": 0.2080054358753909
+      "foreign_ratio": -0.5486058543375184,
+      "invest_ratio": 0.1435443104648877
+    },
+    {
+      "stock_id": "8996",
+      "name": "高力",
+      "market": "TWSE",
+      "foreign_ratio": 0.9989621350096891,
+      "invest_ratio": 0.1333749711043672
+    },
+    {
+      "stock_id": "2472",
+      "name": "立隆電",
+      "market": "TWSE",
+      "foreign_ratio": -0.16965718734309854,
+      "invest_ratio": 0.12444218260491688
     }
   ]
 }

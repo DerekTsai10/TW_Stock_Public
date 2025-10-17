@@ -1,44 +1,56 @@
 {
-  "date": "20251016",
+  "date": "20251017",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "8028",
-        "name": "昇陽半導體",
-        "foreign_ratio": 1.9328581465053687,
-        "invest_ratio": 0.02664655338475353
-      },
-      {
-        "stock_id": "6187",
-        "name": "萬潤",
-        "foreign_ratio": 1.6821927468273163,
+        "stock_id": "3006",
+        "name": "晶豪科",
+        "foreign_ratio": 1.3184018220523543,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "6462",
-        "name": "神盾",
-        "foreign_ratio": 1.4739604233845565,
+        "stock_id": "8112",
+        "name": "至上",
+        "foreign_ratio": 1.2622645044478948,
+        "invest_ratio": 0.06252263472521788
+      },
+      {
+        "stock_id": "6227",
+        "name": "茂綸",
+        "foreign_ratio": 1.2017691977429095,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "2344",
-        "name": "華邦電",
-        "foreign_ratio": 1.4532446043386205,
-        "invest_ratio": 0.043244442589738356
-      },
-      {
-        "stock_id": "8064",
-        "name": "東捷",
-        "foreign_ratio": 1.3572560193060659,
+        "stock_id": "8110",
+        "name": "華東",
+        "foreign_ratio": 0.9039288293104162,
         "invest_ratio": 0.0
       }
     ],
     "invest": [
       {
-        "stock_id": "7751",
-        "name": "竑騰",
-        "foreign_ratio": -0.1970537699991818,
-        "invest_ratio": 0.33471433990613125
+        "stock_id": "8210",
+        "name": "勤誠",
+        "foreign_ratio": -0.04587737043122088,
+        "invest_ratio": 0.7180548323942813
+      },
+      {
+        "stock_id": "3587",
+        "name": "閎康",
+        "foreign_ratio": -0.5116483229555242,
+        "invest_ratio": 0.29833721455132606
+      },
+      {
+        "stock_id": "3665",
+        "name": "貿聯-KY",
+        "foreign_ratio": 0.1567850579328093,
+        "invest_ratio": 0.24492215463482095
+      },
+      {
+        "stock_id": "2472",
+        "name": "立隆電",
+        "foreign_ratio": -0.16965718734309854,
+        "invest_ratio": 0.12444218260491688
       }
     ]
   },

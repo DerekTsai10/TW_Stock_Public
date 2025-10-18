@@ -292,7 +292,7 @@
     "abbreviation": "聯成",
     "industry": "03",
     "market": "TWSE",
-    "share_capital": 13596896070,
+    "share_capital": 13496896070,
     "shares_issued": 0
   },
   "1314": {
@@ -1084,7 +1084,7 @@
     "abbreviation": "程泰",
     "industry": "05",
     "market": "TWSE",
-    "share_capital": 1104003720,
+    "share_capital": 1094003720,
     "shares_issued": 0
   },
   "1587": {
@@ -4836,7 +4836,7 @@
     "abbreviation": "柏騰",
     "industry": "31",
     "market": "TWSE",
-    "share_capital": 969622300,
+    "share_capital": 978872300,
     "shares_issued": 0
   },
   "3528": {
@@ -5740,7 +5740,7 @@
     "abbreviation": "臻鼎-KY",
     "industry": "28",
     "market": "TWSE",
-    "share_capital": 10406229500,
+    "share_capital": 10572992510,
     "shares_issued": 0
   },
   "4960": {
@@ -14196,8 +14196,8 @@
     "abbreviation": "惠民實業",
     "industry": "35",
     "market": "TPEX",
-    "share_capital": 351680000,
-    "shares_issued": 35168000
+    "share_capital": 386680000,
+    "shares_issued": 38668000
   },
   "6982": {
     "company_name": "大井泵浦工業股份有限公司",
@@ -14364,8 +14364,8 @@
     "abbreviation": "東聯互動",
     "industry": "36",
     "market": "TPEX",
-    "share_capital": 248557990,
-    "shares_issued": 24855799
+    "share_capital": 273557990,
+    "shares_issued": 27355799
   },
   "7743": {
     "company_name": "金利食安科技股份有限公司",

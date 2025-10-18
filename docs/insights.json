@@ -55,7 +55,7 @@
       "name": "高力",
       "market": "TWSE",
       "foreign_ratio": 0.9989621350096891,
-      "invest_ratio": 0.1333749711043672
+      "invest_ratio": 0.09839137212617252
     },
     {
       "stock_id": "8110",
@@ -92,7 +92,7 @@
       "name": "南亞科",
       "market": "TWSE",
       "foreign_ratio": 0.8506557386590157,
-      "invest_ratio": 0.4237682112597674
+      "invest_ratio": 0.4369998742417569
     },
     {
       "stock_id": "3587",
@@ -130,18 +130,18 @@
       "invest_ratio": 0.1435443104648877
     },
     {
-      "stock_id": "8996",
-      "name": "高力",
-      "market": "TWSE",
-      "foreign_ratio": 0.9989621350096891,
-      "invest_ratio": 0.1333749711043672
-    },
-    {
       "stock_id": "2472",
       "name": "立隆電",
       "market": "TWSE",
       "foreign_ratio": -0.16965718734309854,
       "invest_ratio": 0.12444218260491688
+    },
+    {
+      "stock_id": "3443",
+      "name": "創意",
+      "market": "TWSE",
+      "foreign_ratio": 0.21060441411062336,
+      "invest_ratio": 0.12013857484652987
     }
   ]
 }

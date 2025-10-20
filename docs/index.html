@@ -6,17 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    /* 桌機字體放大取代 scale */
-    body {
-      font-size: 1.25rem; /* 放大約等於原本 scale-150 */
-    }
-
-    /* 保留手機排版微調 */
+    /* 手機排版微調 */
     @media (max-width: 768px) {
-      body {
-        font-size: 1rem; /* 手機維持原字體大小 */
-      }
       .mobile-reset {
+        transform: scale(1) !important;
         padding: 1rem !important;
       }
       .mobile-col {
@@ -41,8 +34,8 @@
 </head>
 
 <body class="p-6 bg-gray-50 text-lg">
-  <!-- 外層容器：移除 transform，改為自然放大字體 -->
-  <div class="max-w-7xl mx-auto mobile-reset transition-transform duration-300">
+  <!-- 外層容器：桌機放大、手機正常 -->
+  <div class="max-w-7xl mx-auto transform scale-150 origin-top mobile-reset transition-transform duration-300">
 
     <!-- 頁面標題 -->
     <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">
@@ -84,6 +77,7 @@
       <div class="p-6 border rounded bg-white shadow">
         <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
         <div id="newcomers-container" class="text-gray-700 text-lg mb-6">（此區塊暫不顯示內容）</div>
+
         <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 成交量暴增</h3>
         <div id="volume-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
       </div>
@@ -107,7 +101,7 @@
     </div>
   </div>
 
-  <!-- JS 保持不變 -->
+  <!-- JS -->
   <script>
   let records = [];
   let stockList = [];
@@ -117,6 +111,7 @@
   const tableBody = document.querySelector("#trading-table tbody");
   const pageTitle = document.getElementById("page-title");
 
+  // 載入 data.json
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -130,6 +125,7 @@
       });
     });
 
+  // insights.json
   fetch("insights.json")
     .then(res => res.json())
     .then(data => {
@@ -145,6 +141,7 @@
 
       const foreignTop = data.foreign_ratio_ranking || [];
       const investTop = data.invest_ratio_ranking || [];
+
       const bothTop = new Set(
         foreignTop.map(i => i.stock_id).filter(id => investTop.some(j => j.stock_id === id))
       );
@@ -164,6 +161,7 @@
       });
     });
 
+  // newcomers.json
   fetch("newcomers.json")
     .then(res => res.json())
     .then(data => {
@@ -216,6 +214,7 @@
       document.getElementById("volume-container").textContent = "無法載入資料";
     });
 
+  // 搜尋
   input.addEventListener("input", function() {
     const keyword = this.value.trim();
     suggestions.innerHTML = "";
@@ -245,14 +244,22 @@
     }
   });
 
+  // ✅ 修正版：支援全形／半形空白清理
   function showStockData(keyword) {
     tableBody.innerHTML = "";
-    const colorize = val => val > 0 ? `<span class='text-red-600'>${val}</span>`
-                        : val < 0 ? `<span class='text-green-600'>${val}</span>` : val;
+    const colorize = (val) => {
+      if (val > 0) return `<span class="text-red-600">${val}</span>`;
+      if (val < 0) return `<span class="text-green-600">${val}</span>`;
+      return val;
+    };
+
+    const kw = keyword.toString().replace(/\s|　/g, "").trim();
     let foundStock = null;
+
     records.forEach(day => {
       const stock = day.stocks.find(s =>
-        s.stock_id === keyword || s.name.includes(keyword)
+        s.stock_id.toString().replace(/\s|　/g, "").trim() === kw ||
+        s.name.replace(/\s|　/g, "").includes(kw)
       );
       if (stock) {
         if (!foundStock) foundStock = stock;
@@ -271,10 +278,10 @@
       }
     });
 
-    pageTitle.textContent = foundStock
-      ? `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`
-      : "法人買賣超查詢";
-    if (!foundStock) {
+    if (foundStock) {
+      pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
+    } else {
+      pageTitle.textContent = "法人買賣超查詢";
       const tr = document.createElement("tr");
       tr.innerHTML = `<td colspan="5" class="border px-4 py-2 text-red-500">找不到相關資料</td>`;
       tableBody.appendChild(tr);

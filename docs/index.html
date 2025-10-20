@@ -6,10 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    /* 手機排版微調 */
+    /* 桌機字體放大取代 scale */
+    body {
+      font-size: 1.25rem; /* 放大約等於原本 scale-150 */
+    }
+
+    /* 保留手機排版微調 */
     @media (max-width: 768px) {
+      body {
+        font-size: 1rem; /* 手機維持原字體大小 */
+      }
       .mobile-reset {
-        transform: scale(1) !important;
         padding: 1rem !important;
       }
       .mobile-col {
@@ -30,50 +37,35 @@
         font-size: 1.5rem;
       }
     }
-
-    /* 🔧 修正搜尋框在桌機縮放下的行為 */
-    .search-container {
-      transform: scale(0.67);        /* 抵銷外層 scale(1.5) */
-      transform-origin: left top;
-    }
-
-    @media (max-width: 768px) {
-      .search-container {
-        transform: none !important;  /* 手機保持原樣 */
-      }
-    }
   </style>
 </head>
 
 <body class="p-6 bg-gray-50 text-lg">
-  <!-- 外層容器：桌機放大、手機正常 -->
-  <div class="max-w-7xl mx-auto transform scale-150 origin-top mobile-reset transition-transform duration-300">
+  <!-- 外層容器：移除 transform，改為自然放大字體 -->
+  <div class="max-w-7xl mx-auto mobile-reset transition-transform duration-300">
 
     <!-- 頁面標題 -->
     <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">
       法人買賣超查詢
     </h1>
 
-    <!-- 🔧 搜尋框區塊加 search-container -->
-    <div class="search-container">
-      <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-auto mx-auto md:mx-0">
-        <label class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">
-          輸入股票代碼或名稱：
-        </label>
-        <div class="relative w-full md:w-80">
-          <input type="text" id="search-input"
-                 placeholder="台積電 或 2330"
-                 class="w-full border p-3 rounded text-lg"
-                 autocomplete="off">
-          <ul id="suggestions"
-              class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
-        </div>
+    <!-- 搜尋框 -->
+    <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-auto mx-auto md:mx-0">
+      <label class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">
+        輸入股票代碼或名稱：
+      </label>
+      <div class="relative w-full md:w-80">
+        <input type="text" id="search-input"
+               placeholder="台積電 或 2330"
+               class="w-full border p-3 rounded text-lg"
+               autocomplete="off">
+        <ul id="suggestions"
+            class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
       </div>
     </div>
 
-    <!-- 上方兩塊 (左：指標觀察 / 右：新上榜+爆量) -->
+    <!-- 上方兩塊 -->
     <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
-      <!-- 指標觀察清單 -->
       <div class="p-6 border rounded bg-white shadow">
         <h3 id="insights-title" class="font-bold text-2xl mb-6 mobile-center">📊 指標觀察清單</h3>
         <div class="grid grid-cols-2 gap-6 text-gray-700">
@@ -89,17 +81,15 @@
         <div id="industry-section" class="mt-8"></div>
       </div>
 
-      <!-- 新上榜 + 爆量 -->
       <div class="p-6 border rounded bg-white shadow">
         <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
         <div id="newcomers-container" class="text-gray-700 text-lg mb-6">（此區塊暫不顯示內容）</div>
-
         <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 成交量暴增</h3>
         <div id="volume-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
       </div>
     </div>
 
-    <!-- 下方：法人表格 -->
+    <!-- 下方表格 -->
     <div class="p-6 border rounded bg-white shadow overflow-x-auto">
       <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超 (張)</h3>
       <table id="trading-table" class="table-auto w-full text-center border-collapse border text-lg">
@@ -117,7 +107,7 @@
     </div>
   </div>
 
-  <!-- JS -->
+  <!-- JS 保持不變 -->
   <script>
   let records = [];
   let stockList = [];
@@ -127,7 +117,6 @@
   const tableBody = document.querySelector("#trading-table tbody");
   const pageTitle = document.getElementById("page-title");
 
-  // 載入 data.json
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -141,7 +130,6 @@
       });
     });
 
-  // insights.json：同時上榜紅字
   fetch("insights.json")
     .then(res => res.json())
     .then(data => {
@@ -157,7 +145,6 @@
 
       const foreignTop = data.foreign_ratio_ranking || [];
       const investTop = data.invest_ratio_ranking || [];
-
       const bothTop = new Set(
         foreignTop.map(i => i.stock_id).filter(id => investTop.some(j => j.stock_id === id))
       );
@@ -177,7 +164,6 @@
       });
     });
 
-  // newcomers.json
   fetch("newcomers.json")
     .then(res => res.json())
     .then(data => {
@@ -230,7 +216,6 @@
       document.getElementById("volume-container").textContent = "無法載入資料";
     });
 
-  // 搜尋
   input.addEventListener("input", function() {
     const keyword = this.value.trim();
     suggestions.innerHTML = "";

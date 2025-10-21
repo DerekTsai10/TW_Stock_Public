@@ -1,50 +1,62 @@
 {
-  "date": "20251020",
+  "date": "20251021",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "8103",
-        "name": "瀚荃",
-        "foreign_ratio": 1.7780752157524646,
+        "stock_id": "6209",
+        "name": "今國光",
+        "foreign_ratio": 2.3648567360329884,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "3305",
-        "name": "昇貿",
-        "foreign_ratio": 1.6605824987439795,
-        "invest_ratio": -0.02234845390490587
-      },
-      {
-        "stock_id": "8111",
-        "name": "立碁",
-        "foreign_ratio": 1.2117076661215234,
+        "stock_id": "3543",
+        "name": "州巧",
+        "foreign_ratio": 1.686057460441403,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "6415",
-        "name": "矽力*-KY",
-        "foreign_ratio": 0.7151706263950854,
-        "invest_ratio": -0.6230014268689208
+        "stock_id": "4721",
+        "name": "美琪瑪",
+        "foreign_ratio": 1.402922859086374,
+        "invest_ratio": 0.0
       }
     ],
     "invest": [
       {
-        "stock_id": "8358",
-        "name": "金居",
-        "foreign_ratio": -0.48765420368346873,
-        "invest_ratio": 1.448208149239077
+        "stock_id": "1795",
+        "name": "美時",
+        "foreign_ratio": 0.9588613871344828,
+        "invest_ratio": 0.6729232879584568
       },
       {
-        "stock_id": "3013",
-        "name": "晟銘電",
-        "foreign_ratio": 0.7127998571504688,
-        "invest_ratio": 0.4465266539120586
+        "stock_id": "4979",
+        "name": "華星光",
+        "foreign_ratio": 0.6070585419913352,
+        "invest_ratio": 0.26554994819148914
       },
       {
-        "stock_id": "8155",
-        "name": "博智",
-        "foreign_ratio": 0.021553753033798327,
-        "invest_ratio": 0.1488320716976091
+        "stock_id": "6291",
+        "name": "沛亨",
+        "foreign_ratio": -0.05476190476190476,
+        "invest_ratio": 0.15
+      },
+      {
+        "stock_id": "6223",
+        "name": "旺矽",
+        "foreign_ratio": -0.16462897419388786,
+        "invest_ratio": 0.12320620004187736
+      },
+      {
+        "stock_id": "3026",
+        "name": "禾伸堂",
+        "foreign_ratio": -0.661244136020042,
+        "invest_ratio": 0.12297281870301797
+      },
+      {
+        "stock_id": "6488",
+        "name": "環球晶",
+        "foreign_ratio": -0.044532710287704044,
+        "invest_ratio": 0.10938820047468832
       }
     ]
   },

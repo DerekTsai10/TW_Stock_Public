@@ -1164,7 +1164,7 @@
     "abbreviation": "大亞",
     "industry": "06",
     "market": "TWSE",
-    "share_capital": 7736570870,
+    "share_capital": 7852619440,
     "shares_issued": 0
   },
   "1611": {
@@ -1956,7 +1956,7 @@
     "abbreviation": "三陽工業",
     "industry": "12",
     "market": "TWSE",
-    "share_capital": 7974896040,
+    "share_capital": 7917966040,
     "shares_issued": 0
   },
   "2207": {
@@ -3140,7 +3140,7 @@
     "abbreviation": "揚博",
     "industry": "28",
     "market": "TWSE",
-    "share_capital": 1144373900,
+    "share_capital": 1267966290,
     "shares_issued": 0
   },
   "2495": {
@@ -6252,7 +6252,7 @@
     "abbreviation": "嘉聯益",
     "industry": "28",
     "market": "TWSE",
-    "share_capital": 6381776940,
+    "share_capital": 6361776940,
     "shares_issued": 0
   },
   "6155": {
@@ -6548,7 +6548,7 @@
     "abbreviation": "康舒",
     "industry": "28",
     "market": "TWSE",
-    "share_capital": 8586371250,
+    "share_capital": 8584771250,
     "shares_issued": 0
   },
   "6283": {
@@ -7764,7 +7764,7 @@
     "abbreviation": "華冠",
     "industry": "27",
     "market": "TWSE",
-    "share_capital": 444662160,
+    "share_capital": 464662160,
     "shares_issued": 0
   },
   "8103": {
@@ -10916,8 +10916,8 @@
     "abbreviation": "桓達",
     "industry": "05",
     "market": "TPEX",
-    "share_capital": 558847500,
-    "shares_issued": 55884750
+    "share_capital": 570024450,
+    "shares_issued": 57002445
   },
   "4550": {
     "company_name": "長佳機電工程股份有限公司",
@@ -13164,8 +13164,8 @@
     "abbreviation": "威潤",
     "industry": "27",
     "market": "TPEX",
-    "share_capital": 518997460,
-    "shares_issued": 51899746
+    "share_capital": 470736850,
+    "shares_issued": 47073685
   },
   "6469": {
     "company_name": "大樹醫藥股份有限公司",
@@ -14398,6 +14398,14 @@
     "market": "TPEX",
     "share_capital": 250000000,
     "shares_issued": 25000000
+  },
+  "7757": {
+    "company_name": "金色三麥餐飲股份有限公司",
+    "abbreviation": "金色三麥",
+    "industry": "16",
+    "market": "TPEX",
+    "share_capital": 241000000,
+    "shares_issued": 24100000
   },
   "8024": {
     "company_name": "佑華微電子股份有限公司",

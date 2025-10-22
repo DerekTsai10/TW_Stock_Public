@@ -1,62 +1,68 @@
 {
-  "date": "20251021",
+  "date": "20251022",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "6209",
-        "name": "今國光",
-        "foreign_ratio": 2.3648567360329884,
+        "stock_id": "2481",
+        "name": "強茂",
+        "foreign_ratio": 4.822619504733454,
+        "invest_ratio": 0.5432920446994209
+      },
+      {
+        "stock_id": "2472",
+        "name": "立隆電",
+        "foreign_ratio": 1.7914441653088253,
+        "invest_ratio": 0.3520803215163502
+      },
+      {
+        "stock_id": "6282",
+        "name": "康舒",
+        "foreign_ratio": 1.7477204182930326,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "3543",
-        "name": "州巧",
-        "foreign_ratio": 1.686057460441403,
+        "stock_id": "5425",
+        "name": "台半",
+        "foreign_ratio": 1.6238105046894311,
+        "invest_ratio": -0.00111201571080086
+      },
+      {
+        "stock_id": "8043",
+        "name": "蜜望實",
+        "foreign_ratio": 1.2602123188695082,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "4721",
-        "name": "美琪瑪",
-        "foreign_ratio": 1.402922859086374,
+        "stock_id": "5386",
+        "name": "青雲",
+        "foreign_ratio": 1.1889953574027197,
         "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "5243",
+        "name": "乙盛-KY",
+        "foreign_ratio": 0.9723963392276037,
+        "invest_ratio": -0.10858670750950956
       }
     ],
     "invest": [
       {
-        "stock_id": "1795",
-        "name": "美時",
-        "foreign_ratio": 0.9588613871344828,
-        "invest_ratio": 0.6729232879584568
+        "stock_id": "3211",
+        "name": "順達",
+        "foreign_ratio": -0.041090004793898925,
+        "invest_ratio": 0.28876166711761825
       },
       {
-        "stock_id": "4979",
-        "name": "華星光",
-        "foreign_ratio": 0.6070585419913352,
-        "invest_ratio": 0.26554994819148914
+        "stock_id": "1319",
+        "name": "東陽",
+        "foreign_ratio": -0.021566347522369203,
+        "invest_ratio": 0.11150660535836698
       },
       {
-        "stock_id": "6291",
-        "name": "沛亨",
-        "foreign_ratio": -0.05476190476190476,
-        "invest_ratio": 0.15
-      },
-      {
-        "stock_id": "6223",
-        "name": "旺矽",
-        "foreign_ratio": -0.16462897419388786,
-        "invest_ratio": 0.12320620004187736
-      },
-      {
-        "stock_id": "3026",
-        "name": "禾伸堂",
-        "foreign_ratio": -0.661244136020042,
-        "invest_ratio": 0.12297281870301797
-      },
-      {
-        "stock_id": "6488",
-        "name": "環球晶",
-        "foreign_ratio": -0.044532710287704044,
-        "invest_ratio": 0.10938820047468832
+        "stock_id": "3450",
+        "name": "聯鈞",
+        "foreign_ratio": -0.8212930050320363,
+        "invest_ratio": 0.09815942026140305
       }
     ]
   },

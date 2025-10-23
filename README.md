@@ -85,4 +85,4 @@
 
 
 
-© Derek Tsai | TW_Stock 專案文件
+© Derek Tsai  CONTACT us : derektsai0428@gmail.com

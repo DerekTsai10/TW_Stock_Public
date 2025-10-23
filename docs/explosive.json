@@ -1,0 +1,23 @@
+{
+  "date": "2025-10-23",
+  "explosive": [
+    {
+      "stock_id": "1785",
+      "name": "光洋科",
+      "tag": "轉買",
+      "ratio": 0
+    },
+    {
+      "stock_id": "3707",
+      "name": "漢磊",
+      "tag": "轉買",
+      "ratio": 0
+    },
+    {
+      "stock_id": "5371",
+      "name": "中光電",
+      "tag": "轉買",
+      "ratio": 0
+    }
+  ]
+}

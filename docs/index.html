@@ -75,11 +75,19 @@
       </div>
 
       <div class="p-6 border rounded bg-white shadow">
-        <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
-        <div id="newcomers-container" class="text-gray-700 text-lg mb-6">（此區塊暫不顯示內容）</div>
+        <div class="grid grid-cols-2 gap-6 mobile-col">
+          <!-- 左邊：新上榜 -->
+          <div>
+            <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
+            <div id="newcomers-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
+          </div>
 
-        <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 成交量暴增</h3>
-        <div id="volume-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
+          <!-- 右邊：爆量偵測 -->
+          <div>
+            <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 爆量偵測</h3>
+            <div id="explosive-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -178,7 +186,7 @@
 
           const ul = document.createElement("ul");
           ul.className = "list-disc pl-6 space-y-1";
-          items.forEach(stock => {
+          items.slice(0, 10).forEach(stock => {
             const li = document.createElement("li");
             li.textContent = `${stock.name} (${stock.stock_id})`;
             ul.appendChild(li);
@@ -193,28 +201,37 @@
           (!newcomers.invest || newcomers.invest.length === 0)) {
         container.textContent = "（今日無新上榜股票）";
       }
-
-      const volumeContainer = document.getElementById("volume-container");
-      volumeContainer.innerHTML = "";
-      if (data.volume_spike && data.volume_spike.length > 0) {
-        const ul = document.createElement("ul");
-        ul.className = "list-disc pl-6 space-y-1";
-        data.volume_spike.forEach(stock => {
-          const li = document.createElement("li");
-          li.textContent = `${stock.name} (${stock.stock_id})`;
-          ul.appendChild(li);
-        });
-        volumeContainer.appendChild(ul);
-      } else {
-        volumeContainer.textContent = "（今日無成交量暴增股票）";
-      }
     })
     .catch(() => {
       document.getElementById("newcomers-container").textContent = "無法載入資料";
-      document.getElementById("volume-container").textContent = "無法載入資料";
     });
 
-  // 搜尋
+  // explosive.json
+  fetch("explosive.json")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("explosive-container");
+      container.innerHTML = "";
+
+      if (!data || !data.explosive || data.explosive.length === 0) {
+        container.textContent = "（今日無爆量股票）";
+        return;
+      }
+
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6 space-y-1";
+      data.explosive.slice(0, 10).forEach(stock => {
+        const li = document.createElement("li");
+        li.textContent = `${stock.name} (${stock.stock_id}) ${stock.tag}`;
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    })
+    .catch(() => {
+      document.getElementById("explosive-container").textContent = "無法載入資料";
+    });
+
+  // 搜尋功能
   input.addEventListener("input", function() {
     const keyword = this.value.trim();
     suggestions.innerHTML = "";
@@ -244,7 +261,7 @@
     }
   });
 
-  // ✅ 修正版：支援全形／半形空白清理
+  // 顯示個股法人買賣超
   function showStockData(keyword) {
     tableBody.innerHTML = "";
     const colorize = (val) => {

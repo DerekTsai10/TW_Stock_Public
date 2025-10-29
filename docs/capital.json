@@ -2884,7 +2884,7 @@
     "abbreviation": "創見",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 4307126750,
+    "share_capital": 4307016750,
     "shares_issued": 0
   },
   "2453": {
@@ -4492,7 +4492,7 @@
     "abbreviation": "日電貿",
     "industry": "28",
     "market": "TWSE",
-    "share_capital": 2165671500,
+    "share_capital": 2875671500,
     "shares_issued": 0
   },
   "3092": {
@@ -5132,7 +5132,7 @@
     "abbreviation": "神達",
     "industry": "25",
     "market": "TWSE",
-    "share_capital": 12065567890,
+    "share_capital": 13272124680,
     "shares_issued": 0
   },
   "3708": {
@@ -10332,8 +10332,8 @@
     "abbreviation": "新晶投控",
     "industry": "35",
     "market": "TPEX",
-    "share_capital": 780900000,
-    "shares_issued": 78090000
+    "share_capital": 880900000,
+    "shares_issued": 88090000
   },
   "4102": {
     "company_name": "永日化學工業股份有限公司",
@@ -13500,8 +13500,8 @@
     "abbreviation": "台灣銘板",
     "industry": "30",
     "market": "TPEX",
-    "share_capital": 269124360,
-    "shares_issued": 26912436
+    "share_capital": 299124360,
+    "shares_issued": 29912436
   },
   "6596": {
     "company_name": "寬宏藝術經紀股份有限公司",
@@ -14327,6 +14327,14 @@
     "share_capital": 331800000,
     "shares_issued": 33180000
   },
+  "7716": {
+    "company_name": "昱臺國際股份有限公司",
+    "abbreviation": "昱臺國際",
+    "industry": "15",
+    "market": "TPEX",
+    "share_capital": 225000000,
+    "shares_issued": 22500000
+  },
   "7718": {
     "company_name": "友鋮股份有限公司",
     "abbreviation": "友鋮",
@@ -14406,6 +14414,14 @@
     "market": "TPEX",
     "share_capital": 241000000,
     "shares_issued": 24100000
+  },
+  "7782": {
+    "company_name": "光速火箭股份有限公司",
+    "abbreviation": "光速火箭",
+    "industry": "38",
+    "market": "TPEX",
+    "share_capital": 212270000,
+    "shares_issued": 21227000
   },
   "8024": {
     "company_name": "佑華微電子股份有限公司",
@@ -14700,8 +14716,8 @@
     "abbreviation": "常珵",
     "industry": "27",
     "market": "TPEX",
-    "share_capital": 660644680,
-    "shares_issued": 66064468
+    "share_capital": 638024680,
+    "shares_issued": 63802468
   },
   "8099": {
     "company_name": "大同世界科技股份有限公司",

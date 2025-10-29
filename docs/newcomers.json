@@ -1,62 +1,38 @@
 {
-  "date": "20251028",
+  "date": "20251029",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "3693",
-        "name": "營邦",
-        "foreign_ratio": 5.326734199731691,
-        "invest_ratio": 0.05117386567427825
+        "stock_id": "4991",
+        "name": "環宇-KY",
+        "foreign_ratio": 3.3513426052623045,
+        "invest_ratio": 0.9365856977494917
       },
       {
-        "stock_id": "3628",
-        "name": "盈正",
-        "foreign_ratio": 1.728888888888889,
+        "stock_id": "2328",
+        "name": "廣宇",
+        "foreign_ratio": 2.0026403893449745,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "6442",
-        "name": "光聖",
-        "foreign_ratio": 1.594731266704643,
-        "invest_ratio": 0.992102613199599
-      },
-      {
-        "stock_id": "1815",
-        "name": "富喬",
-        "foreign_ratio": 1.2634577673023997,
+        "stock_id": "5475",
+        "name": "德宏",
+        "foreign_ratio": 1.5856818224563547,
         "invest_ratio": 0.0
       }
     ],
     "invest": [
       {
-        "stock_id": "8299",
-        "name": "群聯",
-        "foreign_ratio": 0.6319966737490945,
-        "invest_ratio": 0.658672170720393
+        "stock_id": "2449",
+        "name": "京元電子",
+        "foreign_ratio": 0.08791587312601422,
+        "invest_ratio": 0.22563983932333437
       },
       {
-        "stock_id": "6213",
-        "name": "聯茂",
-        "foreign_ratio": -0.5247323666669718,
-        "invest_ratio": 0.38434281805631426
-      },
-      {
-        "stock_id": "3081",
-        "name": "聯亞",
-        "foreign_ratio": -0.020514178036930862,
-        "invest_ratio": 0.33289603979845656
-      },
-      {
-        "stock_id": "3030",
-        "name": "德律",
-        "foreign_ratio": -0.2671127273343042,
-        "invest_ratio": 0.21167067429810005
-      },
-      {
-        "stock_id": "3264",
-        "name": "欣銓",
-        "foreign_ratio": -0.0007958462156306741,
-        "invest_ratio": 0.17789743656240656
+        "stock_id": "6683",
+        "name": "雍智科技",
+        "foreign_ratio": 0.8915460591403178,
+        "invest_ratio": 0.1570652267413703
       }
     ]
   },

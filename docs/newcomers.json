@@ -1,38 +1,68 @@
 {
-  "date": "20251029",
+  "date": "20251030",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "4991",
-        "name": "環宇-KY",
-        "foreign_ratio": 3.3513426052623045,
-        "invest_ratio": 0.9365856977494917
-      },
-      {
-        "stock_id": "2328",
-        "name": "廣宇",
-        "foreign_ratio": 2.0026403893449745,
+        "stock_id": "7402",
+        "name": "邑錡",
+        "foreign_ratio": 2.443979990474439,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "5475",
-        "name": "德宏",
-        "foreign_ratio": 1.5856818224563547,
+        "stock_id": "5439",
+        "name": "高技",
+        "foreign_ratio": 2.294146542638343,
         "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "4968",
+        "name": "立積",
+        "foreign_ratio": 1.868671408789542,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "8096",
+        "name": "擎亞",
+        "foreign_ratio": 1.4985630467771434,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "2641",
+        "name": "正德",
+        "foreign_ratio": 1.397081106975784,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "1519",
+        "name": "華城",
+        "foreign_ratio": 1.1528100133859336,
+        "invest_ratio": 0.05698351242850295
       }
     ],
     "invest": [
       {
-        "stock_id": "2449",
-        "name": "京元電子",
-        "foreign_ratio": 0.08791587312601422,
-        "invest_ratio": 0.22563983932333437
+        "stock_id": "6191",
+        "name": "精成科",
+        "foreign_ratio": -0.3294414413692688,
+        "invest_ratio": 0.9699521132458647
       },
       {
-        "stock_id": "6683",
-        "name": "雍智科技",
-        "foreign_ratio": 0.8915460591403178,
-        "invest_ratio": 0.1570652267413703
+        "stock_id": "3661",
+        "name": "世芯-KY",
+        "foreign_ratio": 0.07705371098510166,
+        "invest_ratio": 0.25600223721762255
+      },
+      {
+        "stock_id": "3015",
+        "name": "全漢",
+        "foreign_ratio": 0.15646531503062955,
+        "invest_ratio": 0.11214237596051946
+      },
+      {
+        "stock_id": "2059",
+        "name": "川湖",
+        "foreign_ratio": 0.14011343391536732,
+        "invest_ratio": 0.1112311194618865
       }
     ]
   },

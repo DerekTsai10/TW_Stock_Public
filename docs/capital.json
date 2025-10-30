@@ -3860,7 +3860,7 @@
     "abbreviation": "凱基金",
     "industry": "17",
     "market": "TWSE",
-    "share_capital": 183891027110,
+    "share_capital": 185571755770,
     "shares_issued": 0
   },
   "2884": {
@@ -4072,7 +4072,7 @@
     "shares_issued": 0
   },
   "3004": {
-    "company_name": "豐達科技股份有限公司(原宏達)",
+    "company_name": "豐達科技股份有限公司",
     "abbreviation": "豐達科",
     "industry": "10",
     "market": "TWSE",
@@ -4276,7 +4276,7 @@
     "abbreviation": "威健",
     "industry": "29",
     "market": "TWSE",
-    "share_capital": 4797640490,
+    "share_capital": 4798785900,
     "shares_issued": 0
   },
   "3034": {
@@ -5308,7 +5308,7 @@
     "abbreviation": "廣越",
     "industry": "04",
     "market": "TWSE",
-    "share_capital": 1034254550,
+    "share_capital": 1134254550,
     "shares_issued": 0
   },
   "4439": {
@@ -5332,7 +5332,7 @@
     "abbreviation": "振大環球",
     "industry": "04",
     "market": "TWSE",
-    "share_capital": 604175780,
+    "share_capital": 680175780,
     "shares_issued": 0
   },
   "4526": {
@@ -7663,12 +7663,20 @@
     "share_capital": 797459930,
     "shares_issued": 0
   },
+  "7791": {
+    "company_name": "皇家可口股份有限公司",
+    "abbreviation": "皇家可口",
+    "industry": "02",
+    "market": "TWSE",
+    "share_capital": 800000000,
+    "shares_issued": 0
+  },
   "7799": {
     "company_name": "禾榮科技股份有限公司",
     "abbreviation": "禾榮科",
     "industry": "22",
     "market": "TWSE",
-    "share_capital": 1564875000,
+    "share_capital": 1575120000,
     "shares_issued": 0
   },
   "8011": {
@@ -10420,8 +10428,8 @@
     "abbreviation": "晟德",
     "industry": "22",
     "market": "TPEX",
-    "share_capital": 7249768320,
-    "shares_issued": 724976832
+    "share_capital": 7612256740,
+    "shares_issued": 761225674
   },
   "4126": {
     "company_name": "太平洋醫材股份有限公司",
@@ -11468,8 +11476,8 @@
     "abbreviation": "坤悅",
     "industry": "14",
     "market": "TPEX",
-    "share_capital": 1559250000,
-    "shares_issued": 155925000
+    "share_capital": 1715175000,
+    "shares_issued": 171517500
   },
   "5209": {
     "company_name": "新鼎系統股份有限公司",

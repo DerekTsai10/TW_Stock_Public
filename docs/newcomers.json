@@ -1,68 +1,56 @@
 {
-  "date": "20251030",
+  "date": "20251031",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "7402",
-        "name": "邑錡",
-        "foreign_ratio": 2.443979990474439,
+        "stock_id": "5284",
+        "name": "jpp-KY",
+        "foreign_ratio": 1.7997894086759052,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "5439",
-        "name": "高技",
-        "foreign_ratio": 2.294146542638343,
+        "stock_id": "8039",
+        "name": "台虹",
+        "foreign_ratio": 1.5505545965998402,
+        "invest_ratio": -0.001557838660717691
+      },
+      {
+        "stock_id": "8261",
+        "name": "富鼎",
+        "foreign_ratio": 1.0859692960564435,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "4968",
-        "name": "立積",
-        "foreign_ratio": 1.868671408789542,
+        "stock_id": "4915",
+        "name": "致伸",
+        "foreign_ratio": 1.0739262248867523,
+        "invest_ratio": -0.23430793492480828
+      },
+      {
+        "stock_id": "6591",
+        "name": "動力-KY",
+        "foreign_ratio": 0.9072972644028028,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "8096",
-        "name": "擎亞",
-        "foreign_ratio": 1.4985630467771434,
+        "stock_id": "2374",
+        "name": "佳能",
+        "foreign_ratio": 0.9057292614004491,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "2641",
-        "name": "正德",
-        "foreign_ratio": 1.397081106975784,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "1519",
-        "name": "華城",
-        "foreign_ratio": 1.1528100133859336,
-        "invest_ratio": 0.05698351242850295
+        "stock_id": "2228",
+        "name": "劍麟",
+        "foreign_ratio": 0.8663251601987991,
+        "invest_ratio": -0.21752431453467666
       }
     ],
     "invest": [
       {
-        "stock_id": "6191",
-        "name": "精成科",
-        "foreign_ratio": -0.3294414413692688,
-        "invest_ratio": 0.9699521132458647
-      },
-      {
-        "stock_id": "3661",
-        "name": "世芯-KY",
-        "foreign_ratio": 0.07705371098510166,
-        "invest_ratio": 0.25600223721762255
-      },
-      {
-        "stock_id": "3015",
-        "name": "全漢",
-        "foreign_ratio": 0.15646531503062955,
-        "invest_ratio": 0.11214237596051946
-      },
-      {
-        "stock_id": "2059",
-        "name": "川湖",
-        "foreign_ratio": 0.14011343391536732,
-        "invest_ratio": 0.1112311194618865
+        "stock_id": "2368",
+        "name": "金像電",
+        "foreign_ratio": 0.03780033895406592,
+        "invest_ratio": 0.5898224869106438
       }
     ]
   },

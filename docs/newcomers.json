@@ -15,34 +15,22 @@
         "invest_ratio": -0.001557838660717691
       },
       {
-        "stock_id": "8261",
-        "name": "富鼎",
-        "foreign_ratio": 1.0859692960564435,
+        "stock_id": "6510",
+        "name": "精測",
+        "foreign_ratio": 1.5237142480187424,
+        "invest_ratio": -1.3388627449760473
+      },
+      {
+        "stock_id": "4772",
+        "name": "台特化",
+        "foreign_ratio": 1.3679359220168543,
+        "invest_ratio": 0.018282581428992566
+      },
+      {
+        "stock_id": "3680",
+        "name": "家登",
+        "foreign_ratio": 1.2659967207294522,
         "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "4915",
-        "name": "致伸",
-        "foreign_ratio": 1.0739262248867523,
-        "invest_ratio": -0.23430793492480828
-      },
-      {
-        "stock_id": "6591",
-        "name": "動力-KY",
-        "foreign_ratio": 0.9072972644028028,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "2374",
-        "name": "佳能",
-        "foreign_ratio": 0.9057292614004491,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "2228",
-        "name": "劍麟",
-        "foreign_ratio": 0.8663251601987991,
-        "invest_ratio": -0.21752431453467666
       }
     ],
     "invest": [
@@ -51,6 +39,12 @@
         "name": "金像電",
         "foreign_ratio": 0.03780033895406592,
         "invest_ratio": 0.5898224869106438
+      },
+      {
+        "stock_id": "5274",
+        "name": "信驊",
+        "foreign_ratio": 0.15108450629895734,
+        "invest_ratio": 0.20580548709701443
       }
     ]
   },

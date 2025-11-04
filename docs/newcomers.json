@@ -1,86 +1,44 @@
 {
-  "date": "20251103",
+  "date": "20251104",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "6596",
-        "name": "寬宏藝術",
-        "foreign_ratio": 2.3954973684210525,
+        "stock_id": "3105",
+        "name": "穩懋",
+        "foreign_ratio": 2.280347748139984,
+        "invest_ratio": 0.04340232894632656
+      },
+      {
+        "stock_id": "4939",
+        "name": "亞電",
+        "foreign_ratio": 2.060063257282003,
         "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "3535",
-        "name": "晶彩科",
-        "foreign_ratio": 2.3766148095573523,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "3715",
-        "name": "定穎投控",
-        "foreign_ratio": 1.5391920061362188,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "3037",
-        "name": "欣興",
-        "foreign_ratio": 1.4318892370597862,
-        "invest_ratio": -0.0030725697896425304
-      },
-      {
-        "stock_id": "6112",
-        "name": "邁達特",
-        "foreign_ratio": 1.2295778063032277,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "3217",
-        "name": "優群",
-        "foreign_ratio": 1.135463125954291,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "3167",
-        "name": "大量",
-        "foreign_ratio": 1.1237889518916135,
-        "invest_ratio": 0.8657588602186147
-      },
-      {
-        "stock_id": "8358",
-        "name": "金居",
-        "foreign_ratio": 1.0862689438928215,
-        "invest_ratio": 0.0
-      }
-    ],
-    "invest": [
-      {
-        "stock_id": "3167",
-        "name": "大量",
-        "foreign_ratio": 1.1237889518916135,
-        "invest_ratio": 0.8657588602186147
-      },
-      {
-        "stock_id": "8021",
-        "name": "尖點",
-        "foreign_ratio": 0.8767294314766879,
-        "invest_ratio": 0.840481133037775
-      },
-      {
-        "stock_id": "2383",
-        "name": "台光電",
-        "foreign_ratio": -0.11404864984393664,
-        "invest_ratio": 0.2011801478475547
       },
       {
         "stock_id": "6781",
         "name": "AES-KY",
-        "foreign_ratio": 0.16346873603205292,
-        "invest_ratio": 0.15511811337038528
+        "foreign_ratio": 1.2741635972791931,
+        "invest_ratio": 0.16448373530972932
       },
       {
-        "stock_id": "1519",
-        "name": "華城",
-        "foreign_ratio": 0.5482640156552196,
-        "invest_ratio": 0.15455194870886188
+        "stock_id": "3413",
+        "name": "京鼎",
+        "foreign_ratio": 1.0911187861119194,
+        "invest_ratio": 0.0027646590864322277
+      },
+      {
+        "stock_id": "1514",
+        "name": "亞力",
+        "foreign_ratio": 0.9311545599685587,
+        "invest_ratio": 0.11057877358495576
+      }
+    ],
+    "invest": [
+      {
+        "stock_id": "8996",
+        "name": "高力",
+        "foreign_ratio": -1.5269291446012627,
+        "invest_ratio": 0.7346555785420881
       }
     ]
   },

@@ -3844,7 +3844,7 @@
     "abbreviation": "富邦金",
     "industry": "17",
     "market": "TWSE",
-    "share_capital": 152657119050,
+    "share_capital": 156073549520,
     "shares_issued": 0
   },
   "2882": {
@@ -5908,7 +5908,7 @@
     "abbreviation": "jpp-KY",
     "industry": "20",
     "market": "TWSE",
-    "share_capital": 525957090,
+    "share_capital": 528782290,
     "shares_issued": 0
   },
   "5285": {
@@ -7597,6 +7597,14 @@
     "industry": "36",
     "market": "TWSE",
     "share_capital": 680000000,
+    "shares_issued": 0
+  },
+  "7730": {
+    "company_name": "暉盛科技股份有限公司",
+    "abbreviation": "暉盛-創",
+    "industry": "24",
+    "market": "TWSE",
+    "share_capital": 346317310,
     "shares_issued": 0
   },
   "7732": {
@@ -12836,8 +12844,8 @@
     "abbreviation": "旺矽",
     "industry": "24",
     "market": "TPEX",
-    "share_capital": 941511060,
-    "shares_issued": 94151106
+    "share_capital": 949311360,
+    "shares_issued": 94931136
   },
   "6227": {
     "company_name": "茂綸股份有限公司",

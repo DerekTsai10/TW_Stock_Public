@@ -1,80 +1,38 @@
 {
-  "date": "20251105",
+  "date": "20251106",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "1608",
-        "name": "華榮",
-        "foreign_ratio": 2.009338709576124,
+        "stock_id": "8110",
+        "name": "華東",
+        "foreign_ratio": 2.4281981324536805,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "2439",
-        "name": "美律",
-        "foreign_ratio": 1.452172743852711,
-        "invest_ratio": -0.02718205851484974
-      },
-      {
-        "stock_id": "8111",
-        "name": "立碁",
-        "foreign_ratio": 1.411520276722501,
+        "stock_id": "2731",
+        "name": "雄獅",
+        "foreign_ratio": 1.3961530521231866,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "4303",
-        "name": "信立",
-        "foreign_ratio": 1.3485499974594453,
-        "invest_ratio": 0.0
+        "stock_id": "3363",
+        "name": "上詮",
+        "foreign_ratio": 1.289011666638219,
+        "invest_ratio": -0.001929746293263718
       },
       {
-        "stock_id": "5521",
-        "name": "工信",
-        "foreign_ratio": 1.115624902653246,
+        "stock_id": "6706",
+        "name": "惠特",
+        "foreign_ratio": 1.1773111397243678,
         "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "4989",
-        "name": "榮科",
-        "foreign_ratio": 1.0223078681778097,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "5289",
-        "name": "宜鼎",
-        "foreign_ratio": 0.9840696101090682,
-        "invest_ratio": 0.3694385346296992
       }
     ],
     "invest": [
       {
-        "stock_id": "8358",
-        "name": "金居",
-        "foreign_ratio": -0.9925123125405799,
-        "invest_ratio": 0.9574286981170919
-      },
-      {
-        "stock_id": "3694",
-        "name": "海華",
-        "foreign_ratio": -0.3851118117597834,
-        "invest_ratio": 0.4059447137634129
-      },
-      {
-        "stock_id": "4763",
-        "name": "材料*-KY",
-        "foreign_ratio": -0.6806563883999124,
-        "invest_ratio": 0.38113660130908594
-      },
-      {
-        "stock_id": "2402",
-        "name": "毅嘉",
-        "foreign_ratio": -0.09792755256169841,
-        "invest_ratio": 0.3050044138983644
-      },
-      {
-        "stock_id": "4906",
-        "name": "正文",
-        "foreign_ratio": -0.07015999338681257,
-        "invest_ratio": 0.22813223449655978
+        "stock_id": "3529",
+        "name": "力旺",
+        "foreign_ratio": 0.3716830079527634,
+        "invest_ratio": 0.17941664739053484
       }
     ]
   },

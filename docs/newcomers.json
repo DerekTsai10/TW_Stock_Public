@@ -1,38 +1,68 @@
 {
-  "date": "20251106",
+  "date": "20251107",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "8110",
-        "name": "華東",
-        "foreign_ratio": 2.4281981324536805,
+        "stock_id": "8271",
+        "name": "宇瞻",
+        "foreign_ratio": 2.177545448516032,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "2731",
-        "name": "雄獅",
-        "foreign_ratio": 1.3961530521231866,
+        "stock_id": "2421",
+        "name": "建準",
+        "foreign_ratio": 1.9663223579698237,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "3363",
-        "name": "上詮",
-        "foreign_ratio": 1.289011666638219,
-        "invest_ratio": -0.001929746293263718
+        "stock_id": "3002",
+        "name": "歐格",
+        "foreign_ratio": 1.9058823529411764,
+        "invest_ratio": 0.0
       },
       {
-        "stock_id": "6706",
-        "name": "惠特",
-        "foreign_ratio": 1.1773111397243678,
+        "stock_id": "4967",
+        "name": "十銓",
+        "foreign_ratio": 1.7108565760778935,
         "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "4973",
+        "name": "廣穎",
+        "foreign_ratio": 1.6974334637813497,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "3162",
+        "name": "精確",
+        "foreign_ratio": 1.6523200446875792,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "6449",
+        "name": "鈺邦",
+        "foreign_ratio": 1.1089622876810736,
+        "invest_ratio": -0.7984030720287707
       }
     ],
     "invest": [
       {
-        "stock_id": "3529",
-        "name": "力旺",
-        "foreign_ratio": 0.3716830079527634,
-        "invest_ratio": 0.17941664739053484
+        "stock_id": "8163",
+        "name": "達方",
+        "foreign_ratio": -0.023928571343112246,
+        "invest_ratio": 0.31906821314618494
+      },
+      {
+        "stock_id": "8436",
+        "name": "大江",
+        "foreign_ratio": -0.0365246133848438,
+        "invest_ratio": 0.18002217468737267
+      },
+      {
+        "stock_id": "6206",
+        "name": "飛捷",
+        "foreign_ratio": -0.25024058745194155,
+        "invest_ratio": 0.15713710899873262
       }
     ]
   },

@@ -74,6 +74,7 @@
             <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
           </div>
         </div>
+        <p class="text-sm text-gray-500 mt-3">※ 紅字 = <span class="text-red-500 font-semibold">同一日</span>外資＋投信都進前 10</p>
 
         <!-- 動態塞 5日 / 10日 -->
         <div id="period-section" class="mt-8"></div>
@@ -180,11 +181,11 @@
       // ===== 5日 / 10日區塊 =====
       const periodRoot = document.getElementById("period-section");
 
-      function buildPeriodBlock(title, foreignKey, investKey, prefix) {
+      function buildPeriodBlock(titleHTML, foreignKey, investKey, prefix) {
         const section = document.createElement("div");
         section.className = "mt-6";
         section.innerHTML = `
-          <h4 class="font-semibold text-xl mb-3">${title}</h4>
+          <h4 class="font-semibold text-xl mb-3">${titleHTML}</h4>
           <div class="grid grid-cols-2 gap-6 text-gray-700">
             <div>
               <h5 class="font-semibold mb-2">🌏 外資</h5>
@@ -201,7 +202,7 @@
         const fList = data[foreignKey] || [];
         const iList = data[investKey]  || [];
 
-        // 這裡只比同一段的外/投
+        // 這裡只比「同一段期間」的外/投
         const both = new Set(
           fList.map(i => i.stock_id).filter(id => iList.some(j => j.stock_id === id))
         );
@@ -228,7 +229,7 @@
 
       // 近5日
       buildPeriodBlock(
-        "📅 近5日外/投本比前 10",
+        "📅 近5日外/投本比前 10 <span class='text-red-500 text-base'>(紅字 = 外＋投 同時上榜)</span>",
         "foreign_ratio_5d_ranking",
         "invest_ratio_5d_ranking",
         "p5d"
@@ -236,7 +237,7 @@
 
       // 近10日
       buildPeriodBlock(
-        "🗓️ 近10日外/投本比前 10",
+        "🗓️ 近10日外/投本比前 10 <span class='text-red-500 text-base'>(紅字 = 外＋投 同時上榜)</span>",
         "foreign_ratio_10d_ranking",
         "invest_ratio_10d_ranking",
         "p10d"

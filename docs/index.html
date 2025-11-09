@@ -151,27 +151,33 @@
       }
 
       // ===== 當日外/投 =====
-      const dailyForeign = data.foreign_ratio_ranking || [];
-      const dailyInvest  = data.invest_ratio_ranking || [];
+      const dailyForeignAll = data.foreign_ratio_ranking || [];
+      const dailyInvestAll  = data.invest_ratio_ranking  || [];
+
+      // 只拿前 10 來顯示、也只拿前 10 來比交集
+      const dailyForeign = dailyForeignAll.slice(0, 10);
+      const dailyInvest  = dailyInvestAll.slice(0, 10);
 
       const foreignList = document.getElementById("foreign_ratio_list");
       const investList  = document.getElementById("invest_ratio_list");
       foreignList.innerHTML = "";
       investList.innerHTML  = "";
 
-      // 當日交集只看當日
+      // 當日交集只看「前 10 vs 前 10」
       const dailyBoth = new Set(
-        dailyForeign.map(i => i.stock_id).filter(id => dailyInvest.some(j => j.stock_id === id))
+        dailyForeign
+          .map(i => i.stock_id)
+          .filter(id => dailyInvest.some(j => j.stock_id === id))
       );
 
-      dailyForeign.slice(0, 10).forEach(item => {
+      dailyForeign.forEach(item => {
         const li = document.createElement("li");
         li.textContent = `${item.name} (${item.stock_id}) - ${(item.foreign_ratio * 100).toFixed(2)}%`;
         if (dailyBoth.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
         foreignList.appendChild(li);
       });
 
-      dailyInvest.slice(0, 10).forEach(item => {
+      dailyInvest.forEach(item => {
         const li = document.createElement("li");
         li.textContent = `${item.name} (${item.stock_id}) - ${(item.invest_ratio * 100).toFixed(2)}%`;
         if (dailyBoth.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
@@ -199,10 +205,10 @@
         `;
         periodRoot.appendChild(section);
 
-        const fList = data[foreignKey] || [];
-        const iList = data[investKey]  || [];
+        // 這裡一樣：只拿前 10 來顯示，也只拿前 10 來比交集
+        const fList = (data[foreignKey] || []).slice(0, 10);
+        const iList = (data[investKey]  || []).slice(0, 10);
 
-        // 這裡只比「同一段期間」的外/投
         const both = new Set(
           fList.map(i => i.stock_id).filter(id => iList.some(j => j.stock_id === id))
         );
@@ -212,14 +218,14 @@
         fUl.innerHTML = "";
         iUl.innerHTML = "";
 
-        fList.slice(0, 10).forEach(item => {
+        fList.forEach(item => {
           const li = document.createElement("li");
           li.textContent = `${item.name} (${item.stock_id}) - ${(item.foreign_ratio * 100).toFixed(2)}%`;
           if (both.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
           fUl.appendChild(li);
         });
 
-        iList.slice(0, 10).forEach(item => {
+        iList.forEach(item => {
           const li = document.createElement("li");
           li.textContent = `${item.name} (${item.stock_id}) - ${(item.invest_ratio * 100).toFixed(2)}%`;
           if (both.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");

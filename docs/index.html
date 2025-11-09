@@ -59,21 +59,27 @@
 
     <!-- 上方兩塊 -->
     <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
+      <!-- 左邊：指標 -->
       <div class="p-6 border rounded bg-white shadow">
         <h3 id="insights-title" class="font-bold text-2xl mb-6 mobile-center">📊 指標觀察清單</h3>
+
+        <!-- 單日外/投 -->
         <div class="grid grid-cols-2 gap-6 text-gray-700">
           <div>
-            <h4 class="font-semibold mb-3">🌏 外資買超投本比前 10</h4>
+            <h4 class="font-semibold mb-3">🌏 當日外本比前 10</h4>
             <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
           </div>
           <div>
-            <h4 class="font-semibold mb-3">🏦 投信買超投本比前 10</h4>
+            <h4 class="font-semibold mb-3">🏦 當日投本比前 10</h4>
             <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
           </div>
         </div>
-        <div id="industry-section" class="mt-8"></div>
+
+        <!-- 動態塞 5 日 / 10 日 -->
+        <div id="period-section" class="mt-8"></div>
       </div>
 
+      <!-- 右邊：新上榜 + 爆量 -->
       <div class="p-6 border rounded bg-white shadow">
         <div class="grid grid-cols-2 gap-6 mobile-col">
           <!-- 左邊：新上榜 -->
@@ -119,7 +125,7 @@
   const tableBody = document.querySelector("#trading-table tbody");
   const pageTitle = document.getElementById("page-title");
 
-  // 載入 data.json
+  // 1. 載入 data.json
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -133,7 +139,7 @@
       });
     });
 
-  // insights.json
+  // 2. 載入 insights.json，填單日 + 5日 + 10日
   fetch("insights.json")
     .then(res => res.json())
     .then(data => {
@@ -147,29 +153,81 @@
       foreignList.innerHTML = "";
       investList.innerHTML = "";
 
-      const foreignTop = data.foreign_ratio_ranking || [];
-      const investTop = data.invest_ratio_ranking || [];
+      const dailyForeign = data.foreign_ratio_ranking || [];
+      const dailyInvest = data.invest_ratio_ranking || [];
 
-      const bothTop = new Set(
-        foreignTop.map(i => i.stock_id).filter(id => investTop.some(j => j.stock_id === id))
+      // 單日同時上榜
+      const dailyBoth = new Set(
+        dailyForeign.map(i => i.stock_id).filter(id => dailyInvest.some(j => j.stock_id === id))
       );
 
-      foreignTop.slice(0, 10).forEach(item => {
+      // 單日外本比
+      dailyForeign.slice(0, 10).forEach(item => {
         const li = document.createElement("li");
-        li.textContent = `${item.name} (${item.stock_id}) - ${item.foreign_ratio.toFixed(2)}%`;
-        if (bothTop.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
+        li.textContent = `${item.name} (${item.stock_id}) - ${(item.foreign_ratio * 100).toFixed(2)}%`;
+        if (dailyBoth.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
         foreignList.appendChild(li);
       });
 
-      investTop.slice(0, 10).forEach(item => {
+      // 單日投本比
+      dailyInvest.slice(0, 10).forEach(item => {
         const li = document.createElement("li");
-        li.textContent = `${item.name} (${item.stock_id}) - ${item.invest_ratio.toFixed(2)}%`;
-        if (bothTop.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
+        li.textContent = `${item.name} (${item.stock_id}) - ${(item.invest_ratio * 100).toFixed(2)}%`;
+        if (dailyBoth.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
         investList.appendChild(li);
       });
+
+      // ---- 動態塞 5 日 / 10 日 ----
+      const periodRoot = document.getElementById("period-section");
+
+      const buildPeriodBlock = (title, foreignKey, investKey, prefix) => {
+        const section = document.createElement("div");
+        section.className = "mt-6";
+        section.innerHTML = `
+          <h4 class="font-semibold text-xl mb-3">${title}</h4>
+          <div class="grid grid-cols-2 gap-6 text-gray-700">
+            <div>
+              <h5 class="font-semibold mb-2">🌏 外資</h5>
+              <ul id="${prefix}-foreign" class="list-disc pl-6 space-y-2 text-lg"></ul>
+            </div>
+            <div>
+              <h5 class="font-semibold mb-2">🏦 投信</h5>
+              <ul id="${prefix}-invest" class="list-disc pl-6 space-y-2 text-lg"></ul>
+            </div>
+          </div>
+        `;
+        periodRoot.appendChild(section);
+
+        const fList = data[foreignKey] || [];
+        const iList = data[investKey] || [];
+
+        // 找出同時在外/投的
+        const both = new Set(
+          fList.map(i => i.stock_id).filter(id => iList.some(j => j.stock_id === id))
+        );
+
+        const fillList = (ulId, list, ratioKey) => {
+          const ul = document.getElementById(ulId);
+          ul.innerHTML = "";
+          list.slice(0, 10).forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = `${item.name} (${item.stock_id}) - ${(item[ratioKey] * 100).toFixed(2)}%`;
+            if (both.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
+            ul.appendChild(li);
+          });
+        };
+
+        fillList(`${prefix}-foreign`, fList, "foreign_ratio");
+        fillList(`${prefix}-invest`, iList, "invest_ratio");
+      };
+
+      // 近5日
+      buildPeriodBlock("📅 近5日外/投本比前 10", "foreign_ratio_5d_ranking", "invest_ratio_5d_ranking", "p5d");
+      // 近10日
+      buildPeriodBlock("🗓️ 近10日外/投本比前 10", "foreign_ratio_10d_ranking", "invest_ratio_10d_ranking", "p10d");
     });
 
-  // newcomers.json
+  // 3. newcomers.json
   fetch("newcomers.json")
     .then(res => res.json())
     .then(data => {
@@ -206,7 +264,7 @@
       document.getElementById("newcomers-container").textContent = "無法載入資料";
     });
 
-  // explosive.json
+  // 4. explosive.json
   fetch("explosive.json")
     .then(res => res.json())
     .then(data => {
@@ -231,7 +289,7 @@
       document.getElementById("explosive-container").textContent = "無法載入資料";
     });
 
-  // 搜尋功能
+  // 5. 搜尋功能
   input.addEventListener("input", function() {
     const keyword = this.value.trim();
     suggestions.innerHTML = "";
@@ -261,7 +319,7 @@
     }
   });
 
-  // 顯示個股法人買賣超
+  // 6. 顯示個股法人買賣超
   function showStockData(keyword) {
     tableBody.innerHTML = "";
     const colorize = (val) => {
@@ -307,3 +365,4 @@
   </script>
 </body>
 </html>
+

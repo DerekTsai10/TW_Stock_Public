@@ -171,14 +171,22 @@
 
       dailyForeign.forEach(item => {
         const li = document.createElement("li");
-        li.textContent = `${item.name} (${item.stock_id}) - ${(item.foreign_ratio * 100).toFixed(2)}%`;
+        li.innerHTML = `<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}"
+                           target="_blank"
+                           class="text-blue-600 hover:underline">
+                           ${item.name} (${item.stock_id})
+                        </a> : ${(item.foreign_ratio * 100).toFixed(2)}%`;
         if (dailyBoth.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
         foreignList.appendChild(li);
       });
 
       dailyInvest.forEach(item => {
         const li = document.createElement("li");
-        li.textContent = `${item.name} (${item.stock_id}) - ${(item.invest_ratio * 100).toFixed(2)}%`;
+        li.innerHTML = `<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}"
+                           target="_blank"
+                           class="text-blue-600 hover:underline">
+                           ${item.name} (${item.stock_id})
+                        </a> : ${(item.invest_ratio * 100).toFixed(2)}%`;
         if (dailyBoth.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
         investList.appendChild(li);
       });
@@ -219,14 +227,22 @@
 
         fList.forEach(item => {
           const li = document.createElement("li");
-          li.textContent = `${item.name} (${item.stock_id}) - ${(item.foreign_ratio * 100).toFixed(2)}%`;
+          li.innerHTML = `<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}"
+                             target="_blank"
+                             class="text-blue-600 hover:underline">
+                             ${item.name} (${item.stock_id})
+                          </a> : ${(item.foreign_ratio * 100).toFixed(2)}%`;
           if (both.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
           fUl.appendChild(li);
         });
 
         iList.forEach(item => {
           const li = document.createElement("li");
-          li.textContent = `${item.name} (${item.stock_id}) - ${(item.invest_ratio * 100).toFixed(2)}%`;
+          li.innerHTML = `<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}"
+                             target="_blank"
+                             class="text-blue-600 hover:underline">
+                             ${item.name} (${item.stock_id})
+                          </a> : ${(item.invest_ratio * 100).toFixed(2)}%`;
           if (both.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
           iUl.appendChild(li);
         });
@@ -268,7 +284,11 @@
           ul.className = "list-disc pl-6 space-y-1";
           items.slice(0, 10).forEach(stock => {
             const li = document.createElement("li");
-            li.textContent = `${stock.name} (${stock.stock_id})`;
+            li.innerHTML = `<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${stock.stock_id}"
+                               target="_blank"
+                               class="text-blue-600 hover:underline">
+                               ${stock.name} (${stock.stock_id})
+                            </a>`;
             ul.appendChild(li);
           });
           container.appendChild(ul);
@@ -302,7 +322,11 @@
       ul.className = "list-disc pl-6 space-y-1";
       data.explosive.slice(0, 10).forEach(stock => {
         const li = document.createElement("li");
-        li.textContent = `${stock.name} (${stock.stock_id}) ${stock.tag}`;
+        li.innerHTML = `<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${stock.stock_id}"
+                           target="_blank"
+                           class="text-blue-600 hover:underline">
+                           ${stock.name} (${stock.stock_id})
+                        </a> ${stock.tag}`;
         ul.appendChild(li);
       });
       container.appendChild(ul);

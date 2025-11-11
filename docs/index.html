@@ -6,34 +6,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
+    /* 手機排版微調 */
     @media (max-width: 768px) {
-      .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
-      .mobile-col { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
-      .mobile-center { text-align: center !important; }
-      input, select, button { font-size: 1rem; padding: 0.6rem 0.8rem; }
-      h1 { font-size: 1.8rem; }
-      h3 { font-size: 1.5rem; }
+      .mobile-reset {
+        transform: scale(1) !important;
+        padding: 1rem !important;
+      }
+      .mobile-col {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+      }
+      .mobile-center {
+        text-align: center !important;
+      }
+      input, select, button {
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      h3 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
 
 <body class="p-6 bg-gray-50 text-lg">
+  <!-- 外層容器：桌機放大、手機正常 -->
   <div class="max-w-7xl mx-auto transform scale-150 origin-top mobile-reset transition-transform duration-300">
-    <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">法人買賣超查詢</h1>
 
+    <!-- 頁面標題 -->
+    <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">
+      法人買賣超查詢
+    </h1>
+
+    <!-- 搜尋框 -->
     <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-auto mx-auto md:mx-0">
-      <label class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">輸入股票代碼或名稱：</label>
+      <label class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">
+        輸入股票代碼或名稱：
+      </label>
       <div class="relative w-full md:w-80">
-        <input type="text" id="search-input" placeholder="台積電 或 2330"
-               class="w-full border p-3 rounded text-lg" autocomplete="off">
+        <input type="text" id="search-input"
+               placeholder="台積電 或 2330"
+               class="w-full border p-3 rounded text-lg"
+               autocomplete="off">
         <ul id="suggestions"
             class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-10 text-lg"></ul>
       </div>
     </div>
 
+    <!-- 上方兩塊 -->
     <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
+      <!-- 左邊：指標 -->
       <div class="p-6 border rounded bg-white shadow">
         <h3 id="insights-title" class="font-bold text-2xl mb-6 mobile-center">📊 指標觀察清單</h3>
+
+        <!-- 當日外/投 -->
         <div class="grid grid-cols-2 gap-6 text-gray-700">
           <div>
             <h4 class="font-semibold mb-3">🌏 當日外本比前 10</h4>
@@ -44,15 +74,21 @@
             <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-lg"></ul>
           </div>
         </div>
+
+        <!-- 動態塞 5日 / 10日 -->
         <div id="period-section" class="mt-8"></div>
       </div>
 
+      <!-- 右邊：新上榜 + 爆量 -->
       <div class="p-6 border rounded bg-white shadow">
         <div class="grid grid-cols-2 gap-6 mobile-col">
+          <!-- 左邊：新上榜 -->
           <div>
             <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
             <div id="newcomers-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
           </div>
+
+          <!-- 右邊：爆量偵測 -->
           <div>
             <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 爆量偵測</h3>
             <div id="explosive-container" class="text-gray-700 text-lg">（此區塊暫不顯示內容）</div>
@@ -61,6 +97,7 @@
       </div>
     </div>
 
+    <!-- 下方表格 -->
     <div class="p-6 border rounded bg-white shadow overflow-x-auto">
       <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超 (張)</h3>
       <table id="trading-table" class="table-auto w-full text-center border-collapse border text-lg">
@@ -78,6 +115,7 @@
     </div>
   </div>
 
+  <!-- JS -->
   <script>
   let records = [];
   let stockList = [];
@@ -87,67 +125,265 @@
   const tableBody = document.querySelector("#trading-table tbody");
   const pageTitle = document.getElementById("page-title");
 
-  fetch("data.json").then(r=>r.json()).then(d=>{
-    records=d.records;
-    records.forEach(day=>day.stocks.forEach(s=>{
-      if(!stockList.find(x=>x.id===s.stock_id)){stockList.push({id:s.stock_id,name:s.name.trim()});}
-    }));
+  // 載入 data.json
+  fetch("data.json")
+    .then(res => res.json())
+    .then(data => {
+      records = data.records;
+      records.forEach(day => {
+        day.stocks.forEach(s => {
+          if (!stockList.find(x => x.id === s.stock_id)) {
+            stockList.push({ id: s.stock_id, name: s.name.trim() });
+          }
+        });
+      });
+    });
+
+  // 載入 insights.json
+  fetch("insights.json")
+    .then(res => res.json())
+    .then(data => {
+      // 標題日期
+      if (data.date) {
+        document.getElementById("insights-title").textContent =
+          `📊 指標觀察清單 (資料日期：${data.date})`;
+      }
+
+      // ===== 當日外/投 =====
+      const dailyForeignAll = data.foreign_ratio_ranking || [];
+      const dailyInvestAll  = data.invest_ratio_ranking  || [];
+
+      // 只拿前 10 來顯示、也只拿前 10 來比交集
+      const dailyForeign = dailyForeignAll.slice(0, 10);
+      const dailyInvest  = dailyInvestAll.slice(0, 10);
+
+      const foreignList = document.getElementById("foreign_ratio_list");
+      const investList  = document.getElementById("invest_ratio_list");
+      foreignList.innerHTML = "";
+      investList.innerHTML  = "";
+
+      // 當日交集只看「前 10 vs 前 10」
+      const dailyBoth = new Set(
+        dailyForeign
+          .map(i => i.stock_id)
+          .filter(id => dailyInvest.some(j => j.stock_id === id))
+      );
+
+      dailyForeign.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} (${item.stock_id}) - ${(item.foreign_ratio * 100).toFixed(2)}%`;
+        if (dailyBoth.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
+        foreignList.appendChild(li);
+      });
+
+      dailyInvest.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} (${item.stock_id}) - ${(item.invest_ratio * 100).toFixed(2)}%`;
+        if (dailyBoth.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
+        investList.appendChild(li);
+      });
+
+      // ===== 5日 / 10日區塊 =====
+      const periodRoot = document.getElementById("period-section");
+
+      function buildPeriodBlock(titleHTML, foreignKey, investKey, prefix) {
+        const section = document.createElement("div");
+        section.className = "mt-6";
+        section.innerHTML = `
+          <h4 class="font-semibold text-xl mb-3">${titleHTML}</h4>
+          <div class="grid grid-cols-2 gap-6 text-gray-700">
+            <div>
+              <h5 class="font-semibold mb-2">🌏 外資</h5>
+              <ul id="${prefix}-foreign" class="list-disc pl-6 space-y-2 text-lg"></ul>
+            </div>
+            <div>
+              <h5 class="font-semibold mb-2">🏦 投信</h5>
+              <ul id="${prefix}-invest" class="list-disc pl-6 space-y-2 text-lg"></ul>
+            </div>
+          </div>
+        `;
+        periodRoot.appendChild(section);
+
+        // 這裡一樣：只拿前 10 來顯示，也只拿前 10 來比交集
+        const fList = (data[foreignKey] || []).slice(0, 10);
+        const iList = (data[investKey]  || []).slice(0, 10);
+
+        const both = new Set(
+          fList.map(i => i.stock_id).filter(id => iList.some(j => j.stock_id === id))
+        );
+
+        const fUl = document.getElementById(`${prefix}-foreign`);
+        const iUl = document.getElementById(`${prefix}-invest`);
+        fUl.innerHTML = "";
+        iUl.innerHTML = "";
+
+        fList.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.name} (${item.stock_id}) - ${(item.foreign_ratio * 100).toFixed(2)}%`;
+          if (both.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
+          fUl.appendChild(li);
+        });
+
+        iList.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.name} (${item.stock_id}) - ${(item.invest_ratio * 100).toFixed(2)}%`;
+          if (both.has(item.stock_id)) li.classList.add("text-red-600", "font-bold");
+          iUl.appendChild(li);
+        });
+      }
+
+      // 近5日
+      buildPeriodBlock(
+        "📅 近5日外/投本比前 10",
+        "foreign_ratio_5d_ranking",
+        "invest_ratio_5d_ranking",
+        "p5d"
+      );
+
+      // 近10日
+      buildPeriodBlock(
+        "🗓️ 近10日外/投本比前 10",
+        "foreign_ratio_10d_ranking",
+        "invest_ratio_10d_ranking",
+        "p10d"
+      );
+    });
+
+  // newcomers.json
+  fetch("newcomers.json")
+    .then(res => res.json())
+    .then(data => {
+      const newcomers = data.newcomers || {};
+      const container = document.getElementById("newcomers-container");
+      container.innerHTML = "";
+
+      const addList = (title, items) => {
+        if (items && items.length > 0) {
+          const header = document.createElement("p");
+          header.className = "font-semibold mt-2";
+          header.textContent = title;
+          container.appendChild(header);
+
+          const ul = document.createElement("ul");
+          ul.className = "list-disc pl-6 space-y-1";
+          items.slice(0, 10).forEach(stock => {
+            const li = document.createElement("li");
+            li.textContent = `${stock.name} (${stock.stock_id})`;
+            ul.appendChild(li);
+          });
+          container.appendChild(ul);
+        }
+      };
+
+      addList("🌏 外資新上榜：", newcomers.foreign);
+      addList("🏦 投信新上榜：", newcomers.invest);
+      if ((!newcomers.foreign || newcomers.foreign.length === 0) &&
+          (!newcomers.invest || newcomers.invest.length === 0)) {
+        container.textContent = "（今日無新上榜股票）";
+      }
+    })
+    .catch(() => {
+      document.getElementById("newcomers-container").textContent = "無法載入資料";
+    });
+
+  // explosive.json
+  fetch("explosive.json")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("explosive-container");
+      container.innerHTML = "";
+
+      if (!data || !data.explosive || data.explosive.length === 0) {
+        container.textContent = "（今日無爆量股票）";
+        return;
+      }
+
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6 space-y-1";
+      data.explosive.slice(0, 10).forEach(stock => {
+        const li = document.createElement("li");
+        li.textContent = `${stock.name} (${stock.stock_id}) ${stock.tag}`;
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    })
+    .catch(() => {
+      document.getElementById("explosive-container").textContent = "無法載入資料";
+    });
+
+  // 搜尋功能
+  input.addEventListener("input", function() {
+    const keyword = this.value.trim();
+    suggestions.innerHTML = "";
+    if (!keyword) { suggestions.classList.add("hidden"); return; }
+    const matched = stockList.filter(s =>
+      s.id.includes(keyword) || s.name.includes(keyword)
+    ).slice(0, 10);
+    if (matched.length === 0) { suggestions.classList.add("hidden"); return; }
+    matched.forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = `${s.name} (${s.id})`;
+      li.className = "p-2 hover:bg-gray-200 cursor-pointer";
+      li.addEventListener("click", () => {
+        input.value = s.id;
+        suggestions.classList.add("hidden");
+        showStockData(s.id);
+      });
+      suggestions.appendChild(li);
+    });
+    suggestions.classList.remove("hidden");
   });
 
-  fetch("insights.json").then(r=>r.json()).then(data=>{
-    if(data.date){document.getElementById("insights-title").textContent=`📊 指標觀察清單 (資料日期：${data.date})`; }
-    const dailyForeign=(data.foreign_ratio_ranking||[]).slice(0,10);
-    const dailyInvest=(data.invest_ratio_ranking||[]).slice(0,10);
-    const fList=document.getElementById("foreign_ratio_list");
-    const iList=document.getElementById("invest_ratio_list");
-    fList.innerHTML=iList.innerHTML="";
-    const both=new Set(dailyForeign.map(i=>i.stock_id).filter(id=>dailyInvest.some(j=>j.stock_id===id)));
-
-    dailyForeign.forEach(item=>{
-      const li=document.createElement("li");
-      li.innerHTML=`<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}" target="_blank" class="hover:underline text-black">${item.name} (${item.stock_id})</a> : ${(item.foreign_ratio*100).toFixed(2)}%`;
-      if(both.has(item.stock_id))li.classList.add("text-red-600","font-bold");
-      fList.appendChild(li);
-    });
-
-    dailyInvest.forEach(item=>{
-      const li=document.createElement("li");
-      li.innerHTML=`<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}" target="_blank" class="hover:underline text-black">${item.name} (${item.stock_id})</a> : ${(item.invest_ratio*100).toFixed(2)}%`;
-      if(both.has(item.stock_id))li.classList.add("text-red-600","font-bold");
-      iList.appendChild(li);
-    });
-
-    const root=document.getElementById("period-section");
-    function buildPeriodBlock(title,fKey,iKey,prefix){
-      const section=document.createElement("div");
-      section.className="mt-6";
-      section.innerHTML=`<h4 class="font-semibold text-xl mb-3">${title}</h4>
-        <div class="grid grid-cols-2 gap-6 text-gray-700">
-          <div><h5 class="font-semibold mb-2">🌏 外資</h5><ul id="${prefix}-f" class="list-disc pl-6 space-y-2 text-lg"></ul></div>
-          <div><h5 class="font-semibold mb-2">🏦 投信</h5><ul id="${prefix}-i" class="list-disc pl-6 space-y-2 text-lg"></ul></div>
-        </div>`;
-      root.appendChild(section);
-      const fList=(data[fKey]||[]).slice(0,10);
-      const iList=(data[iKey]||[]).slice(0,10);
-      const both=new Set(fList.map(i=>i.stock_id).filter(id=>iList.some(j=>j.stock_id===id)));
-      const fUl=document.getElementById(`${prefix}-f`);
-      const iUl=document.getElementById(`${prefix}-i`);
-      fList.forEach(item=>{
-        const li=document.createElement("li");
-        li.innerHTML=`<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}" target="_blank" class="hover:underline text-black">${item.name} (${item.stock_id})</a> : ${(item.foreign_ratio*100).toFixed(2)}%`;
-        if(both.has(item.stock_id))li.classList.add("text-red-600","font-bold");
-        fUl.appendChild(li);
-      });
-      iList.forEach(item=>{
-        const li=document.createElement("li");
-        li.innerHTML=`<a href="https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}" target="_blank" class="hover:underline text-black">${item.name} (${item.stock_id})</a> : ${(item.invest_ratio*100).toFixed(2)}%`;
-        if(both.has(item.stock_id))li.classList.add("text-red-600","font-bold");
-        iUl.appendChild(li);
-      });
+  input.addEventListener("keyup", e => {
+    if (e.key === "Enter") {
+      const keyword = e.target.value.trim();
+      if (keyword) { showStockData(keyword); suggestions.classList.add("hidden"); }
     }
-    buildPeriodBlock("📅 近5日外/投本比前 10","foreign_ratio_5d_ranking","invest_ratio_5d_ranking","p5d");
-    buildPeriodBlock("🗓️ 近10日外/投本比前 10","foreign_ratio_10d_ranking","invest_ratio_10d_ranking","p10d");
   });
+
+  // 顯示個股法人買賣超
+  function showStockData(keyword) {
+    tableBody.innerHTML = "";
+    const colorize = (val) => {
+      if (val > 0) return `<span class="text-red-600">${val}</span>`;
+      if (val < 0) return `<span class="text-green-600">${val}</span>`;
+      return val;
+    };
+
+    const kw = keyword.toString().replace(/\s|　/g, "").trim();
+    let foundStock = null;
+
+    records.forEach(day => {
+      const stock = day.stocks.find(s =>
+        s.stock_id.toString().replace(/\s|　/g, "").trim() === kw ||
+        s.name.replace(/\s|　/g, "").includes(kw)
+      );
+      if (stock) {
+        if (!foundStock) foundStock = stock;
+        const foreign = (stock.foreign_net/1000).toFixed(0);
+        const invest  = (stock.invest_net/1000).toFixed(0);
+        const dealer  = (stock.dealer_net/1000).toFixed(0);
+        const total   = ((stock.foreign_net + stock.invest_net + stock.dealer_net)/1000).toFixed(0);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="border px-4 py-2">${day.date}</td>
+          <td class="border px-4 py-2">${colorize(foreign)}</td>
+          <td class="border px-4 py-2">${colorize(invest)}</td>
+          <td class="border px-4 py-2">${colorize(dealer)}</td>
+          <td class="border px-4 py-2">${colorize(total)}</td>`;
+        tableBody.appendChild(tr);
+      }
+    });
+
+    if (foundStock) {
+      pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
+    } else {
+      pageTitle.textContent = "法人買賣超查詢";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="5" class="border px-4 py-2 text-red-500">找不到相關資料</td>`;
+      tableBody.appendChild(tr);
+    }
+  }
   </script>
 </body>
 </html>

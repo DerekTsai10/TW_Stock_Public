@@ -1,50 +1,50 @@
 {
-  "date": "20251111",
+  "date": "20251112",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "5351",
-        "name": "鈺創",
-        "foreign_ratio": 6.124434394928477,
+        "stock_id": "3491",
+        "name": "昇達科",
+        "foreign_ratio": 3.6370177389565184,
+        "invest_ratio": 0.159038206543549
+      },
+      {
+        "stock_id": "3708",
+        "name": "上緯投控",
+        "foreign_ratio": 2.404108396426551,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "6591",
-        "name": "動力-KY",
-        "foreign_ratio": 2.232356450421929,
+        "stock_id": "2486",
+        "name": "一詮",
+        "foreign_ratio": 2.313956608532829,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "3060",
-        "name": "銘異",
-        "foreign_ratio": 1.7032172632809692,
+        "stock_id": "6265",
+        "name": "方土昶",
+        "foreign_ratio": 2.2509533570223326,
         "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "6485",
-        "name": "點序",
-        "foreign_ratio": 1.701990991315934,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "6770",
-        "name": "力積電",
-        "foreign_ratio": 1.3766674384953712,
-        "invest_ratio": 0.0005729409922765188
       }
     ],
     "invest": [
       {
-        "stock_id": "8210",
-        "name": "勤誠",
-        "foreign_ratio": -0.8759150335998254,
-        "invest_ratio": 0.4145471197327809
+        "stock_id": "3715",
+        "name": "定穎投控",
+        "foreign_ratio": 3.8085552691419533,
+        "invest_ratio": 1.8377627244414996
       },
       {
-        "stock_id": "3231",
-        "name": "緯創",
-        "foreign_ratio": 0.04875229618424467,
-        "invest_ratio": 0.19362269781220973
+        "stock_id": "3491",
+        "name": "昇達科",
+        "foreign_ratio": 3.6370177389565184,
+        "invest_ratio": 0.159038206543549
+      },
+      {
+        "stock_id": "2316",
+        "name": "楠梓電",
+        "foreign_ratio": -0.09029195361449527,
+        "invest_ratio": 0.09466974530489503
       }
     ]
   },

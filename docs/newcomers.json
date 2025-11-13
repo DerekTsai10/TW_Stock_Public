@@ -1,50 +1,38 @@
 {
-  "date": "20251112",
+  "date": "20251113",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "3491",
-        "name": "昇達科",
-        "foreign_ratio": 3.6370177389565184,
-        "invest_ratio": 0.159038206543549
-      },
-      {
-        "stock_id": "3708",
-        "name": "上緯投控",
-        "foreign_ratio": 2.404108396426551,
+        "stock_id": "5340",
+        "name": "建榮",
+        "foreign_ratio": 5.437828746712751,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "2486",
-        "name": "一詮",
-        "foreign_ratio": 2.313956608532829,
+        "stock_id": "4979",
+        "name": "華星光",
+        "foreign_ratio": 2.1708353251354517,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "6265",
-        "name": "方土昶",
-        "foreign_ratio": 2.2509533570223326,
-        "invest_ratio": 0.0
+        "stock_id": "3406",
+        "name": "玉晶光",
+        "foreign_ratio": 2.1178340701990686,
+        "invest_ratio": -0.0008869725315161964
+      },
+      {
+        "stock_id": "9802",
+        "name": "鈺齊-KY",
+        "foreign_ratio": 1.5786723661930013,
+        "invest_ratio": 0.11194493614668305
       }
     ],
     "invest": [
       {
-        "stock_id": "3715",
-        "name": "定穎投控",
-        "foreign_ratio": 3.8085552691419533,
-        "invest_ratio": 1.8377627244414996
-      },
-      {
-        "stock_id": "3491",
-        "name": "昇達科",
-        "foreign_ratio": 3.6370177389565184,
-        "invest_ratio": 0.159038206543549
-      },
-      {
-        "stock_id": "2316",
-        "name": "楠梓電",
-        "foreign_ratio": -0.09029195361449527,
-        "invest_ratio": 0.09466974530489503
+        "stock_id": "1303",
+        "name": "南亞",
+        "foreign_ratio": 0.43883240354658287,
+        "invest_ratio": 0.19533892959447333
       }
     ]
   },

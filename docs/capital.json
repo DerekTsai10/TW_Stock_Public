@@ -4580,7 +4580,7 @@
     "abbreviation": "景碩",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 4568348600,
+    "share_capital": 4568126600,
     "shares_issued": 0
   },
   "3209": {
@@ -7028,7 +7028,7 @@
     "abbreviation": "洋基工程",
     "industry": "31",
     "market": "TWSE",
-    "share_capital": 1057571380,
+    "share_capital": 1214872090,
     "shares_issued": 0
   },
   "6695": {
@@ -7796,7 +7796,7 @@
     "abbreviation": "錸寶",
     "industry": "26",
     "market": "TWSE",
-    "share_capital": 916516750,
+    "share_capital": 925581920,
     "shares_issued": 0
   },
   "8105": {
@@ -10428,7 +10428,7 @@
     "abbreviation": "優盛",
     "industry": "22",
     "market": "TPEX",
-    "share_capital": 854910450,
+    "share_capital": 827480450,
     "shares_issued": 82748045
   },
   "4123": {
@@ -12164,8 +12164,8 @@
     "abbreviation": "桓鼎-KY",
     "industry": "14",
     "market": "TPEX",
-    "share_capital": 454835930,
-    "shares_issued": 45483593
+    "share_capital": 467035930,
+    "shares_issued": 46703593
   },
   "5548": {
     "company_name": "安倉營造股份有限公司",
@@ -12516,8 +12516,8 @@
     "abbreviation": "頎邦",
     "industry": "24",
     "market": "TPEX",
-    "share_capital": 7446335390,
-    "shares_issued": 744633539
+    "share_capital": 7445935390,
+    "shares_issued": 744593539
   },
   "6148": {
     "company_name": "驊宏資通股份有限公司",

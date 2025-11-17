@@ -1,50 +1,56 @@
 {
-  "date": "20251114",
+  "date": "20251117",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "8150",
-        "name": "南茂",
-        "foreign_ratio": 3.8949438252705892,
+        "stock_id": "1727",
+        "name": "中華化",
+        "foreign_ratio": 4.253084694870427,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "3624",
-        "name": "光頡",
-        "foreign_ratio": 2.344452241104593,
+        "stock_id": "8043",
+        "name": "蜜望實",
+        "foreign_ratio": 2.9563679955127933,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "8390",
-        "name": "金益鼎",
-        "foreign_ratio": 1.2016713781895167,
-        "invest_ratio": 0.0
+        "stock_id": "2481",
+        "name": "強茂",
+        "foreign_ratio": 1.3730212114953573,
+        "invest_ratio": -0.11881242210671344
       },
       {
-        "stock_id": "4142",
-        "name": "國光生",
-        "foreign_ratio": 1.1464985206902554,
-        "invest_ratio": 0.0
+        "stock_id": "3189",
+        "name": "景碩",
+        "foreign_ratio": 1.358290289065106,
+        "invest_ratio": 0.18519626842215803
       }
     ],
     "invest": [
       {
-        "stock_id": "9802",
-        "name": "鈺齊-KY",
-        "foreign_ratio": 0.1689124703191062,
-        "invest_ratio": 0.3452879363813246
+        "stock_id": "4979",
+        "name": "華星光",
+        "foreign_ratio": 0.49822566482879127,
+        "invest_ratio": 0.564471146556775
       },
       {
-        "stock_id": "6510",
-        "name": "精測",
-        "foreign_ratio": 0.19767286746155466,
-        "invest_ratio": 0.28363151545050663
+        "stock_id": "4958",
+        "name": "臻鼎-KY",
+        "foreign_ratio": -0.44718817026206964,
+        "invest_ratio": 0.5252251097376883
       },
       {
-        "stock_id": "6223",
-        "name": "旺矽",
-        "foreign_ratio": -0.04002901640195267,
-        "invest_ratio": 0.2570284211072751
+        "stock_id": "3293",
+        "name": "鈊象",
+        "foreign_ratio": -0.307654790839341,
+        "invest_ratio": 0.4403808126541244
+      },
+      {
+        "stock_id": "6472",
+        "name": "保瑞",
+        "foreign_ratio": -0.2906257498361384,
+        "invest_ratio": 0.23383256156668716
       }
     ]
   },

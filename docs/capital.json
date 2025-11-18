@@ -2244,7 +2244,7 @@
     "abbreviation": "旺宏",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 18558264410,
+    "share_capital": 18573481760,
     "shares_issued": 0
   },
   "2338": {
@@ -7732,7 +7732,7 @@
     "abbreviation": "台虹",
     "industry": "28",
     "market": "TWSE",
-    "share_capital": 2567659990,
+    "share_capital": 2627429940,
     "shares_issued": 0
   },
   "8045": {
@@ -7916,7 +7916,7 @@
     "abbreviation": "富鼎",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 1187924930,
+    "share_capital": 1188783930,
     "shares_issued": 0
   },
   "8271": {
@@ -9198,6 +9198,14 @@
     "market": "TPEX",
     "share_capital": 690162000,
     "shares_issued": 69016200
+  },
+  "3158": {
+    "company_name": "嘉實資訊股份有限公司",
+    "abbreviation": "嘉實",
+    "industry": "30",
+    "market": "TPEX",
+    "share_capital": 302984250,
+    "shares_issued": 30298425
   },
   "3162": {
     "company_name": "精確實業股份有限公司",
@@ -10532,8 +10540,8 @@
     "abbreviation": "太景*-KY",
     "industry": "22",
     "market": "TPEX",
-    "share_capital": 20941823,
-    "shares_issued": 717841475
+    "share_capital": 20766579,
+    "shares_issued": 711834475
   },
   "4160": {
     "company_name": "訊聯基因數位股份有限公司",
@@ -14351,6 +14359,14 @@
     "share_capital": 225000000,
     "shares_issued": 22500000
   },
+  "7717": {
+    "company_name": "英屬開曼群島商萊德光電(股)公司",
+    "abbreviation": "萊德光電-KY",
+    "industry": "27",
+    "market": "TPEX",
+    "share_capital": 218556980,
+    "shares_issued": 21855698
+  },
   "7718": {
     "company_name": "友鋮股份有限公司",
     "abbreviation": "友鋮",
@@ -14676,8 +14692,8 @@
     "abbreviation": "麗升能源",
     "industry": "35",
     "market": "TPEX",
-    "share_capital": 389609650,
-    "shares_issued": 38960965
+    "share_capital": 389853420,
+    "shares_issued": 38985342
   },
   "8088": {
     "company_name": "品安科技股份有限公司",

@@ -429,6 +429,11 @@
       "invest_ratio": 0.00142289
     },
     {
+      "stock_id": "6278",
+      "name": "台表科",
+      "invest_ratio": 0.00135881
+    },
+    {
       "stock_id": "3443",
       "name": "創意",
       "invest_ratio": 0.00133595
@@ -497,11 +502,6 @@
       "stock_id": "1319",
       "name": "東陽",
       "invest_ratio": 0.00068636
-    },
-    {
-      "stock_id": "2618",
-      "name": "長榮航",
-      "invest_ratio": 0.0006725
     }
   ],
   "foreign_ratio_5d_ranking": [

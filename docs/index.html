@@ -5,9 +5,8 @@
   <title>法人買賣超查詢</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
   <style>
-    /* 原有的行動裝置適應性樣式 */
     @media (max-width: 768px) {
       .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
       .mobile-col { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
@@ -16,27 +15,20 @@
       h1 { font-size: 1.8rem; }
       h3 { font-size: 1.5rem; }
     }
-    /* 確保 suggestions 清單在其他元素之上 */
     #suggestions { z-index: 20; }
-    /* 清除按鈕樣式 */
     #clear-input-btn {
       position: absolute;
       right: 10px;
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
-      color: #9ca3af; /* gray-400 */
+      color: #9ca3af;
       transition: color 0.15s;
     }
     #clear-input-btn:hover {
-      color: #6b7280; /* gray-500 */
+      color: #6b7280;
     }
-    /* 外部連結圖示基礎樣式 */
-    .external-link-icon {
-      font-size: 0.8em;
-      margin-left: 0.25rem;
-      color: #6b7280; /* gray-500 */
-    }
+    /* 移除外部連結圖示的相關樣式 */
   </style>
 </head>
 
@@ -97,6 +89,13 @@
       </div>
     </div>
 
+    <div id="chart-container" class="p-6 border rounded bg-white shadow mb-8 hidden">
+      <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超趨勢圖</h3>
+      <div class="relative h-96">
+        <canvas id="tradingChart"></canvas>
+      </div>
+    </div>
+
     <div class="p-6 border rounded bg-white shadow overflow-x-auto">
       <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超 (張)</h3>
       <table id="trading-table" class="min-w-full text-center border-collapse border text-lg">
@@ -123,16 +122,17 @@
   <script>
   let records = [];
   let stockList = [];
+  let tradingChart; // Chart.js 實例
 
   const input = document.getElementById("search-input");
   const suggestions = document.getElementById("suggestions");
   const tableBody = document.querySelector("#trading-table tbody");
   const pageTitle = document.getElementById("page-title");
-  const clearBtn = document.getElementById("clear-input-btn"); // 新增清除按鈕變數
+  const clearBtn = document.getElementById("clear-input-btn");
+  const chartContainer = document.getElementById("chart-container"); // 圖表容器
 
   // --- 載入數據區塊 ---
 
-  // 載入 data.json
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -146,23 +146,16 @@
       });
     });
 
-  // 輔助函式：創建帶有外部連結圖示的連結
-  function createExternalLink(stock_id, name) {
+  // 輔助函式：創建連結 (已移除外部連結圖示邏輯)
+  function createStockLink(stock_id, name) {
     const a = document.createElement("a");
     a.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${stock_id}`;
     a.target = "_blank";
     a.textContent = `${name} (${stock_id})`;
     a.className = "hover:underline text-black";
-
-    // 增加外部連結圖示
-    const icon = document.createElement('i');
-    icon.className = 'fa fa-external-link external-link-icon';
-    a.appendChild(icon);
-
     return a;
   }
 
-  // 載入 insights.json
   fetch("insights.json")
     .then(res => res.json())
     .then(data => {
@@ -185,11 +178,10 @@
           .filter(id => dailyInvest.some(j => j.stock_id === id))
       );
 
-      // 渲染清單項目的通用函式
       const renderListItem = (listEl, items, ratioKey, bothSet, isPeriod = false) => {
         items.forEach(item => {
           const li = document.createElement("li");
-          const a = createExternalLink(item.stock_id, item.name); // 使用輔助函式
+          const a = createStockLink(item.stock_id, item.name); // 使用新的輔助函式
 
           const ratioValue = (item[ratioKey] * 100).toFixed(2);
           const text = document.createTextNode(` : ${ratioValue}%`);
@@ -205,13 +197,9 @@
         });
       };
 
-      // 當日外資
       renderListItem(foreignList, dailyForeign, 'foreign_ratio', dailyBoth);
-
-      // 當日投信
       renderListItem(investList, dailyInvest, 'invest_ratio', dailyBoth);
 
-      // ===== 5日 / 10日區塊 (優化函式結構) =====
       const periodRoot = document.getElementById("period-section");
 
       function buildPeriodBlock(titleHTML, foreignKey, investKey, prefix) {
@@ -242,10 +230,7 @@
         const fUl = document.getElementById(`${prefix}-foreign`);
         const iUl = document.getElementById(`${prefix}-invest`);
 
-        // 外資 5/10 日
         renderListItem(fUl, fList, 'foreign_ratio', both, true);
-
-        // 投信 5/10 日
         renderListItem(iUl, iList, 'invest_ratio', both, true);
       }
 
@@ -264,7 +249,6 @@
       );
     });
 
-  // newcomers.json
   fetch("newcomers.json")
     .then(res => res.json())
     .then(data => {
@@ -283,7 +267,7 @@
           ul.className = "list-disc pl-6 space-y-1";
           items.slice(0, 10).forEach(stock => {
             const li = document.createElement("li");
-            const a = createExternalLink(stock.stock_id, stock.name); // 使用輔助函式
+            const a = createStockLink(stock.stock_id, stock.name); // 使用新的輔助函式
             li.appendChild(a);
             ul.appendChild(li);
           });
@@ -302,7 +286,6 @@
       document.getElementById("newcomers-container").textContent = "無法載入資料";
     });
 
-  // explosive.json
   fetch("explosive.json")
     .then(res => res.json())
     .then(data => {
@@ -318,7 +301,7 @@
       ul.className = "list-disc pl-6 space-y-1";
       data.explosive.slice(0, 10).forEach(stock => {
         const li = document.createElement("li");
-        const a = createExternalLink(stock.stock_id, stock.name); // 使用輔助函式
+        const a = createStockLink(stock.stock_id, stock.name); // 使用新的輔助函式
         li.appendChild(a);
 
         const tag = document.createTextNode(` ${stock.tag}`);
@@ -333,17 +316,14 @@
 
   // --- 搜尋功能區塊 ---
 
-  // 顯示/隱藏清除按鈕
   input.addEventListener("input", function() {
     if (this.value.trim()) {
       clearBtn.classList.remove("hidden");
     } else {
       clearBtn.classList.add("hidden");
-      // 清空時也隱藏建議
       suggestions.classList.add("hidden");
     }
 
-    // 原有的建議清單邏輯
     const keyword = this.value.trim();
     suggestions.innerHTML = "";
     if (!keyword) { suggestions.classList.add("hidden"); return; }
@@ -361,7 +341,7 @@
       li.addEventListener("click", () => {
         input.value = s.id;
         suggestions.classList.add("hidden");
-        clearBtn.classList.remove("hidden"); // 點擊建議後顯示清除按鈕
+        clearBtn.classList.remove("hidden");
         showStockData(s.id);
       });
       suggestions.appendChild(li);
@@ -369,7 +349,6 @@
     suggestions.classList.remove("hidden");
   });
   
-  // 實作清除按鈕功能
   clearBtn.addEventListener("click", () => {
     input.value = "";
     clearBtn.classList.add("hidden");
@@ -382,7 +361,8 @@
       </tr>
     `;
     pageTitle.textContent = "法人買賣超查詢";
-    input.focus(); // 清空後重新聚焦輸入框
+    chartContainer.classList.add('hidden'); // 清空時隱藏圖表
+    input.focus();
   });
 
 
@@ -393,10 +373,9 @@
     }
   });
 
-  // 顯示個股法人買賣超 (核心優化：增加千分位符號)
+  // 顯示個股法人買賣超
   function showStockData(keyword) {
     tableBody.innerHTML = "";
-    // 優化: 加入千分位分隔符 (toLocaleString)
     const colorize = (val) => {
       const num = Number(val);
       const formattedVal = num.toLocaleString(); 
@@ -409,7 +388,16 @@
     let foundStock = null;
     let dataFound = false;
 
-    records.forEach(day => {
+    // 用於圖表的數據
+    const chartLabels = [];
+    const chartForeignData = [];
+    const chartInvestData = [];
+    const chartDealerData = [];
+    const chartTotalData = [];
+
+    // 反向迭代 records 以便圖表數據從舊到新排列
+    for (let i = records.length - 1; i >= 0; i--) {
+      const day = records[i];
       const stock = day.stocks.find(s =>
         s.stock_id.toString().replace(/\s|　/g, "").trim() === kw ||
         s.name.replace(/\s|　/g, "").includes(kw)
@@ -418,7 +406,6 @@
         dataFound = true;
         if (!foundStock) foundStock = stock;
         
-        // 確保買賣超數據為整數
         const foreign = Math.round(stock.foreign_net/1000);
         const invest  = Math.round(stock.invest_net/1000);
         const dealer  = Math.round(stock.dealer_net/1000);
@@ -432,18 +419,108 @@
           <td class="border px-4 py-2">${colorize(invest)}</td>
           <td class="border px-4 py-2">${colorize(dealer)}</td>
           <td class="border px-4 py-2">${colorize(total)}</td>`;
-        tableBody.appendChild(tr);
+        tableBody.prepend(tr); // 將最新資料放在表格最上面
+
+        // 收集圖表數據
+        chartLabels.push(day.date);
+        chartForeignData.push(foreign);
+        chartInvestData.push(invest);
+        chartDealerData.push(dealer);
+        chartTotalData.push(total);
       }
-    });
+    }
 
     if (foundStock && dataFound) {
       pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
+      chartContainer.classList.remove('hidden'); // 顯示圖表容器
+      updateChart(chartLabels, chartForeignData, chartInvestData, chartDealerData, chartTotalData);
     } else {
       pageTitle.textContent = "法人買賣超查詢";
       const tr = document.createElement("tr");
       tr.innerHTML = `<td colspan="5" class="border px-4 py-8 text-red-500">找不到相關資料，或代碼輸入錯誤。</td>`;
       tableBody.appendChild(tr);
+      chartContainer.classList.add('hidden'); // 隱藏圖表容器
     }
+  }
+
+  // --- Chart.js 相關功能 ---
+  function updateChart(labels, foreignData, investData, dealerData, totalData) {
+    const ctx = document.getElementById('tradingChart').getContext('2d');
+
+    // 如果圖表已存在，先銷毀它
+    if (tradingChart) {
+      tradingChart.destroy();
+    }
+
+    tradingChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: '外資',
+            data: foreignData,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            tension: 0.3,
+            fill: false,
+          },
+          {
+            label: '投信',
+            data: investData,
+            borderColor: 'rgb(54, 162, 235)',
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            tension: 0.3,
+            fill: false,
+          },
+          {
+            label: '自營商',
+            data: dealerData,
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            tension: 0.3,
+            fill: false,
+          },
+          {
+            label: '合計',
+            data: totalData,
+            borderColor: 'rgb(153, 102, 255)',
+            backgroundColor: 'rgba(153, 102, 255, 0.5)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: false,
+            text: '法人買賣超趨勢',
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: '日期'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: '買賣超張數'
+            }
+          }
+        }
+      }
+    });
   }
   </script>
 </body>

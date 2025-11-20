@@ -563,7 +563,7 @@
   
   // --- K 線圖功能 (使用 TradingView Lightweight Charts) ---
   function loadKlineData(stockId) {
-      // 確保每次查詢前清空並顯示載入中
+      // 修正 1：確保 innerHTML 是賦值，而不是函式調用
       klineChartContainer.innerHTML = `<div id="klineChart" class="relative" style="height: 300px;"><div class="text-center py-4 text-gray-500">載入中...</div></div>`;
       const currentKlineChartEl = document.getElementById('klineChart');
       
@@ -592,6 +592,7 @@
               console.log(`[🔢 LOG - Kline] 篩選後筆數 (股票代碼: ${stockId}): ${filteredData.length}`);
 
               if (filteredData.length === 0) {
+                  // 修正 2：確保 innerHTML 是賦值，而不是函式調用
                   currentKlineChartEl.innerHTML = `<div class="text-center py-4 text-gray-500">找不到 ${stockId} 的 K 線資料。</div>`;
                   return;
               }
@@ -673,10 +674,10 @@
                   scaleMargins: { top: 0.8, bottom: 0 }, 
               });
               
-              // 修正處：確保傳遞給 setData 的 volume value 是經過最終清理的有效數字
+              // 確保傳遞給 setData 的 volume value 是經過最終清理的有效數字
               const volumeData = chartData.map(d => ({
                   time: d.time,
-                  value: ensureFiniteNumber(d.value), // 最終確認是有效數字
+                  value: ensureFiniteNumber(d.value), 
                   color: d.close >= d.open ? '#ef535099' : '#26a69a99', 
               }));
               volumeSeries.setData(volumeData);
@@ -687,6 +688,7 @@
           })
           .catch(error => {
               console.error("[❌ LOG - Kline] K 線圖載入錯誤:", error);
+              // 修正 3：確保 innerHTML 是賦值，而不是函式調用
               currentKlineChartEl.innerHTML = `<div class="text-center py-4 text-red-500">K 線圖載入錯誤，請檢查 console。</div>`;
           });
   }

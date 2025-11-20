@@ -554,6 +554,13 @@
     });
   }
 
+  // ✅ 新增輔助函式：確保數值是有效數字，否則返回 0
+  const ensureFiniteNumber = (value) => {
+      const num = Number(value);
+      // 檢查是否是有限數字且不是 null
+      return (Number.isFinite(num) && num !== null) ? num : 0;
+  };
+  
   // --- K 線圖功能 (使用 TradingView Lightweight Charts) ---
   function loadKlineData(stockId) {
       // 確保每次查詢前清空並顯示載入中
@@ -565,19 +572,16 @@
           klineChart = null;
       }
       
-      // 埋入 log 2: 開始載入
       console.log(`[📥 LOG - Kline] 嘗試載入 K 線資料並篩選股票代碼: ${stockId}`);
 
       fetch("Kline.json")
           .then(res => {
               if (!res.ok) {
-                  // 埋入 log 3: 檔案載入錯誤
                   throw new Error(`HTTP error! status: ${res.status}`);
               }
               return res.json();
           })
           .then(klineData => {
-              // 埋入 log 4: 檔案載入成功
               console.log(`[✅ LOG - Kline] Kline.json 載入成功，包含 ${Object.keys(klineData).length} 檔股票資料`);
 
               const chartData = [];
@@ -585,7 +589,6 @@
               // 修正邏輯: 直接從物件中取出對應 stockId 的資料陣列
               const filteredData = klineData[stockId] || []; 
 
-              // 埋入 log 5: 篩選結果
               console.log(`[🔢 LOG - Kline] 篩選後筆數 (股票代碼: ${stockId}): ${filteredData.length}`);
 
               if (filteredData.length === 0) {
@@ -593,27 +596,45 @@
                   return;
               }
 
-              // 轉換為 Lightweight Charts 所需的格式
+              // 轉換為 Lightweight Charts 所需的格式 (新增數據清理)
               filteredData.forEach((item, index) => {
-                  // 🚨 修正處：由於 Kline.json 中的 date 已經是 YYYY-MM-DD 格式，直接使用即可。
+                  
+                  // 確保所有 OHLCV 字段都是有效的數字 (修正 NaN/null 錯誤)
+                  const validOpen = ensureFiniteNumber(item.open);
+                  const validHigh = ensureFiniteNumber(item.high);
+                  const validLow = ensureFiniteNumber(item.low);
+                  const validClose = ensureFiniteNumber(item.close);
+                  const validVolume = ensureFiniteNumber(item.volume);
+                  
+                  // 如果 OHLC 任何一個是 0 (或原始數據是 null/無效值)，則跳過整個數據點
+                  if (validOpen === 0 || validHigh === 0 || validLow === 0 || validClose === 0) {
+                      return; // 跳過此數據點
+                  }
+
+                  // 修正邏輯: 由於 Kline.json 中的 date 已經是 YYYY-MM-DD 格式，直接使用。
                   const dateStr = item.date.toString(); 
                   
                   const dataPoint = {
-                      time: dateStr, // 直接使用 'YYYY-MM-DD' 格式
-                      open: item.open,
-                      high: item.high,
-                      low: item.low,
-                      close: item.close,
-                      value: item.volume 
+                      time: dateStr, // YYYY-MM-DD 格式
+                      open: validOpen,
+                      high: validHigh,
+                      low: validLow,
+                      close: validClose,
+                      value: validVolume // 使用清理後的 volume 值
                   };
 
                   if (index === 0) {
-                      // 埋入 log 6: 顯示第一個轉換後的數據點
-                      console.log("[🎯 LOG - Kline] 第一筆轉換後的數據點:", dataPoint);
+                      console.log("[🎯 LOG - Kline] 第一筆轉換後的數據點 (已清理):", dataPoint);
                   }
 
                   chartData.push(dataPoint);
               });
+              
+              // 再次檢查數據是否為空
+              if (chartData.length === 0) {
+                  currentKlineChartEl.innerHTML = `<div class="text-center py-4 text-gray-500">找到數據但無法繪製有效的 K 線圖 (可能數據無效或缺失)。</div>`;
+                  return;
+              }
 
               // 繪製 K 線圖
               klineChart = LightweightCharts.create(currentKlineChartEl, {
@@ -643,7 +664,7 @@
               });
               candleSeries.setData(chartData);
 
-              // 繪製成交量 (Volume) - 作為子圖表
+              // 繪製成交量 (Volume)
               const volumeSeries = klineChart.addHistogramSeries({
                   color: '#182233',
                   lineWidth: 2,
@@ -651,7 +672,6 @@
                   overlay: true, 
                   scaleMargins: { top: 0.8, bottom: 0 }, 
               });
-              // 根據價格決定成交量條的顏色
               const volumeData = chartData.map(d => ({
                   time: d.time,
                   value: d.value,
@@ -659,7 +679,6 @@
               }));
               volumeSeries.setData(volumeData);
               
-              // 埋入 log 7: 繪製完成
               console.log(`[🖼️ LOG - Kline] K 線圖繪製完成。`);
 
 

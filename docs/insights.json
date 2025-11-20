@@ -271,7 +271,7 @@
     {
       "stock_id": "4958",
       "name": "臻鼎-KY",
-      "invest_ratio": 0.00760289
+      "invest_ratio": 0.0075317
     },
     {
       "stock_id": "2441",
@@ -399,11 +399,6 @@
       "invest_ratio": 0.00154469
     },
     {
-      "stock_id": "6531",
-      "name": "愛普*",
-      "invest_ratio": 0.001476
-    },
-    {
       "stock_id": "3443",
       "name": "創意",
       "invest_ratio": 0.00143607
@@ -422,6 +417,11 @@
       "stock_id": "6278",
       "name": "台表科",
       "invest_ratio": 0.00113456
+    },
+    {
+      "stock_id": "6531",
+      "name": "愛普*",
+      "invest_ratio": 0.0011316
     },
     {
       "stock_id": "1609",
@@ -452,11 +452,6 @@
       "stock_id": "1319",
       "name": "東陽",
       "invest_ratio": 0.00101813
-    },
-    {
-      "stock_id": "2360",
-      "name": "致茂",
-      "invest_ratio": 0.00100734
     },
     {
       "stock_id": "3211",
@@ -502,6 +497,11 @@
       "stock_id": "1785",
       "name": "光洋科",
       "invest_ratio": 0.00071474
+    },
+    {
+      "stock_id": "3167",
+      "name": "大量",
+      "invest_ratio": 0.00067903
     }
   ],
   "foreign_ratio_5d_ranking": [
@@ -770,7 +770,7 @@
     {
       "stock_id": "4958",
       "name": "臻鼎-KY",
-      "invest_ratio": 0.01851503
+      "invest_ratio": 0.01844384
     },
     {
       "stock_id": "3293",
@@ -790,7 +790,7 @@
     {
       "stock_id": "3653",
       "name": "健策",
-      "invest_ratio": 0.01177779
+      "invest_ratio": 0.01199469
     },
     {
       "stock_id": "6442",
@@ -805,7 +805,7 @@
     {
       "stock_id": "6531",
       "name": "愛普*",
-      "invest_ratio": 0.01056093
+      "invest_ratio": 0.01021653
     },
     {
       "stock_id": "2441",
@@ -1289,7 +1289,7 @@
     {
       "stock_id": "6531",
       "name": "愛普*",
-      "invest_ratio": 0.02014261
+      "invest_ratio": 0.01979821
     },
     {
       "stock_id": "2481",
@@ -1309,7 +1309,7 @@
     {
       "stock_id": "4958",
       "name": "臻鼎-KY",
-      "invest_ratio": 0.01696747
+      "invest_ratio": 0.01689628
     },
     {
       "stock_id": "2337",
@@ -1324,7 +1324,7 @@
     {
       "stock_id": "3653",
       "name": "健策",
-      "invest_ratio": 0.0151024
+      "invest_ratio": 0.0153193
     },
     {
       "stock_id": "6442",
@@ -1494,7 +1494,7 @@
     {
       "stock_id": "6669",
       "name": "緯穎",
-      "invest_ratio": 0.0038252
+      "invest_ratio": 0.00382009
     },
     {
       "stock_id": "2383",

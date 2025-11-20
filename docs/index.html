@@ -163,7 +163,7 @@
     toggleView('insights');
   });
   
-  // --- 載入數據區塊 ---
+  // --- 載入數據區塊 (保持不變) ---
 
   fetch("data.json")
     .then(res => res.json())
@@ -178,7 +178,7 @@
       });
     });
 
-  // 輔助函式：創建連結 
+  // 輔助函式：創建連結 (保持不變)
   function createStockLink(stock_id, name) {
     const a = document.createElement("a");
     a.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${stock_id}`;
@@ -346,7 +346,7 @@
       document.getElementById("explosive-container").textContent = "無法載入資料";
     });
 
-  // --- 搜尋功能區塊 ---
+  // --- 搜尋功能區塊 (保持不變) ---
 
   input.addEventListener("input", function() {
     if (this.value.trim()) {
@@ -406,7 +406,7 @@
     }
   });
 
-  // 顯示個股法人買賣超
+  // 顯示個股法人買賣超 (保持不變)
   function showStockData(keyword) {
     tableBody.innerHTML = "";
     const colorize = (val) => {
@@ -475,7 +475,7 @@
     }
   }
 
-  // --- Chart.js 法人買賣超趨勢圖功能 ---
+  // --- Chart.js 法人買賣超趨勢圖功能 (保持不變) ---
   function updateChart(labels, foreignData, investData, dealerData, totalData) {
     const ctx = document.getElementById('tradingChart').getContext('2d');
 
@@ -554,7 +554,7 @@
     });
   }
 
-  // ✅ 新增輔助函式：確保數值是有效數字，否則返回 0
+  // ✅ 輔助函式：確保數值是有效數字，否則返回 0
   const ensureFiniteNumber = (value) => {
       const num = Number(value);
       // 檢查是否是有限數字且不是 null
@@ -620,7 +620,7 @@
                       high: validHigh,
                       low: validLow,
                       close: validClose,
-                      value: validVolume // 使用清理後的 volume 值
+                      value: validVolume // K線圖數據結構中帶有 volume
                   };
 
                   if (index === 0) {
@@ -656,8 +656,8 @@
               
               // 繪製蠟燭圖 (K 線)
               const candleSeries = klineChart.addCandlestickSeries({
-                  upColor: '#ef5350',   // 紅色 (上漲)
-                  downColor: '#26a69a', // 綠色 (下跌)
+                  upColor: '#ef5350',   
+                  downColor: '#26a69a', 
                   borderVisible: false,
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
@@ -672,9 +672,11 @@
                   overlay: true, 
                   scaleMargins: { top: 0.8, bottom: 0 }, 
               });
+              
+              // 修正處：確保傳遞給 setData 的 volume value 是經過最終清理的有效數字
               const volumeData = chartData.map(d => ({
                   time: d.time,
-                  value: d.value,
+                  value: ensureFiniteNumber(d.value), // 最終確認是有效數字
                   color: d.close >= d.open ? '#ef535099' : '#26a69a99', 
               }));
               volumeSeries.setData(volumeData);

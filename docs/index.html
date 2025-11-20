@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
   <style>
     @media (max-width: 768px) {
       .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
@@ -28,7 +29,6 @@
     #clear-input-btn:hover {
       color: #6b7280;
     }
-    /* 移除外部連結圖示的相關樣式 */
   </style>
 </head>
 
@@ -57,82 +57,167 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
-      <div class="p-6 border rounded bg-white shadow">
-        <h3 id="insights-title" class="font-bold text-2xl mb-6 mobile-center">📊 指標觀察清單</h3>
+    <div id="insights-view">
+      <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
+        <div class="p-6 border rounded bg-white shadow">
+          <h3 id="insights-title" class="font-bold text-2xl mb-6 mobile-center">📊 指標觀察清單</h3>
 
-        <div class="grid grid-cols-2 gap-6 text-gray-700">
-          <div>
-            <h4 class="font-semibold mb-3">🌏 當日外本比前 10</h4>
-            <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
+          <div class="grid grid-cols-2 gap-6 text-gray-700">
+            <div>
+              <h4 class="font-semibold mb-3">🌏 當日外本比前 10</h4>
+              <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3">🏦 當日投本比前 10</h4>
+              <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
+            </div>
           </div>
-          <div>
-            <h4 class="font-semibold mb-3">🏦 當日投本比前 10</h4>
-            <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
-          </div>
+          <div id="period-section" class="mt-8"></div>
         </div>
 
-        <div id="period-section" class="mt-8"></div>
-      </div>
-
-      <div class="p-6 border rounded bg-white shadow">
-        <div class="grid grid-cols-2 gap-6 mobile-col">
-          <div>
-            <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
-            <div id="newcomers-container" class="text-gray-700 text-base">（此區塊暫不顯示內容）</div>
-          </div>
-          <div>
-            <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 爆量偵測</h3>
-            <div id="explosive-container" class="text-gray-700 text-base">（此區塊暫不顯示內容）</div>
+        <div class="p-6 border rounded bg-white shadow">
+          <div class="grid grid-cols-2 gap-6 mobile-col">
+            <div>
+              <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
+              <div id="newcomers-container" class="text-gray-700 text-base">（此區塊暫不顯示內容）</div>
+            </div>
+            <div>
+              <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 爆量偵測</h3>
+              <div id="explosive-container" class="text-gray-700 text-base">（此區塊暫不顯示內容）</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div id="chart-container" class="p-6 border rounded bg-white shadow mb-8 hidden">
-      <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超趨勢圖</h3>
-      <div class="relative h-96">
-        <canvas id="tradingChart"></canvas>
+    
+    <div id="stock-view" class="hidden">
+      
+      <div id="price-chart-container" class="p-6 border rounded bg-white shadow mb-8">
+        <h3 class="font-bold text-2xl mb-4 mobile-center">過去 30 天股價 K 線圖</h3>
+        <div id="candlestickChart" class="relative h-96">
+          </div>
       </div>
-    </div>
 
-    <div class="p-6 border rounded bg-white shadow overflow-x-auto">
-      <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超 (張)</h3>
-      <table id="trading-table" class="min-w-full text-center border-collapse border text-lg">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="border px-4 py-3 whitespace-nowrap">日期</th>
-            <th class="border px-4 py-3 whitespace-nowrap">外資</th>
-            <th class="border px-4 py-3 whitespace-nowrap">投信</th>
-            <th class="border px-4 py-3 whitespace-nowrap">自營商</th>
-            <th class="border px-4 py-3 whitespace-nowrap">合計</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="5" class="border px-4 py-8 text-gray-500">
-              請輸入股票代碼或名稱進行查詢
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div id="chart-container" class="p-6 border rounded bg-white shadow mb-8">
+        <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超趨勢圖</h3>
+        <div class="relative h-96">
+          <canvas id="tradingChart"></canvas>
+        </div>
+      </div>
+
+      <div class="p-6 border rounded bg-white shadow overflow-x-auto">
+        <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超 (張)</h3>
+        <table id="trading-table" class="min-w-full text-center border-collapse border text-lg">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border px-4 py-3 whitespace-nowrap">日期</th>
+              <th class="border px-4 py-3 whitespace-nowrap">外資</th>
+              <th class="border px-4 py-3 whitespace-nowrap">投信</th>
+              <th class="border px-4 py-3 whitespace-nowrap">自營商</th>
+              <th class="border px-4 py-3 whitespace-nowrap">合計</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5" class="border px-4 py-8 text-gray-500">
+                請輸入股票代碼或名稱進行查詢
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <script>
   let records = [];
   let stockList = [];
-  let tradingChart; // Chart.js 實例
+  let tradingChartInstance; // Chart.js 實例
+  let candlestickChartInstance; // Lightweight Charts 實例
 
   const input = document.getElementById("search-input");
   const suggestions = document.getElementById("suggestions");
   const tableBody = document.querySelector("#trading-table tbody");
   const pageTitle = document.getElementById("page-title");
   const clearBtn = document.getElementById("clear-input-btn");
-  const chartContainer = document.getElementById("chart-container"); // 圖表容器
+  
+  // 新增頁面視圖元素
+  const insightsView = document.getElementById('insights-view'); // 總覽模式
+  const stockView = document.getElementById('stock-view');     // 個股模式
 
-  // --- 載入數據區塊 ---
+  // --- 頁面模式切換函式 ---
+  function toggleView(view) {
+    if (view === 'insights') {
+      insightsView.classList.remove('hidden');
+      stockView.classList.add('hidden');
+      pageTitle.textContent = "法人買賣超查詢";
+    } else if (view === 'stock') {
+      insightsView.classList.add('hidden');
+      stockView.classList.remove('hidden');
+    }
+  }
 
+  // 初始化時顯示總覽模式 (確保初始狀態正確)
+  toggleView('insights');
+
+  // --- K 線圖初始化 (Lightweight Charts) ---
+  const chartOptions = {
+      layout: { backgroundColor: '#ffffff', textColor: 'rgba(33, 56, 120, 1)', },
+      grid: { vertLines: { color: '#e0e0e0', }, horzLines: { color: '#e0e0e0', }, },
+      crosshair: { mode: LightweightCharts.CrosshairMode.Normal, },
+      priceScale: { borderColor: '#cccccc', },
+      timeScale: { borderColor: '#cccccc', },
+  };
+
+  const chartElement = document.getElementById('candlestickChart');
+  candlestickChartInstance = LightweightCharts.createChart(chartElement, chartOptions);
+  candlestickChartInstance.timeScale().fitContent();
+  window.candleSeries = candlestickChartInstance.addCandlestickSeries({
+      upColor: '#ef5350',   // 紅色 (漲)
+      downColor: '#26a69a', // 綠色 (跌)
+      borderVisible: false,
+      wickUpColor: '#ef5350',
+      wickDownColor: '#26a69a',
+  });
+
+  // [待實作] 股價 K 線數據獲取與繪製 (模擬函式)
+  async function fetchPriceData(stockId) {
+      console.log(`正在模擬獲取 ${stockId} 的股價數據...`);
+      return new Promise(resolve => {
+          setTimeout(() => {
+              // 模擬過去幾天的股價數據 (Lightweight Charts 格式)
+              const mockData = [
+                  { time: '2025-10-14', open: 120, high: 122, low: 118, close: 121 },
+                  { time: '2025-10-15', open: 121, high: 125, low: 120, close: 124 },
+                  { time: '2025-10-16', open: 124, high: 126, low: 123, close: 125 },
+                  { time: '2025-10-17', open: 125, high: 128, low: 124, close: 127 },
+                  { time: '2025-10-18', open: 127, high: 130, low: 126, close: 129 },
+                  { time: '2025-10-21', open: 129, high: 132, low: 128, close: 131 },
+              ];
+              // 假設只顯示最近 30 天
+              resolve(mockData); 
+          }, 300);
+      });
+  }
+
+  async function updateCandlestickChart(stockId) {
+      try {
+          const data = await fetchPriceData(stockId);
+          if (data && data.length > 0) {
+              window.candleSeries.setData(data);
+              candlestickChartInstance.timeScale().fitContent();
+          } else {
+              window.candleSeries.setData([]);
+              // (可選: 提示找不到 K 線數據)
+          }
+      } catch (error) {
+          console.error("載入 K 線圖數據失敗:", error);
+          window.candleSeries.setData([]);
+      }
+  }
+
+
+  // --- 數據載入區塊 (保持不變) ---
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -146,7 +231,6 @@
       });
     });
 
-  // 輔助函式：創建連結 (已移除外部連結圖示邏輯)
   function createStockLink(stock_id, name) {
     const a = document.createElement("a");
     a.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${stock_id}`;
@@ -181,7 +265,7 @@
       const renderListItem = (listEl, items, ratioKey, bothSet, isPeriod = false) => {
         items.forEach(item => {
           const li = document.createElement("li");
-          const a = createStockLink(item.stock_id, item.name); // 使用新的輔助函式
+          const a = createStockLink(item.stock_id, item.name);
 
           const ratioValue = (item[ratioKey] * 100).toFixed(2);
           const text = document.createTextNode(` : ${ratioValue}%`);
@@ -234,19 +318,8 @@
         renderListItem(iUl, iList, 'invest_ratio', both, true);
       }
 
-      buildPeriodBlock(
-        "📅 近5日外/投本比前 10",
-        "foreign_ratio_5d_ranking",
-        "invest_ratio_5d_ranking",
-        "p5d"
-      );
-
-      buildPeriodBlock(
-        "🗓️ 近10日外/投本比前 10",
-        "foreign_ratio_10d_ranking",
-        "invest_ratio_10d_ranking",
-        "p10d"
-      );
+      buildPeriodBlock("📅 近5日外/投本比前 10", "foreign_ratio_5d_ranking", "invest_ratio_5d_ranking", "p5d");
+      buildPeriodBlock("🗓️ 近10日外/投本比前 10", "foreign_ratio_10d_ranking", "invest_ratio_10d_ranking", "p10d");
     });
 
   fetch("newcomers.json")
@@ -267,7 +340,7 @@
           ul.className = "list-disc pl-6 space-y-1";
           items.slice(0, 10).forEach(stock => {
             const li = document.createElement("li");
-            const a = createStockLink(stock.stock_id, stock.name); // 使用新的輔助函式
+            const a = createStockLink(stock.stock_id, stock.name);
             li.appendChild(a);
             ul.appendChild(li);
           });
@@ -301,7 +374,7 @@
       ul.className = "list-disc pl-6 space-y-1";
       data.explosive.slice(0, 10).forEach(stock => {
         const li = document.createElement("li");
-        const a = createStockLink(stock.stock_id, stock.name); // 使用新的輔助函式
+        const a = createStockLink(stock.stock_id, stock.name);
         li.appendChild(a);
 
         const tag = document.createTextNode(` ${stock.tag}`);
@@ -314,7 +387,7 @@
       document.getElementById("explosive-container").textContent = "無法載入資料";
     });
 
-  // --- 搜尋功能區塊 ---
+  // --- 搜尋功能區塊 (調整切換邏輯) ---
 
   input.addEventListener("input", function() {
     if (this.value.trim()) {
@@ -322,6 +395,7 @@
     } else {
       clearBtn.classList.add("hidden");
       suggestions.classList.add("hidden");
+      toggleView('insights'); // 清空輸入時切換回總覽模式
     }
 
     const keyword = this.value.trim();
@@ -353,6 +427,7 @@
     input.value = "";
     clearBtn.classList.add("hidden");
     suggestions.classList.add("hidden");
+    
     tableBody.innerHTML = `
       <tr>
         <td colspan="5" class="border px-4 py-8 text-gray-500">
@@ -360,8 +435,8 @@
         </td>
       </tr>
     `;
-    pageTitle.textContent = "法人買賣超查詢";
-    chartContainer.classList.add('hidden'); // 清空時隱藏圖表
+    
+    toggleView('insights'); // 清除按鈕切換回總覽模式
     input.focus();
   });
 
@@ -373,9 +448,13 @@
     }
   });
 
-  // 顯示個股法人買賣超
+  // 顯示個股法人買賣超 (調整切換模式邏輯)
   function showStockData(keyword) {
     tableBody.innerHTML = "";
+    
+    // 查詢成功，切換到個股模式
+    toggleView('stock'); 
+
     const colorize = (val) => {
       const num = Number(val);
       const formattedVal = num.toLocaleString(); 
@@ -419,9 +498,8 @@
           <td class="border px-4 py-2">${colorize(invest)}</td>
           <td class="border px-4 py-2">${colorize(dealer)}</td>
           <td class="border px-4 py-2">${colorize(total)}</td>`;
-        tableBody.prepend(tr); // 將最新資料放在表格最上面
+        tableBody.prepend(tr);
 
-        // 收集圖表數據
         chartLabels.push(day.date);
         chartForeignData.push(foreign);
         chartInvestData.push(invest);
@@ -432,93 +510,36 @@
 
     if (foundStock && dataFound) {
       pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
-      chartContainer.classList.remove('hidden'); // 顯示圖表容器
-      updateChart(chartLabels, chartForeignData, chartInvestData, chartDealerData, chartTotalData);
+      updateTradingChart(chartLabels, chartForeignData, chartInvestData, chartDealerData, chartTotalData);
+      updateCandlestickChart(foundStock.stock_id); 
     } else {
       pageTitle.textContent = "法人買賣超查詢";
       const tr = document.createElement("tr");
       tr.innerHTML = `<td colspan="5" class="border px-4 py-8 text-red-500">找不到相關資料，或代碼輸入錯誤。</td>`;
       tableBody.appendChild(tr);
-      chartContainer.classList.add('hidden'); // 隱藏圖表容器
+      toggleView('insights'); // 找不到資料時切回總覽模式
     }
   }
 
-  // --- Chart.js 相關功能 ---
-  function updateChart(labels, foreignData, investData, dealerData, totalData) {
+  // --- Chart.js 法人買賣超趨勢圖功能 (保持不變) ---
+  function updateTradingChart(labels, foreignData, investData, dealerData, totalData) {
     const ctx = document.getElementById('tradingChart').getContext('2d');
-
-    // 如果圖表已存在，先銷毀它
-    if (tradingChart) {
-      tradingChart.destroy();
-    }
-
-    tradingChart = new Chart(ctx, {
+    if (tradingChartInstance) { tradingChartInstance.destroy(); }
+    tradingChartInstance = new Chart(ctx, {
       type: 'line',
       data: {
         labels: labels,
         datasets: [
-          {
-            label: '外資',
-            data: foreignData,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            tension: 0.3,
-            fill: false,
-          },
-          {
-            label: '投信',
-            data: investData,
-            borderColor: 'rgb(54, 162, 235)',
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            tension: 0.3,
-            fill: false,
-          },
-          {
-            label: '自營商',
-            data: dealerData,
-            borderColor: 'rgb(75, 192, 192)',
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            tension: 0.3,
-            fill: false,
-          },
-          {
-            label: '合計',
-            data: totalData,
-            borderColor: 'rgb(153, 102, 255)',
-            backgroundColor: 'rgba(153, 102, 255, 0.5)',
-            tension: 0.3,
-            fill: false,
-            borderWidth: 2
-          }
+          { label: '外資', data: foreignData, borderColor: 'rgb(255, 99, 132)', backgroundColor: 'rgba(255, 99, 132, 0.5)', tension: 0.3, fill: false, },
+          { label: '投信', data: investData, borderColor: 'rgb(54, 162, 235)', backgroundColor: 'rgba(54, 162, 235, 0.5)', tension: 0.3, fill: false, },
+          { label: '自營商', data: dealerData, borderColor: 'rgb(75, 192, 192)', backgroundColor: 'rgba(75, 192, 192, 0.5)', tension: 0.3, fill: false, },
+          { label: '合計', data: totalData, borderColor: 'rgb(153, 102, 255)', backgroundColor: 'rgba(153, 102, 255, 0.5)', tension: 0.3, fill: false, borderWidth: 2 }
         ]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          title: {
-            display: false,
-            text: '法人買賣超趨勢',
-          },
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-          }
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: '日期'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: '買賣超張數'
-            }
-          }
-        }
+        responsive: true, maintainAspectRatio: false,
+        plugins: { tooltip: { mode: 'index', intersect: false, } },
+        scales: { x: { title: { display: true, text: '日期' } }, y: { title: { display: true, text: '買賣超張數' } } }
       }
     });
   }

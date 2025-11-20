@@ -1052,7 +1052,7 @@
     "abbreviation": "中砂",
     "industry": "05",
     "market": "TWSE",
-    "share_capital": 1465335800,
+    "share_capital": 1469410800,
     "shares_issued": 0
   },
   "1563": {
@@ -2268,7 +2268,7 @@
     "abbreviation": "茂矽",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 1575687440,
+    "share_capital": 1575247440,
     "shares_issued": 0
   },
   "2344": {
@@ -2460,7 +2460,7 @@
     "abbreviation": "佳能",
     "industry": "26",
     "market": "TWSE",
-    "share_capital": 2898635120,
+    "share_capital": 3245871330,
     "shares_issued": 0
   },
   "2375": {
@@ -7583,6 +7583,14 @@
     "share_capital": 660673040,
     "shares_issued": 0
   },
+  "7711": {
+    "company_name": "永擎電子股份有限公司",
+    "abbreviation": "永擎",
+    "industry": "25",
+    "market": "TWSE",
+    "share_capital": 623946950,
+    "shares_issued": 0
+  },
   "7721": {
     "company_name": "微程式資訊股份有限公司",
     "abbreviation": "微程式",
@@ -7661,6 +7669,14 @@
     "industry": "02",
     "market": "TWSE",
     "share_capital": 810024170,
+    "shares_issued": 0
+  },
+  "7786": {
+    "company_name": "東方風能科技股份有限公司",
+    "abbreviation": "東方風能",
+    "industry": "35",
+    "market": "TWSE",
+    "share_capital": 1753614440,
     "shares_issued": 0
   },
   "7788": {
@@ -13452,8 +13468,8 @@
     "abbreviation": "醫揚",
     "industry": "22",
     "market": "TPEX",
-    "share_capital": 390147450,
-    "shares_issued": 39014745
+    "share_capital": 390707450,
+    "shares_issued": 39070745
   },
   "6570": {
     "company_name": "維田科技股份有限公司",
@@ -13564,8 +13580,8 @@
     "abbreviation": "奈米醫材",
     "industry": "22",
     "market": "TPEX",
-    "share_capital": 473840840,
-    "shares_issued": 47384084
+    "share_capital": 475145840,
+    "shares_issued": 47514584
   },
   "6613": {
     "company_name": "朋億股份有限公司",
@@ -13796,8 +13812,8 @@
     "abbreviation": "應廣",
     "industry": "24",
     "market": "TPEX",
-    "share_capital": 300083140,
-    "shares_issued": 30008314
+    "share_capital": 302773140,
+    "shares_issued": 30277314
   },
   "6720": {
     "company_name": "久昌科技股份有限公司",
@@ -14236,8 +14252,8 @@
     "abbreviation": "力領科技",
     "industry": "24",
     "market": "TPEX",
-    "share_capital": 419653330,
-    "shares_issued": 41965333
+    "share_capital": 419473330,
+    "shares_issued": 41947333
   },
   "6997": {
     "company_name": "博弘雲端科技股份有限公司",
@@ -14260,8 +14276,8 @@
     "abbreviation": "碩網",
     "industry": "36",
     "market": "TPEX",
-    "share_capital": 327790000,
-    "shares_issued": 32779000
+    "share_capital": 332040000,
+    "shares_issued": 33204000
   },
   "7556": {
     "company_name": "意德士科技股份有限公司",
@@ -15308,8 +15324,8 @@
     "abbreviation": "合騏",
     "industry": "20",
     "market": "TPEX",
-    "share_capital": 1023200680,
-    "shares_issued": 102320068
+    "share_capital": 1079200680,
+    "shares_issued": 107920068
   },
   "8938": {
     "company_name": "明安國際企業股份有限公司",

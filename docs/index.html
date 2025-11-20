@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-
+  <!-- Lightweight Charts (standalone 版本) -->
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
   <style>
     @media (max-width: 768px) {
       .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
@@ -95,7 +95,7 @@
 
     <!-- ⬇️ 個股模式 -->
     <div id="stock-view" class="hidden">
-        <!-- ✅ K 線圖容器修正：使用獨立的 klineChartContainer，避免重覆 id -->
+        <!-- K 線圖外框 -->
         <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖 (TradingView)</h3>
             <div id="klineChartContainer" class="relative" style="height: 300px;">
@@ -139,7 +139,6 @@
   let stockList = [];
   let tradingChart;
 
-  // ✅ 改成抓新的容器 id
   const klineChartContainer = document.getElementById('klineChartContainer');
   let klineChart = null;
 
@@ -566,10 +565,8 @@
   function loadKlineData(stockId) {
       if (!klineChartContainer) return;
 
-      // 顯示載入中
       klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">載入中...</div>`;
 
-      // 若已有圖，先移除
       if (klineChart) {
           try {
               klineChart.remove();
@@ -579,9 +576,8 @@
           klineChart = null;
       }
 
-      // 確認程式庫是否載入成功
-      if (typeof LightweightCharts === 'undefined') {
-          console.error("[❌ LOG - Kline] LightweightCharts 程式庫未載入");
+      if (typeof LightweightCharts === 'undefined' || typeof LightweightCharts.createChart !== 'function') {
+          console.error("[❌ LOG - Kline] LightweightCharts 未載入或不支援 createChart");
           klineChartContainer.innerHTML = `<div class="text-center py-4 text-red-500">K 線程式庫載入失敗，請重新整理頁面。</div>`;
           return;
       }
@@ -600,18 +596,13 @@
 
               let filteredData = [];
 
-              // 1) 若是物件，且以 stockId 當 key
               if (!Array.isArray(klineData) && klineData[stockId]) {
                   filteredData = klineData[stockId];
-              }
-              // 2) 若是陣列格式，嘗試用 stock_id 過濾
-              else if (Array.isArray(klineData)) {
+              } else if (Array.isArray(klineData)) {
                   filteredData = klineData.filter(item =>
                       String(item.stock_id).replace(/\s|　/g, "") === String(stockId)
                   );
-              }
-              // 3) 若包在 klineData.stocks 裡
-              else if (Array.isArray(klineData.stocks)) {
+              } else if (Array.isArray(klineData.stocks)) {
                   filteredData = klineData.stocks.filter(item =>
                       String(item.stock_id).replace(/\s|　/g, "") === String(stockId)
                   );
@@ -638,11 +629,10 @@
                   }
 
                   const dateStr = (item.date || item.Date || item.trade_date || "").toString();
-
                   if (!dateStr) return;
 
                   const dataPoint = {
-                      time: dateStr, // 預期為 YYYY-MM-DD
+                      time: dateStr,
                       open: validOpen,
                       high: validHigh,
                       low: validLow,
@@ -662,11 +652,11 @@
                   return;
               }
 
-              // 清空容器，開始畫圖
               klineChartContainer.innerHTML = "";
               const width = klineChartContainer.clientWidth || 600;
 
-              klineChart = LightweightCharts.create(klineChartContainer, {
+              // ✅ 這裡改成 createChart（關鍵修正）
+              klineChart = LightweightCharts.createChart(klineChartContainer, {
                   width: width,
                   height: 300,
                   layout: {

@@ -576,8 +576,9 @@
 
       fetch("Kline.json")
           .then(res => {
+              // 檢查 HTTP 狀態碼
               if (!res.ok) {
-                  throw new Error(`HTTP error! status: ${res.status}`);
+                  throw new Error(`HTTP error! status: ${res.status} (${res.statusText})`);
               }
               return res.json();
           })
@@ -687,8 +688,8 @@
 
           })
           .catch(error => {
-              console.error("[❌ LOG - Kline] K 線圖載入錯誤:", error);
-              // 修正 3：確保 innerHTML 是賦值，而不是函式調用
+              // 🚨 修正 Log 輸出，確保錯誤訊息顯示
+              console.error("[❌ LOG - Kline] K 線圖載入錯誤:", error.message || error);
               currentKlineChartEl.innerHTML = `<div class="text-center py-4 text-red-500">K 線圖載入錯誤，請檢查 console。</div>`;
           });
   }

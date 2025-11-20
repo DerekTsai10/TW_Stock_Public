@@ -39,7 +39,7 @@
       法人買賣超查詢
     </h1>
 
-    <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-auto mx-auto md:mx-0">
+    <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-80 mx-auto md:mx-0">
       <label for="search-input" class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">
         輸入股票代碼或名稱：
       </label>
@@ -92,14 +92,14 @@
     </div>
     <div id="stock-view" class="hidden">
         <div id="kline-chart-container" class="p-6 border rounded bg-white shadow mb-8">
-            <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
+            <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖 (TradingView)</h3>
             <div id="klineChart" class="relative" style="height: 300px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
         </div>
 
         <div id="chart-container" class="p-6 border rounded bg-white shadow mb-8">
-            <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超趨勢圖</h3>
+            <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超趨勢圖 (Chart.js)</h3>
             <div class="relative h-96">
                 <canvas id="tradingChart"></canvas>
             </div>
@@ -132,9 +132,8 @@
   <script>
   let records = [];
   let stockList = [];
-  let tradingChart; // Chart.js 實例
+  let tradingChart; 
   
-  // 新增 K 線圖相關變數
   const klineChartContainer = document.getElementById('klineChart');
   let klineChart;
 
@@ -144,7 +143,6 @@
   const pageTitle = document.getElementById("page-title");
   const clearBtn = document.getElementById("clear-input-btn");
   
-  // 新增的視圖容器
   const insightsView = document.getElementById('insights-view'); 
   const stockView = document.getElementById('stock-view');
 
@@ -165,7 +163,7 @@
     toggleView('insights');
   });
   
-  // --- 載入數據區塊 (保持不變) ---
+  // --- 載入數據區塊 ---
 
   fetch("data.json")
     .then(res => res.json())
@@ -180,7 +178,7 @@
       });
     });
 
-  // 輔助函式：創建連結 (保持不變)
+  // 輔助函式：創建連結 
   function createStockLink(stock_id, name) {
     const a = document.createElement("a");
     a.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${stock_id}`;
@@ -215,7 +213,7 @@
       const renderListItem = (listEl, items, ratioKey, bothSet, isPeriod = false) => {
         items.forEach(item => {
           const li = document.createElement("li");
-          const a = createStockLink(item.stock_id, item.name); // 使用新的輔助函式
+          const a = createStockLink(item.stock_id, item.name); 
 
           const ratioValue = (item[ratioKey] * 100).toFixed(2);
           const text = document.createTextNode(` : ${ratioValue}%`);
@@ -301,7 +299,7 @@
           ul.className = "list-disc pl-6 space-y-1";
           items.slice(0, 10).forEach(stock => {
             const li = document.createElement("li");
-            const a = createStockLink(stock.stock_id, stock.name); // 使用新的輔助函式
+            const a = createStockLink(stock.stock_id, stock.name); 
             li.appendChild(a);
             ul.appendChild(li);
           });
@@ -335,7 +333,7 @@
       ul.className = "list-disc pl-6 space-y-1";
       data.explosive.slice(0, 10).forEach(stock => {
         const li = document.createElement("li");
-        const a = createStockLink(stock.stock_id, stock.name); // 使用新的輔助函式
+        const a = createStockLink(stock.stock_id, stock.name); 
         li.appendChild(a);
 
         const tag = document.createTextNode(` ${stock.tag}`);
@@ -348,7 +346,7 @@
       document.getElementById("explosive-container").textContent = "無法載入資料";
     });
 
-  // --- 搜尋功能區塊 (調整切換邏輯) ---
+  // --- 搜尋功能區塊 ---
 
   input.addEventListener("input", function() {
     if (this.value.trim()) {
@@ -356,7 +354,7 @@
     } else {
       clearBtn.classList.add("hidden");
       suggestions.classList.add("hidden");
-      toggleView('insights'); // 清空輸入時切換回總覽模式
+      toggleView('insights'); 
     }
 
     const keyword = this.value.trim();
@@ -389,7 +387,6 @@
     clearBtn.classList.add("hidden");
     suggestions.classList.add("hidden");
     
-    // 清除表格內容，並切換回總覽模式
     tableBody.innerHTML = `
       <tr>
         <td colspan="5" class="border px-4 py-8 text-gray-500">
@@ -409,7 +406,7 @@
     }
   });
 
-  // 顯示個股法人買賣超 (核心邏輯：查詢成功才切換模式)
+  // 顯示個股法人買賣超
   function showStockData(keyword) {
     tableBody.innerHTML = "";
     const colorize = (val) => {
@@ -466,14 +463,11 @@
     }
 
     if (foundStock && dataFound) {
-      // 找到數據時，切換到個股模式
       toggleView('stock'); 
       pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
-      // 步驟 4: 載入 K 線圖數據
       loadKlineData(foundStock.stock_id.toString()); 
       updateChart(chartLabels, chartForeignData, chartInvestData, chartDealerData, chartTotalData);
     } else {
-      // 找不到數據時，維持在總覽模式
       toggleView('insights'); 
       pageTitle.textContent = "法人買賣超查詢";
       // 埋入 log 1: 查詢失敗
@@ -481,11 +475,10 @@
     }
   }
 
-  // --- Chart.js 法人買賣超趨勢圖功能 (保持不變) ---
+  // --- Chart.js 法人買賣超趨勢圖功能 ---
   function updateChart(labels, foreignData, investData, dealerData, totalData) {
     const ctx = document.getElementById('tradingChart').getContext('2d');
 
-    // 如果圖表已存在，先銷毀它
     if (tradingChart) {
       tradingChart.destroy();
     }
@@ -561,13 +554,12 @@
     });
   }
 
-  // 步驟 3: 新增 K 線圖功能 (使用 TradingView Lightweight Charts)
+  // --- K 線圖功能 (使用 TradingView Lightweight Charts) ---
   function loadKlineData(stockId) {
       // 確保每次查詢前清空並顯示載入中
       klineChartContainer.innerHTML = `<div id="klineChart" class="relative" style="height: 300px;"><div class="text-center py-4 text-gray-500">載入中...</div></div>`;
       const currentKlineChartEl = document.getElementById('klineChart');
       
-      // 銷毀舊圖表實例，避免重複繪製
       if (klineChart) {
           klineChart.remove(); 
           klineChart = null;
@@ -590,7 +582,7 @@
 
               const chartData = [];
               
-              // **修正步驟**: 直接從物件中取出對應 stockId 的資料陣列
+              // 修正邏輯: 直接從物件中取出對應 stockId 的資料陣列
               const filteredData = klineData[stockId] || []; 
 
               // 埋入 log 5: 篩選結果
@@ -603,16 +595,16 @@
 
               // 轉換為 Lightweight Charts 所需的格式
               filteredData.forEach((item, index) => {
-                  // 將 'yyyyMMdd' 格式轉換為 'yyyy-MM-dd' 才能被 JS 正確解析
-                  const dateStr = item.date.toString().replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+                  // 🚨 修正處：由於 Kline.json 中的 date 已經是 YYYY-MM-DD 格式，直接使用即可。
+                  const dateStr = item.date.toString(); 
                   
                   const dataPoint = {
-                      time: dateStr, // Lightweight Charts 接受 'yyyy-MM-dd' 格式
+                      time: dateStr, // 直接使用 'YYYY-MM-DD' 格式
                       open: item.open,
                       high: item.high,
                       low: item.low,
                       close: item.close,
-                      value: item.volume // 使用 volume 作為成交量
+                      value: item.volume 
                   };
 
                   if (index === 0) {
@@ -656,14 +648,14 @@
                   color: '#182233',
                   lineWidth: 2,
                   priceFormat: { type: 'volume' },
-                  overlay: true, // 疊加到主圖上
-                  scaleMargins: { top: 0.8, bottom: 0 }, // 讓它位於底部
+                  overlay: true, 
+                  scaleMargins: { top: 0.8, bottom: 0 }, 
               });
               // 根據價格決定成交量條的顏色
               const volumeData = chartData.map(d => ({
                   time: d.time,
                   value: d.value,
-                  color: d.close >= d.open ? '#ef535099' : '#26a69a99', // 淺紅/淺綠
+                  color: d.close >= d.open ? '#ef535099' : '#26a69a99', 
               }));
               volumeSeries.setData(volumeData);
               
@@ -681,7 +673,6 @@
   // 確保 K 線圖在視窗大小改變時響應
   window.addEventListener('resize', () => {
       if (klineChart) {
-          // 重新計算容器寬度並應用
           const currentKlineChartEl = document.getElementById('klineChart');
           if (currentKlineChartEl) {
               klineChart.applyOptions({ width: currentKlineChartEl.clientWidth });

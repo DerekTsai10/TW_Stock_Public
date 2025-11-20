@@ -1,92 +1,38 @@
 {
-  "date": "20251119",
+  "date": "20251120",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "8299",
-        "name": "群聯",
-        "foreign_ratio": 1.3185281122927934,
-        "invest_ratio": -0.5132416142902106
-      },
-      {
-        "stock_id": "3694",
-        "name": "海華",
-        "foreign_ratio": 1.2688192484242762,
-        "invest_ratio": -1.178465894009526
-      },
-      {
-        "stock_id": "3450",
-        "name": "聯鈞",
-        "foreign_ratio": 1.24924336590931,
-        "invest_ratio": -0.10914229245848311
-      },
-      {
-        "stock_id": "4442",
-        "name": "竣邦-KY",
-        "foreign_ratio": 1.064917189010719,
+        "stock_id": "8390",
+        "name": "金益鼎",
+        "foreign_ratio": 2.260806843987723,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "3236",
-        "name": "千如",
-        "foreign_ratio": 1.0504700577319486,
+        "stock_id": "5439",
+        "name": "高技",
+        "foreign_ratio": 1.7575550235936785,
+        "invest_ratio": 0.06076853242337852
+      },
+      {
+        "stock_id": "5498",
+        "name": "凱崴",
+        "foreign_ratio": 1.6440134686391106,
         "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "8042",
-        "name": "金山電",
-        "foreign_ratio": 0.9292262583212385,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "3581",
-        "name": "博磊",
-        "foreign_ratio": 0.8822491471591578,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "2402",
-        "name": "毅嘉",
-        "foreign_ratio": 0.8542074576876368,
-        "invest_ratio": -0.8268936295773355
-      },
-      {
-        "stock_id": "6584",
-        "name": "南俊國際",
-        "foreign_ratio": 0.7507080541874722,
-        "invest_ratio": -0.21535463372650718
       }
     ],
     "invest": [
       {
-        "stock_id": "6257",
-        "name": "矽格",
-        "foreign_ratio": -0.4469817957209501,
-        "invest_ratio": 0.5054634638619713
+        "stock_id": "8358",
+        "name": "金居",
+        "foreign_ratio": -0.2817117202717469,
+        "invest_ratio": 1.448208149239077
       },
       {
-        "stock_id": "5536",
-        "name": "聖暉*",
-        "foreign_ratio": -0.07503489859400635,
-        "invest_ratio": 0.45455010693424047
-      },
-      {
-        "stock_id": "2421",
-        "name": "建準",
-        "foreign_ratio": -0.3125905248148203,
-        "invest_ratio": 0.4406757722373891
-      },
-      {
-        "stock_id": "3264",
-        "name": "欣銓",
-        "foreign_ratio": -0.5655665524551523,
-        "invest_ratio": 0.4243425092314285
-      },
-      {
-        "stock_id": "6188",
-        "name": "廣明",
-        "foreign_ratio": -0.26404759236914677,
-        "invest_ratio": 0.4224761477906348
+        "stock_id": "1513",
+        "name": "中興電",
+        "foreign_ratio": -0.7071644798977024,
+        "invest_ratio": 0.4300310438510956
       }
     ]
   },

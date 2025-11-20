@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.umd.js"></script>
   <style>
     @media (max-width: 768px) {
       .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
@@ -90,6 +91,13 @@
       </div>
     </div>
     <div id="stock-view" class="hidden">
+        <div id="kline-chart-container" class="p-6 border rounded bg-white shadow mb-8">
+            <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
+            <div id="klineChart" class="relative" style="height: 300px;">
+                <div class="text-center py-4 text-gray-500">載入中...</div>
+            </div>
+        </div>
+
         <div id="chart-container" class="p-6 border rounded bg-white shadow mb-8">
             <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超趨勢圖</h3>
             <div class="relative h-96">
@@ -125,6 +133,10 @@
   let records = [];
   let stockList = [];
   let tradingChart; // Chart.js 實例
+  
+  // 新增 K 線圖相關變數
+  const klineChartContainer = document.getElementById('klineChart');
+  let klineChart;
 
   const input = document.getElementById("search-input");
   const suggestions = document.getElementById("suggestions");
@@ -457,15 +469,13 @@
       // 找到數據時，切換到個股模式
       toggleView('stock'); 
       pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
+      // 步驟 4: 載入 K 線圖數據
+      loadKlineData(foundStock.stock_id.toString()); 
       updateChart(chartLabels, chartForeignData, chartInvestData, chartDealerData, chartTotalData);
     } else {
-      // 找不到數據時，維持在總覽模式，並顯示錯誤訊息
+      // 找不到數據時，維持在總覽模式
       toggleView('insights'); 
       pageTitle.textContent = "法人買賣超查詢";
-      // 雖然是總覽模式，但為了顯示錯誤提示，我們在表格中放入找不到資料的提示 (但表格在 insights 模式下是隱藏的，所以使用者看不到)
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="5" class="border px-4 py-8 text-red-500">找不到相關資料，或代碼輸入錯誤。</td>`;
-      // 考慮到如果找不到資料，應該在輸入框下面給予提示更合適，但先照著原本的邏輯讓查詢失敗不會切換畫面。
     }
   }
 
@@ -548,6 +558,110 @@
       }
     });
   }
+
+  // 步驟 3: 新增 K 線圖功能 (使用 TradingView Lightweight Charts)
+  function loadKlineData(stockId) {
+      // 確保每次查詢前清空並顯示載入中
+      klineChartContainer.innerHTML = `<div id="klineChart" class="relative" style="height: 300px;"><div class="text-center py-4 text-gray-500">載入中...</div></div>`;
+      const currentKlineChartEl = document.getElementById('klineChart');
+      
+      // 銷毀舊圖表實例，避免重複繪製
+      if (klineChart) {
+          klineChart.remove(); 
+          klineChart = null;
+      }
+
+      fetch("Kline.json")
+          .then(res => res.json())
+          .then(klineData => {
+              const chartData = [];
+              
+              // 過濾並轉換數據
+              // 注意: 這裡假設 stock_id 在 Kline.json 中是數字或字串，與您傳入的 stockId 匹配
+              const filteredData = klineData.filter(item => item.stock_id.toString() === stockId);
+
+              if (filteredData.length === 0) {
+                  currentKlineChartEl.innerHTML = `<div class="text-center py-4 text-gray-500">找不到 ${stockId} 的 K 線資料。</div>`;
+                  return;
+              }
+
+              // 轉換為 Lightweight Charts 所需的格式
+              filteredData.forEach(item => {
+                  // 將 'yyyyMMdd' 格式轉換為 'yyyy-MM-dd' 才能被 JS 正確解析
+                  const dateStr = item.date.toString().replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+                  
+                  chartData.push({
+                      time: dateStr, // Lightweight Charts 接受 'yyyy-MM-dd' 格式
+                      open: item.open,
+                      high: item.high,
+                      low: item.low,
+                      close: item.close,
+                      value: item.volume // 使用 volume 作為成交量
+                  });
+              });
+
+              // 繪製 K 線圖
+              klineChart = LightweightCharts.create(currentKlineChartEl, {
+                  width: currentKlineChartEl.clientWidth,
+                  height: 300,
+                  layout: {
+                      backgroundColor: '#ffffff',
+                      textColor: '#333',
+                  },
+                  grid: {
+                      vertLines: { color: '#e0e0e0' },
+                      horzLines: { color: '#e0e0e0' },
+                  },
+                  timeScale: {
+                      timeVisible: true,
+                      secondsVisible: false,
+                  },
+              });
+              
+              // 繪製蠟燭圖 (K 線)
+              const candleSeries = klineChart.addCandlestickSeries({
+                  upColor: '#ef5350',   // 紅色 (上漲)
+                  downColor: '#26a69a', // 綠色 (下跌)
+                  borderVisible: false,
+                  wickUpColor: '#ef5350',
+                  wickDownColor: '#26a69a',
+              });
+              candleSeries.setData(chartData);
+
+              // 繪製成交量 (Volume) - 作為子圖表
+              const volumeSeries = klineChart.addHistogramSeries({
+                  color: '#182233',
+                  lineWidth: 2,
+                  priceFormat: { type: 'volume' },
+                  overlay: true, // 疊加到主圖上
+                  scaleMargins: { top: 0.8, bottom: 0 }, // 讓它位於底部
+              });
+              // 根據價格決定成交量條的顏色
+              const volumeData = chartData.map(d => ({
+                  time: d.time,
+                  value: d.value,
+                  color: d.close >= d.open ? '#ef535099' : '#26a69a99', // 淺紅/淺綠
+              }));
+              volumeSeries.setData(volumeData);
+
+          })
+          .catch(error => {
+              console.error("載入 K 線資料失敗:", error);
+              currentKlineChartEl.innerHTML = `<div class="text-center py-4 text-red-500">K 線圖載入錯誤。</div>`;
+          });
+  }
+
+  // 確保 K 線圖在視窗大小改變時響應
+  window.addEventListener('resize', () => {
+      if (klineChart) {
+          // 重新計算容器寬度並應用
+          const currentKlineChartEl = document.getElementById('klineChart');
+          if (currentKlineChartEl) {
+              klineChart.applyOptions({ width: currentKlineChartEl.clientWidth });
+          }
+      }
+  });
+
   </script>
 </body>
 </html>

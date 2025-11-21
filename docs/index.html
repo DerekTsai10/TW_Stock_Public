@@ -31,7 +31,11 @@
       color: #6b7280;
     }
     /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
-    .tv-lightweight-charts-logo { display: none !important; }
+    /* .tv-lightweight-charts-logo,
+.tv-lightweight-charts-watermark,
+.tv-lightweight-charts-watermark__text,
+.tv-watermark,
+.tv-logo { display: none !important; } */
   </style>
 </head>
 
@@ -99,7 +103,7 @@
     <div id="stock-view" class="hidden">
         <!-- K 線圖外框 -->
         <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8">
-            <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖 (TradingView)</h3>
+            <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
             <div id="klineChartContainer" class="relative" style="height: 300px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
@@ -625,19 +629,9 @@
                       horzLines: { color: '#e0e0e0' }
                   },
                   timeScale: {
-            timeVisible: false,
-            secondsVisible: false,
-            tickMarkFormatter: (time, tickMarkType, locale) => {
-                const d = new Date(time);
-                if (isNaN(d)) return "";
-                const day = d.getDate();
-                const month = d.getMonth() + 1;
-                const isMonthTick =
-                    tickMarkType === LightweightCharts.TickMarkType.Month ||
-                    tickMarkType === 'month';
-                return (isMonthTick || day === 1) ? `${month}月` : "";
-            },
-        },
+                      timeVisible: true,
+                      secondsVisible: false,
+                  },
               });
 
               // K 線 series（使用預設 right price scale）

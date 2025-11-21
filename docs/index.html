@@ -30,6 +30,8 @@
     #clear-input-btn:hover {
       color: #6b7280;
     }
+    /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
+    /* .tv-lightweight-charts-logo { display: none !important; } */
   </style>
 </head>
 
@@ -151,7 +153,6 @@
   const insightsView = document.getElementById('insights-view');
   const stockView = document.getElementById('stock-view');
 
-  // --- 頁面模式切換 ---
   function toggleView(view) {
     if (view === 'insights') {
       insightsView.classList.remove('hidden');
@@ -181,7 +182,6 @@
       });
     });
 
-  // 輔助函式：cmoney 連結
   function createStockLink(stock_id, name) {
     const a = document.createElement("a");
     a.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${stock_id}`;
@@ -214,7 +214,7 @@
           .filter(id => dailyInvest.some(j => j.stock_id === id))
       );
 
-      const renderListItem = (listEl, items, ratioKey, bothSet, isPeriod = false) => {
+      const renderListItem = (listEl, items, ratioKey, bothSet) => {
         items.forEach(item => {
           const li = document.createElement("li");
           const a = createStockLink(item.stock_id, item.name);
@@ -266,8 +266,8 @@
         const fUl = document.getElementById(`${prefix}-foreign`);
         const iUl = document.getElementById(`${prefix}-invest`);
 
-        renderListItem(fUl, fList, 'foreign_ratio', both, true);
-        renderListItem(iUl, iList, 'invest_ratio', both, true);
+        renderListItem(fUl, fList, 'foreign_ratio', both);
+        renderListItem(iUl, iList, 'invest_ratio', both);
       }
 
       buildPeriodBlock(
@@ -410,7 +410,6 @@
     }
   });
 
-  // --- 顯示個股法人買賣超 ---
   function showStockData(keyword) {
     tableBody.innerHTML = "";
     const colorize = (val) => {
@@ -431,7 +430,6 @@
     const chartDealerData = [];
     const chartTotalData = [];
 
-    // 由舊到新畫圖，但表格用 prepend 讓最新在上
     for (let i = records.length - 1; i >= 0; i--) {
       const day = records[i];
       const stock = day.stocks.find(s =>
@@ -477,7 +475,6 @@
     }
   }
 
-  // --- Chart.js 法人買賣超趨勢圖 ---
   function updateChart(labels, foreignData, investData, dealerData, totalData) {
     const ctx = document.getElementById('tradingChart').getContext('2d');
 
@@ -529,50 +526,30 @@
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          title: {
-            display: false,
-          },
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-          }
+          title: { display: false },
+          tooltip: { mode: 'index', intersect: false }
         },
         scales: {
-          x: {
-            title: {
-              display: true,
-              text: '日期'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: '買賣超張數'
-            }
-          }
+          x: { title: { display: true, text: '日期' } },
+          y: { title: { display: true, text: '買賣超張數' } }
         }
       }
     });
   }
 
-  // ✅ 確保數值有效的輔助函式
   const ensureFiniteNumber = (value) => {
       const num = Number(value);
       return (Number.isFinite(num) && num !== null) ? num : 0;
   };
 
-  // --- K 線圖功能 (Lightweight Charts) ---
+  // --- K 線圖功能 ---
   function loadKlineData(stockId) {
       if (!klineChartContainer) return;
 
       klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">載入中...</div>`;
 
       if (klineChart) {
-          try {
-              klineChart.remove();
-          } catch (e) {
-              console.warn("[⚠️ LOG - Kline] remove() 發生例外，可忽略：", e);
-          }
+          try { klineChart.remove(); } catch (e) {}
           klineChart = null;
       }
 
@@ -582,18 +559,12 @@
           return;
       }
 
-      console.log(`[📥 LOG - Kline] 嘗試載入 K 線資料並篩選股票代碼: ${stockId}`);
-
       fetch("Kline.json")
           .then(res => {
-              if (!res.ok) {
-                  throw new Error(`HTTP error! status: ${res.status} (${res.statusText})`);
-              }
+              if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
               return res.json();
           })
           .then(klineData => {
-              console.log(`[✅ LOG - Kline] Kline.json 載入成功，型態: ${Array.isArray(klineData) ? 'Array' : typeof klineData}`);
-
               let filteredData = [];
 
               if (!Array.isArray(klineData) && klineData[stockId]) {
@@ -607,8 +578,6 @@
                       String(item.stock_id).replace(/\s|　/g, "") === String(stockId)
                   );
               }
-
-              console.log(`[🔢 LOG - Kline] 篩選後筆數 (股票代碼: ${stockId}): ${filteredData.length}`);
 
               if (!filteredData || filteredData.length === 0) {
                   klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">找不到 ${stockId} 的 K 線資料。</div>`;
@@ -624,48 +593,36 @@
                   const validClose  = ensureFiniteNumber(item.close);
                   const validVolume = ensureFiniteNumber(item.volume);
 
-                  if (validOpen === 0 || validHigh === 0 || validLow === 0 || validClose === 0) {
-                      return;
-                  }
+                  if (validOpen === 0 || validHigh === 0 || validLow === 0 || validClose === 0) return;
 
                   const dateStr = (item.date || item.Date || item.trade_date || "").toString();
                   if (!dateStr) return;
 
-                  const dataPoint = {
+                  chartData.push({
                       time: dateStr,
                       open: validOpen,
                       high: validHigh,
                       low: validLow,
                       close: validClose,
                       value: validVolume
-                  };
-
-                  if (index === 0) {
-                      console.log("[🎯 LOG - Kline] 第一筆轉換後數據:", dataPoint);
-                  }
-
-                  chartData.push(dataPoint);
+                  });
               });
 
               if (chartData.length === 0) {
-                  klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">找到原始資料，但無法繪製有效 K 線 (可能 OHLC 為 0 或缺失)。</div>`;
+                  klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">找到原始資料，但無法繪製有效 K 線。</div>`;
                   return;
               }
 
               klineChartContainer.innerHTML = "";
               const width = klineChartContainer.clientWidth || 600;
 
-              // ✅ 這裡改成 createChart（關鍵修正）
               klineChart = LightweightCharts.createChart(klineChartContainer, {
                   width: width,
                   height: 300,
-                  layout: {
-                      backgroundColor: '#ffffff',
-                      textColor: '#333',
-                  },
+                  layout: { backgroundColor: '#ffffff', textColor: '#333' },
                   grid: {
                       vertLines: { color: '#e0e0e0' },
-                      horzLines: { color: '#e0e0e0' },
+                      horzLines: { color: '#e0e0e0' }
                   },
                   timeScale: {
                       timeVisible: true,
@@ -673,6 +630,7 @@
                   },
               });
 
+              // K 線 series（使用預設 right price scale）
               const candleSeries = klineChart.addCandlestickSeries({
                   upColor: '#ef5350',
                   downColor: '#26a69a',
@@ -682,27 +640,26 @@
               });
               candleSeries.setData(chartData);
 
+              // ▶ 調整股價的 price scale，只佔上方 70%
+              klineChart.priceScale('right').applyOptions({
+                  scaleMargins: {
+                      top: 0.05,   // 上方留一點空間
+                      bottom: 0.25 // 底部空出 25% 給成交量
+                  }
+              });
 
-               const volumeSeries = klineChart.addHistogramSeries({
+              // 成交量 series，用獨立的 'volume' scale，佔下方 25%
+              const volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
-             });
+              });
 
-              // 讓成交量與 K 線之間有明顯區隔
               klineChart.priceScale('volume').applyOptions({
                   scaleMargins: {
-                      top: 0.65,   // K 線佔上方 65%
-                      bottom: 0,   // 成交量佔下方 35%
-                  },
+                      top: 0.8,  // 從 80% 開始
+                      bottom: 0  // 到最底
+                  }
               });
-              
-              // ➤ 加一條分隔線
-              klineChart.applyOptions({
-                  grid: {
-                      horzLines: [{ color: '#e0e0e0' }],
-                      vertLines: [{ color: '#e0e0e0' }]
-                 }
-             });
 
               const volumeData = chartData.map(d => ({
                   time: d.time,
@@ -711,7 +668,8 @@
               }));
               volumeSeries.setData(volumeData);
 
-              console.log(`[🖼️ LOG - Kline] K 線圖繪製完成。`);
+              // 一載入就看到全部 180 天
+              klineChart.timeScale().fitContent();
           })
           .catch(error => {
               console.error("[❌ LOG - Kline] K 線圖載入錯誤:", error.message || error);
@@ -719,7 +677,6 @@
           });
   }
 
-  // 視窗調整大小時自適應
   window.addEventListener('resize', () => {
       if (klineChart && klineChartContainer) {
           const width = klineChartContainer.clientWidth || 600;

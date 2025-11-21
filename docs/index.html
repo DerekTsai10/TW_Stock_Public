@@ -31,7 +31,7 @@
       color: #6b7280;
     }
     /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
-    /* .tv-lightweight-charts-logo { display: none !important; } */
+    .tv-lightweight-charts-logo { display: none !important; }
   </style>
 </head>
 
@@ -625,9 +625,19 @@
                       horzLines: { color: '#e0e0e0' }
                   },
                   timeScale: {
-                      timeVisible: true,
-                      secondsVisible: false,
-                  },
+            timeVisible: false,
+            secondsVisible: false,
+            tickMarkFormatter: (time, tickMarkType, locale) => {
+                const d = new Date(time);
+                if (isNaN(d)) return "";
+                const day = d.getDate();
+                const month = d.getMonth() + 1;
+                const isMonthTick =
+                    tickMarkType === LightweightCharts.TickMarkType.Month ||
+                    tickMarkType === 'month';
+                return (isMonthTick || day === 1) ? `${month}月` : "";
+            },
+        },
               });
 
               // K 線 series（使用預設 right price scale）

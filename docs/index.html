@@ -688,13 +688,21 @@
                   priceFormat: { type: 'volume' },
              });
 
-
-               klineChart.priceScale('volume').applyOptions({
+              // 讓成交量與 K 線之間有明顯區隔
+              klineChart.priceScale('volume').applyOptions({
                   scaleMargins: {
-                  top: 0.8,
-                  bottom: 0,
+                      top: 0.65,   // K 線佔上方 65%
+                      bottom: 0,   // 成交量佔下方 35%
                   },
               });
+              
+              // ➤ 加一條分隔線
+              klineChart.applyOptions({
+                  grid: {
+                      horzLines: [{ color: '#e0e0e0' }],
+                      vertLines: [{ color: '#e0e0e0' }]
+                 }
+             });
 
               const volumeData = chartData.map(d => ({
                   time: d.time,

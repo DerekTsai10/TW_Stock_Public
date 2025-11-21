@@ -682,11 +682,18 @@
               });
               candleSeries.setData(chartData);
 
-              const volumeSeries = klineChart.addHistogramSeries({
-                  lineWidth: 2,
+
+               const volumeSeries = klineChart.addHistogramSeries({
+                  priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
-                  overlay: true,
-                  scaleMargins: { top: 0.8, bottom: 0 },
+             });
+
+
+               klineChart.priceScale('volume').applyOptions({
+                  scaleMargins: {
+                  top: 0.8,
+                  bottom: 0,
+                  },
               });
 
               const volumeData = chartData.map(d => ({

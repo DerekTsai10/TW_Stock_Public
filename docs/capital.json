@@ -7812,7 +7812,7 @@
     "abbreviation": "錸寶",
     "industry": "26",
     "market": "TWSE",
-    "share_capital": 925581920,
+    "share_capital": 1050581920,
     "shares_issued": 0
   },
   "8105": {
@@ -8036,7 +8036,7 @@
     "abbreviation": "柏文",
     "industry": "37",
     "market": "TWSE",
-    "share_capital": 792960630,
+    "share_capital": 792920630,
     "shares_issued": 0
   },
   "8463": {
@@ -9684,8 +9684,8 @@
     "abbreviation": "先進光",
     "industry": "26",
     "market": "TPEX",
-    "share_capital": 1424490750,
-    "shares_issued": 142449075
+    "share_capital": 1424454750,
+    "shares_issued": 142445475
   },
   "3363": {
     "company_name": "上詮光纖通信股份有限公司",
@@ -11012,8 +11012,8 @@
     "abbreviation": "科際精密",
     "industry": "05",
     "market": "TPEX",
-    "share_capital": 317721250,
-    "shares_issued": 31772125
+    "share_capital": 317691250,
+    "shares_issued": 31769125
   },
   "4577": {
     "company_name": "達航科技股份有限公司",

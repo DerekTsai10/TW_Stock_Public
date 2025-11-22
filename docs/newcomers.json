@@ -6,13 +6,13 @@
         "stock_id": "6442",
         "name": "光聖",
         "foreign_ratio": 1.2363032668547276,
-        "invest_ratio": 0.25341634321819984
+        "invest_ratio": 0.3219421911292437
       },
       {
         "stock_id": "5289",
         "name": "宜鼎",
         "foreign_ratio": 1.144424681294511,
-        "invest_ratio": -0.28251475128420767
+        "invest_ratio": -0.28991048071744746
       },
       {
         "stock_id": "3260",
@@ -39,12 +39,6 @@
         "name": "信邦",
         "foreign_ratio": -0.40144122889595407,
         "invest_ratio": 0.39446990022627404
-      },
-      {
-        "stock_id": "5469",
-        "name": "瀚宇博",
-        "foreign_ratio": -0.28763693882336483,
-        "invest_ratio": 0.31779268809419003
       }
     ]
   },

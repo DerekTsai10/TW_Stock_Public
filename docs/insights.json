@@ -299,6 +299,11 @@
       "invest_ratio": 0.0039447
     },
     {
+      "stock_id": "6442",
+      "name": "光聖",
+      "invest_ratio": 0.00321942
+    },
+    {
       "stock_id": "5469",
       "name": "瀚宇博",
       "invest_ratio": 0.00317793
@@ -314,14 +319,14 @@
       "invest_ratio": 0.00258809
     },
     {
-      "stock_id": "6442",
-      "name": "光聖",
-      "invest_ratio": 0.00253416
-    },
-    {
       "stock_id": "2881",
       "name": "富邦金",
       "invest_ratio": 0.00227553
+    },
+    {
+      "stock_id": "3693",
+      "name": "營邦",
+      "invest_ratio": 0.00209348
     },
     {
       "stock_id": "3264",
@@ -359,6 +364,11 @@
       "invest_ratio": 0.00158248
     },
     {
+      "stock_id": "6515",
+      "name": "穎崴",
+      "invest_ratio": 0.00155346
+    },
+    {
       "stock_id": "2458",
       "name": "義隆",
       "invest_ratio": 0.00137225
@@ -382,6 +392,11 @@
       "stock_id": "1477",
       "name": "聚陽",
       "invest_ratio": 0.00115123
+    },
+    {
+      "stock_id": "2368",
+      "name": "金像電",
+      "invest_ratio": 0.00103489
     },
     {
       "stock_id": "3665",
@@ -444,11 +459,6 @@
       "invest_ratio": 0.00074898
     },
     {
-      "stock_id": "2368",
-      "name": "金像電",
-      "invest_ratio": 0.00073805
-    },
-    {
       "stock_id": "2890",
       "name": "永豐金",
       "invest_ratio": 0.0006943
@@ -489,19 +499,9 @@
       "invest_ratio": 0.00053589
     },
     {
-      "stock_id": "6515",
-      "name": "穎崴",
-      "invest_ratio": 0.00049935
-    },
-    {
       "stock_id": "6691",
       "name": "洋基工程",
       "invest_ratio": 0.00046095
-    },
-    {
-      "stock_id": "5243",
-      "name": "乙盛-KY",
-      "invest_ratio": 0.00041536
     }
   ],
   "foreign_ratio_5d_ranking": [
@@ -830,7 +830,7 @@
     {
       "stock_id": "6442",
       "name": "光聖",
-      "invest_ratio": 0.01301346
+      "invest_ratio": 0.01369872
     },
     {
       "stock_id": "2421",
@@ -858,6 +858,11 @@
       "invest_ratio": 0.0100525
     },
     {
+      "stock_id": "6531",
+      "name": "愛普*",
+      "invest_ratio": 0.00922023
+    },
+    {
       "stock_id": "2327",
       "name": "國巨*",
       "invest_ratio": 0.00878639
@@ -866,11 +871,6 @@
       "stock_id": "4763",
       "name": "材料*-KY",
       "invest_ratio": 0.00853477
-    },
-    {
-      "stock_id": "6531",
-      "name": "愛普*",
-      "invest_ratio": 0.00827313
     },
     {
       "stock_id": "8070",
@@ -896,6 +896,11 @@
       "stock_id": "3131",
       "name": "弘塑",
       "invest_ratio": 0.00694482
+    },
+    {
+      "stock_id": "6515",
+      "name": "穎崴",
+      "invest_ratio": 0.00647158
     },
     {
       "stock_id": "5536",
@@ -928,14 +933,9 @@
       "invest_ratio": 0.00550645
     },
     {
-      "stock_id": "6515",
-      "name": "穎崴",
-      "invest_ratio": 0.00541746
-    },
-    {
       "stock_id": "2368",
       "name": "金像電",
-      "invest_ratio": 0.00501975
+      "invest_ratio": 0.00531659
     },
     {
       "stock_id": "1319",
@@ -1309,12 +1309,12 @@
     {
       "stock_id": "6442",
       "name": "光聖",
-      "invest_ratio": 0.02004547
+      "invest_ratio": 0.02073072
     },
     {
       "stock_id": "6531",
       "name": "愛普*",
-      "invest_ratio": 0.01735052
+      "invest_ratio": 0.01829762
     },
     {
       "stock_id": "1513",
@@ -1364,17 +1364,17 @@
     {
       "stock_id": "5289",
       "name": "宜鼎",
-      "invest_ratio": 0.01388603
+      "invest_ratio": 0.01381207
+    },
+    {
+      "stock_id": "2368",
+      "name": "金像電",
+      "invest_ratio": 0.01368924
     },
     {
       "stock_id": "2421",
       "name": "建準",
       "invest_ratio": 0.0134653
-    },
-    {
-      "stock_id": "2368",
-      "name": "金像電",
-      "invest_ratio": 0.0133924
     },
     {
       "stock_id": "2337",
@@ -1502,14 +1502,14 @@
       "invest_ratio": 0.00381415
     },
     {
-      "stock_id": "2408",
-      "name": "南亞科",
-      "invest_ratio": 0.0036245
-    },
-    {
       "stock_id": "6805",
       "name": "富世達",
       "invest_ratio": 0.00357383
+    },
+    {
+      "stock_id": "2408",
+      "name": "南亞科",
+      "invest_ratio": 0.00345152
     }
   ]
 }

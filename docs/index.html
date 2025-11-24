@@ -29,11 +29,22 @@
     #clear-input-btn:hover {
       color: #6b7280;
     }
+    /* 自訂圖例 (Tooltip/Legend) 樣式 */
+    #kline-legend {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 5px 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
     .legend-item {
         display: flex;
         align-items: center;
-        margin-right: 1rem;
-        font-size: 0.9rem;
     }
     .legend-color {
         width: 10px;
@@ -41,12 +52,6 @@
         margin-right: 5px;
         border-radius: 2px;
     }
-    /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
-    /* .tv-lightweight-charts-logo,
-.tv-lightweight-charts-watermark,
-.tv-lightweight-charts-watermark__text,
-.tv-watermark,
-.tv-logo { display: none !important; } */
   </style>
 </head>
 
@@ -114,8 +119,9 @@
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
             <div id="klineChartContainer" class="relative" style="height: 300px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
+                <div id="kline-legend" class="hidden"></div>
             </div>
-            <div id="kline-legend" class="mt-4 flex flex-wrap justify-center"></div>
+             <div id="kline-static-legend" class="mt-4 flex flex-wrap justify-center text-sm"></div>
         </div>
 
         <div id="chart-container" class="p-6 border rounded bg-white shadow mb-8">
@@ -156,7 +162,8 @@
 
   const klineChartContainer = document.getElementById('klineChartContainer');
   let klineChart = null;
-  const klineLegend = document.getElementById('kline-legend'); // MA 圖例
+  const klineLegend = document.getElementById('kline-legend'); // 動態圖例
+  const klineStaticLegend = document.getElementById('kline-static-legend'); // 靜態圖例
 
   const input = document.getElementById("search-input");
   const suggestions = document.getElementById("suggestions");
@@ -166,6 +173,17 @@
 
   const insightsView = document.getElementById('insights-view');
   const stockView = document.getElementById('stock-view');
+
+  // MA 線定義 (用於計算和圖例)
+  const MA_PERIODS = [
+      { period: 5, color: 'rgb(255, 165, 0)', title: '5MA', series: null },    // 橙色
+      { period: 10, color: 'rgb(50, 205, 50)', title: '10MA', series: null },  // 綠色
+      { period: 20, color: 'rgb(255, 0, 255)', title: '20MA', series: null },  // 洋紅色/紫紅色
+      { period: 60, color: 'rgb(65, 105, 225)', title: '60MA', series: null } // 皇家藍
+  ];
+  let candleSeries = null;
+  let volumeSeries = null;
+
 
   function toggleView(view) {
     if (view === 'insights') {
@@ -182,7 +200,7 @@
     toggleView('insights');
   });
 
-  // --- 載入 data.json 建股票清單 ---
+  // --- 載入 data.json 建股票清單 (此處內容與之前版本一致) ---
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -205,7 +223,7 @@
     return a;
   }
 
-  // --- insights.json (恢復內容) ---
+  // --- insights.json (此處內容與之前版本一致) ---
   fetch("insights.json")
     .then(res => res.json())
     .then(data => {
@@ -299,7 +317,7 @@
       );
     });
 
-  // --- newcomers.json (恢復內容) ---
+  // --- newcomers.json (此處內容與之前版本一致) ---
   fetch("newcomers.json")
     .then(res => res.json())
     .then(data => {
@@ -337,7 +355,7 @@
       document.getElementById("newcomers-container").textContent = "無法載入資料";
     });
 
-  // --- explosive.json (恢復內容) ---
+  // --- explosive.json (此處內容與之前版本一致) ---
   fetch("explosive.json")
     .then(res => res.json())
     .then(data => {
@@ -366,7 +384,7 @@
       document.getElementById("explosive-container").textContent = "無法載入資料";
     });
 
-  // --- 搜尋 (保持不變) ---
+  // --- 搜尋 (此處內容與之前版本一致) ---
   input.addEventListener("input", function() {
     if (this.value.trim()) {
       clearBtn.classList.remove("hidden");
@@ -566,13 +584,11 @@
       const result = [];
       for (let i = 0; i < data.length; i++) {
           if (i < period - 1) {
-              // 資料點不足計算週期時，MA 設為 null
               result.push({ time: data[i].time, value: null });
               continue;
           }
   
           let sum = 0;
-          // 向前計算 period 個收盤價的總和
           for (let j = 0; j < period; j++) {
               sum += data[i - j].close;
           }
@@ -586,39 +602,114 @@
   }
 
   /**
-   * 在圖表下方繪製 MA 線的客製化圖例
-   * @param {Array<Object>} periods - 包含 { period, color, title } 的 MA 資訊
+   * 繪製靜態圖例 (圖表下方)
    */
-  function drawLegend(periods) {
-      klineLegend.innerHTML = '';
+  function drawStaticLegend(periods) {
+      klineStaticLegend.innerHTML = '';
       periods.forEach(ma => {
           const item = document.createElement('div');
           item.className = 'legend-item';
           
           const colorBox = document.createElement('span');
-          colorBox.className = 'legend-color';
+          colorBox.className = 'legend-color w-3 h-1.5';
           colorBox.style.backgroundColor = ma.color;
 
-          const titleText = document.createTextNode(ma.title);
+          const titleText = document.createTextNode(` ${ma.title}`);
 
           item.appendChild(colorBox);
           item.appendChild(titleText);
-          klineLegend.appendChild(item);
+          klineStaticLegend.appendChild(item);
       });
   }
 
+  /**
+   * 監聽滑鼠移動事件，更新自訂圖例 (Tooltip)
+   */
+  function updateCustomTooltip(param) {
+      if (!param.time || !param.point) {
+          klineLegend.classList.add('hidden');
+          return;
+      }
+      
+      const date = new Date(param.time * 1000);
+      // 格式化日期為 YYYY-MM-DD
+      const formattedDate = date.toLocaleDateString('zh-TW', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          timeZone: 'Asia/Taipei'
+      }).replace(/\//g, '-');
 
-  // --- K 線圖功能 ---
+      let html = `<div class="font-bold mb-1">${formattedDate}</div>`;
+      
+      const maData = {};
+      const volumeData = {};
+      
+      // 提取所有 series 的數值
+      param.seriesData.forEach((data, series) => {
+          if (series === candleSeries) {
+              // K 線數據
+              if (data.value) {
+                  html += `<div><span class="text-gray-600">O:</span> ${data.value.open.toFixed(2)} <span class="text-gray-600">H:</span> ${data.value.high.toFixed(2)} <span class="text-gray-600">L:</span> ${data.value.low.toFixed(2)} <span class="text-gray-600">C:</span> ${data.value.close.toFixed(2)}</div>`;
+              }
+          } else if (series === volumeSeries) {
+              // 成交量數據
+              volumeData.value = data.value;
+          } else {
+              // MA 線數據
+              const ma = MA_PERIODS.find(m => m.series === series);
+              if (ma && data.value) {
+                  maData[ma.title] = { value: data.value, color: ma.color };
+              }
+          }
+      });
+      
+      // 組合 MA 數值
+      MA_PERIODS.forEach(ma => {
+          const data = maData[ma.title];
+          const value = data ? data.value.toFixed(2) : '-';
+          html += `<div class="legend-item"><span class="legend-color" style="background-color: ${ma.color}"></span> ${ma.title}: ${value}</div>`;
+      });
+      
+      // 加上成交量
+      const vol = volumeData.value ? (volumeData.value / 1000000).toFixed(2) + 'M' : '-';
+      html += `<div class="mt-1"><span class="font-semibold text-gray-600">成交量:</span> ${vol}</div>`;
+
+      klineLegend.innerHTML = html;
+      klineLegend.classList.remove('hidden');
+      
+      // 調整 tooltip 位置，避免超出邊界
+      const chartWidth = klineChartContainer.clientWidth;
+      const tooltipWidth = klineLegend.offsetWidth;
+      const pointX = param.point.x;
+      
+      let left = pointX + 15; // 預設在游標右側
+
+      if (left + tooltipWidth > chartWidth) {
+          left = pointX - tooltipWidth - 15; // 如果超出右側，移動到游標左側
+          if (left < 0) {
+              left = 10; // 如果左側也超出，固定在左邊緣
+          }
+      }
+      
+      klineLegend.style.left = `${left}px`;
+  }
+
+  // --- K 線圖功能 (恢復舊版邏輯) ---
   function loadKlineData(stockId) {
       if (!klineChartContainer) return;
 
       klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">載入中...</div>`;
-      klineLegend.innerHTML = ''; // 清空圖例
+      klineStaticLegend.innerHTML = ''; // 清空靜態圖例
 
       if (klineChart) {
           try { klineChart.remove(); } catch (e) {}
           klineChart = null;
+          candleSeries = null;
+          volumeSeries = null;
+          MA_PERIODS.forEach(ma => ma.series = null);
       }
+      klineLegend.classList.add('hidden'); // 隱藏動態圖例
 
       if (typeof LightweightCharts === 'undefined' || typeof LightweightCharts.createChart !== 'function') {
           console.error("[❌ LOG - Kline] LightweightCharts 未載入或不支援 createChart");
@@ -666,13 +757,12 @@
                   if (!dateStr) return;
 
                   chartData.push({
-                      // 使用 LightWeightCharts 預期的 'YYYY-MM-DD' 格式字串，讓它自行解析並獲取秒級時間戳
                       time: dateStr, 
                       open: validOpen,
                       high: validHigh,
                       low: validLow,
                       close: validClose,
-                      value: validVolume
+                      value: validVolume // 暫存 volume 供後續使用
                   });
               });
 
@@ -681,9 +771,10 @@
                   return;
               }
 
-              klineChartContainer.innerHTML = "";
+              // 恢復 K 線圖容器並添加動態圖例 (Tooltip) 元素
+              klineChartContainer.innerHTML = `<div id="kline-legend" class="hidden"></div>`;
               const width = klineChartContainer.clientWidth || 600;
-
+              
               klineChart = LightweightCharts.createChart(klineChartContainer, {
                   width: width,
                   height: 300,
@@ -695,86 +786,68 @@
                   timeScale: {
                       timeVisible: true,
                       secondsVisible: false,
-                      // ⬇️ 修正 X 軸格式: 只保留月份數字
-                      tickMarkFormatter: (time, tickMarkType, locale) => {
-                          // time 參數是秒級時間戳 (Number)，必須乘 1000 轉為毫秒級。
-                          const date = new Date(time * 1000); 
-                          const month = date.getMonth() + 1; // 0-11 月
-
-                          if (tickMarkType === LightweightCharts.TickMarkType.Year) {
-                              // 年級別，顯示年份
-                              return date.getFullYear().toString();
-                          }
-                          
-                          // 月、週、日級別：一律只顯示月份數字，以符合「只保留月，不用日/月」的要求
-                          // LightWeightCharts 會自動調整間距，確保不會太擠
-                          return `${month}`; 
-                      },
+                      // 恢復預設格式，以避免 NaN (雖然會顯示日/月，但您選擇保留)
                   },
-                  paneContainer: klineChartContainer
+                  // ⬇️ 啟用十字游標 (Crosshair) 和工具列
+                  crosshair: { mode: LightweightCharts.CrosshairMode.Normal }, 
               });
 
               // K 線 series
-              const candleSeries = klineChart.addCandlestickSeries({
+              candleSeries = klineChart.addCandlestickSeries({
                   upColor: '#ef5350',
                   downColor: '#26a69a',
                   borderVisible: false,
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
-                  title: 'K線',             // 恢復 K 線標籤
-                  lastValueVisible: true,   // 確保最後價格可見
+                  // 恢復 MA/K線 標籤顯示
+                  title: 'K線', 
+                  lastValueVisible: true,
                   priceLineVisible: true,
               });
               candleSeries.setData(chartData);
 
               // ----- 恢復：計算並繪製移動平均線 (MA) -----
-              const periods = [
-                  { period: 5, color: 'rgb(255, 165, 0)', title: '5MA' },    // 橙色
-                  { period: 10, color: 'rgb(50, 205, 50)', title: '10MA' },  // 綠色
-                  { period: 20, color: 'rgb(255, 0, 255)', title: '20MA' },  // 洋紅色/紫紅色
-                  { period: 60, color: 'rgb(65, 105, 225)', title: '60MA' } // 皇家藍
-              ];
-
-              periods.forEach(ma => {
+              MA_PERIODS.forEach(ma => {
                   const maData = calculateSMA(chartData, ma.period);
                   
                   const maSeries = klineChart.addLineSeries({
                       color: ma.color,
                       lineWidth: 1, 
-                      // 隱藏圖表上的 MA 價格標籤和數值，使用空字串
-                      title: '', 
-                      lastValueVisible: false, 
-                      priceLineVisible: false, 
+                      // 讓 MA 標籤顯示在右側價格軸上
+                      title: ma.title, 
+                      lastValueVisible: true, 
+                      priceLineVisible: true, 
                   });
 
                   maSeries.setData(maData.filter(d => d.value !== null));
+                  ma.series = maSeries; // 儲存 series 引用給 tooltip 使用
               });
               
-              // 繪製 MA 客製化圖例 (放在圖表下方)
-              drawLegend(periods);
+              // 繪製靜態圖例 (圖表下方)
+              drawStaticLegend(MA_PERIODS);
               // ------------------------------------------------
 
               // ▶ 調整股價的 price scale，只佔上方 70%
               klineChart.priceScale('right').applyOptions({
                   scaleMargins: {
-                      top: 0.05,   // 上方留一點空間
-                      bottom: 0.25 // 底部空出 25% 給成交量
+                      top: 0.05,
+                      bottom: 0.25
                   }
               });
 
-              // 成交量 series，用獨立的 'volume' scale，佔下方 25%
-              const volumeSeries = klineChart.addHistogramSeries({
+              // 成交量 series
+              volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
-                  title: '成交量',           // 恢復成交量標籤
+                  title: '成交量', // 讓成交量標籤顯示在右側價格軸上
                   lastValueVisible: true,
                   priceLineVisible: true,
               });
 
               klineChart.priceScale('volume').applyOptions({
                   scaleMargins: {
-                      top: 0.8,  // 從 80% 開始
-                      bottom: 0  // 到最底
+                      top: 0.8,
+                      bottom: 0
                   }
               });
 
@@ -784,6 +857,10 @@
                   color: d.close >= d.open ? '#ef535099' : '#26a69a99',
               }));
               volumeSeries.setData(volumeData);
+              
+              // ⬇️ 修復滑鼠移動數值不跟隨的問題：監聽滑鼠移動事件
+              klineChart.subscribeCrosshairMove(updateCustomTooltip);
+
 
               // 一載入就看到全部 180 天
               klineChart.timeScale().fitContent();

@@ -8,10 +8,16 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
   <style>
-    /* ✅ Desktop 用 zoom 取代 transform scale，避免 lightweight-charts 滑鼠座標偏移 */
+    /* ✅ 桌機維持原本 scale-150（用 transform） */
     .desktop-zoom {
-      zoom: 1.5;
-      transform: none !important;
+      transform: scale(1.5);
+      transform-origin: top left;
+    }
+
+    /* ✅ 只讓 lightweight-charts 的外框「視覺上不吃 scale」 */
+    .no-scale-chart {
+      width: 150%;                 /* 先把 layout 放大 1.5 倍 */
+      transform: scale(0.6666667);  /* 再反向縮放 2/3 抵銷父層 */
       transform-origin: top left;
     }
 
@@ -23,8 +29,9 @@
       h1 { font-size: 1.8rem; }
       h3 { font-size: 1.5rem; }
 
-      /* ✅ mobile 取消 zoom */
-      .desktop-zoom { zoom: 1 !important; }
+      /* ✅ 手機不要縮放，也不要反縮放 */
+      .desktop-zoom { transform: none !important; }
+      .no-scale-chart { width: 100% !important; transform: none !important; }
     }
 
     #suggestions { z-index: 20; }
@@ -40,7 +47,7 @@
     #clear-input-btn:hover {
       color: #6b7280;
     }
-    /* 自訂圖例 (Tooltip/Legend) 樣式 */
+
     #kline-legend {
         position: absolute;
         top: 10px;
@@ -53,27 +60,14 @@
         font-size: 0.8rem;
         line-height: 1.4;
     }
-    .legend-item {
-        display: flex;
-        align-items: center;
-    }
+    .legend-item { display: flex; align-items: center; }
     .legend-color {
-        width: 10px;
-        height: 3px;
-        margin-right: 5px;
-        border-radius: 2px;
+        width: 10px; height: 3px; margin-right: 5px; border-radius: 2px;
     }
-    /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
-    /* .tv-lightweight-charts-logo,
-.tv-lightweight-charts-watermark,
-.tv-lightweight-charts-watermark__text,
-.tv-watermark,
-.tv-logo { display: none !important; } */
   </style>
 </head>
 
 <body class="p-6 bg-gray-50 text-lg">
-  <!-- ✅ 移除 transform scale-150，改用 desktop-zoom -->
   <div class="max-w-7xl mx-auto desktop-zoom origin-top mobile-reset transition-transform duration-300">
 
     <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">
@@ -133,7 +127,8 @@
     </div>
 
     <div id="stock-view" class="hidden">
-        <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8">
+        <!-- ✅ 只在這塊套 no-scale-chart -->
+        <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
             <div id="klineChartContainer" class="relative" style="height: 300px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
@@ -180,10 +175,8 @@
 
   const klineChartContainer = document.getElementById('klineChartContainer');
   let klineChart = null;
-
-  // ✅ 重要：改成 let，之後 loadKlineData 會重建 legend 節點
-  let klineLegend = document.getElementById('kline-legend'); 
-  const klineStaticLegend = document.getElementById('kline-static-legend'); 
+  let klineLegend = document.getElementById('kline-legend');
+  const klineStaticLegend = document.getElementById('kline-static-legend');
 
   const input = document.getElementById("search-input");
   const suggestions = document.getElementById("suggestions");
@@ -523,61 +516,23 @@
   function updateChart(labels, foreignData, investData, dealerData, totalData) {
     const ctx = document.getElementById('tradingChart').getContext('2d');
 
-    if (tradingChart) {
-      tradingChart.destroy();
-    }
+    if (tradingChart) tradingChart.destroy();
 
     tradingChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: labels,
         datasets: [
-          {
-            label: '外資',
-            data: foreignData,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            tension: 0.3,
-            fill: false,
-          },
-          {
-            label: '投信',
-            data: investData,
-            borderColor: 'rgb(54, 162, 235)',
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            tension: 0.3,
-            fill: false,
-          },
-          {
-            label: '自營商',
-            data: dealerData,
-            borderColor: 'rgb(75, 192, 192)',
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            tension: 0.3,
-            fill: false,
-          },
-          {
-            label: '合計',
-            data: totalData,
-            borderColor: 'rgb(153, 102, 255)',
-            backgroundColor: 'rgba(153, 102, 255, 0.5)',
-            tension: 0.3,
-            fill: false,
-            borderWidth: 2
-          }
+          { label: '外資', data: foreignData, borderColor: 'rgb(255, 99, 132)', backgroundColor: 'rgba(255, 99, 132, 0.5)', tension: 0.3, fill: false },
+          { label: '投信', data: investData, borderColor: 'rgb(54, 162, 235)', backgroundColor: 'rgba(54, 162, 235, 0.5)', tension: 0.3, fill: false },
+          { label: '自營商', data: dealerData, borderColor: 'rgb(75, 192, 192)', backgroundColor: 'rgba(75, 192, 192, 0.5)', tension: 0.3, fill: false },
+          { label: '合計', data: totalData, borderColor: 'rgb(153, 102, 255)', backgroundColor: 'rgba(153, 102, 255, 0.5)', tension: 0.3, fill: false, borderWidth: 2 }
         ]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          title: { display: false },
-          tooltip: { mode: 'index', intersect: false }
-        },
-        scales: {
-          x: { title: { display: true, text: '日期' } },
-          y: { title: { display: true, text: '買賣超張數' } }
-        }
+        responsive: true, maintainAspectRatio: false,
+        plugins: { title: { display: false }, tooltip: { mode: 'index', intersect: false } },
+        scales: { x: { title: { display: true, text: '日期' } }, y: { title: { display: true, text: '買賣超張數' } } }
       }
     });
   }
@@ -591,21 +546,10 @@
       const result = [];
       for (let i = 0; i < data.length; i++) {
           const currentClose = ensureFiniteNumber(data[i].close);
-
-          if (i < period - 1) {
-              result.push({ time: data[i].time, value: null });
-              continue;
-          }
-
+          if (i < period - 1) { result.push({ time: data[i].time, value: null }); continue; }
           let sum = 0;
-          for (let j = 0; j < period; j++) {
-              sum += ensureFiniteNumber(data[i - j].close);
-          }
-
-          result.push({
-              time: data[i].time,
-              value: sum / period
-          });
+          for (let j = 0; j < period; j++) sum += ensureFiniteNumber(data[i - j].close);
+          result.push({ time: data[i].time, value: sum / period });
       }
       return result;
   }
@@ -615,13 +559,10 @@
       periods.forEach(ma => {
           const item = document.createElement('div');
           item.className = 'legend-item mx-2';
-
           const colorBox = document.createElement('span');
           colorBox.className = 'legend-color w-3 h-1.5';
           colorBox.style.backgroundColor = ma.color;
-
           const titleText = document.createTextNode(` ${ma.title}`);
-
           item.appendChild(colorBox);
           item.appendChild(titleText);
           klineStaticLegend.appendChild(item);
@@ -630,44 +571,30 @@
 
   function updateCustomTooltip(param) {
       if (!klineLegend) return;
-
-      if (!param.time) {
-          klineLegend.classList.add('hidden');
-          return;
-      }
+      if (!param.time) { klineLegend.classList.add('hidden'); return; }
 
       const date = new Date(param.time * 1000);
       const formattedDate = date.toLocaleDateString('zh-TW', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          timeZone: 'Asia/Taipei'
+          year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Taipei'
       }).replace(/\//g, '-');
 
       let html = `<div class="font-bold mb-1">${formattedDate}</div>`;
-
       const maData = {};
-      let volumeValue = null;
-      let openValue = null;
-      let highValue = null;
-      let lowValue = null;
-      let closeValue = null;
+      let volumeValue = null, openValue = null, highValue = null, lowValue = null, closeValue = null;
 
       param.seriesData.forEach((data, series) => {
           if (series === candleSeries) {
               if (data.value) {
                   openValue = data.value.open.toFixed(2);
                   highValue = data.value.high.toFixed(2);
-                  lowValue = data.value.low.toFixed(2);
-                  closeValue = data.value.close.toFixed(2);
+                  lowValue  = data.value.low.toFixed(2);
+                  closeValue= data.value.close.toFixed(2);
               }
           } else if (series === volumeSeries) {
               volumeValue = data.value;
           } else {
               const ma = MA_PERIODS.find(m => m.series === series);
-              if (ma && data.value) {
-                  maData[ma.title] = { value: data.value, color: ma.color };
-              }
+              if (ma && data.value) maData[ma.title] = { value: data.value, color: ma.color };
           }
       });
 
@@ -696,14 +623,11 @@
       const chartWidth = klineChartContainer.clientWidth;
       const tooltipWidth = klineLegend.offsetWidth;
       const pointX = param.point ? param.point.x : chartWidth / 2;
-
       let left = pointX + 15;
-
       if (left + tooltipWidth > chartWidth) {
           left = pointX - tooltipWidth - 15;
           if (left < 10) left = 10;
       }
-
       klineLegend.style.left = `${left}px`;
   }
 
@@ -712,45 +636,19 @@
 
       klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">載入中...</div>
           <div id="kline-legend" class="hidden"></div>`;
-
-      /* ✅ 重新抓新的 legend 節點給全域變數 */
       klineLegend = document.getElementById('kline-legend');
 
       if(klineStaticLegend) klineStaticLegend.innerHTML = '';
-      if (klineChart) {
-          try { klineChart.remove(); } catch (e) {}
-          klineChart = null;
-          candleSeries = null;
-          volumeSeries = null;
-          MA_PERIODS.forEach(ma => ma.series = null);
-      }
-      if (klineLegend) klineLegend.classList.add('hidden');
-
-      if (typeof LightweightCharts === 'undefined' || typeof LightweightCharts.createChart !== 'function') {
-          console.error("[❌ LOG - Kline] LightweightCharts 未載入或不支援 createChart");
-          klineChartContainer.innerHTML = `<div class="text-center py-4 text-red-500">K 線程式庫載入失敗，請重新整理頁面。</div>`;
-          return;
-      }
+      if (klineChart) { try { klineChart.remove(); } catch (e) {} klineChart = null; }
+      candleSeries = null; volumeSeries = null; MA_PERIODS.forEach(ma => ma.series = null);
 
       fetch("Kline.json")
-          .then(res => {
-              if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-              return res.json();
-          })
+          .then(res => { if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`); return res.json(); })
           .then(klineData => {
               let filteredData = [];
-
-              if (!Array.isArray(klineData) && klineData[stockId]) {
-                  filteredData = klineData[stockId];
-              } else if (Array.isArray(klineData)) {
-                  filteredData = klineData.filter(item =>
-                      String(item.stock_id).replace(/\s|　/g, "") === String(stockId)
-                  );
-              } else if (Array.isArray(klineData.stocks)) {
-                  filteredData = klineData.stocks.filter(item =>
-                      String(item.stock_id).replace(/\s|　/g, "") === String(stockId)
-                  );
-              }
+              if (!Array.isArray(klineData) && klineData[stockId]) filteredData = klineData[stockId];
+              else if (Array.isArray(klineData)) filteredData = klineData.filter(item => String(item.stock_id).trim() === String(stockId));
+              else if (Array.isArray(klineData.stocks)) filteredData = klineData.stocks.filter(item => String(item.stock_id).trim() === String(stockId));
 
               if (!filteredData || filteredData.length === 0) {
                   klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">找不到 ${stockId} 的 K 線資料。</div>`;
@@ -758,30 +656,15 @@
               }
 
               const chartData = [];
-
-              filteredData.forEach((item, index) => {
-                  const validOpen   = ensureFiniteNumber(item.open);
-                  const validHigh   = ensureFiniteNumber(item.high);
-                  const validLow    = ensureFiniteNumber(item.low);
-                  const validClose  = ensureFiniteNumber(item.close);
-                  const validVolume = ensureFiniteNumber(item.volume);
-
-                  if (validOpen === 0 || validHigh === 0 || validLow === 0 || validClose === 0) return;
-
+              filteredData.forEach(item => {
+                  const o = ensureFiniteNumber(item.open), h = ensureFiniteNumber(item.high),
+                        l = ensureFiniteNumber(item.low),  c = ensureFiniteNumber(item.close),
+                        v = ensureFiniteNumber(item.volume);
+                  if (!o || !h || !l || !c) return;
                   const dateStr = (item.date || item.Date || item.trade_date || "").toString();
                   if (!dateStr) return;
-
-                  const dateObject = new Date(dateStr.replace(/-/g, '/'));
-                  const timeStamp = dateObject.getTime() / 1000;
-
-                  chartData.push({
-                      time: timeStamp,
-                      open: validOpen,
-                      high: validHigh,
-                      low: validLow,
-                      close: validClose,
-                      value: validVolume
-                  });
+                  const t = new Date(dateStr.replace(/-/g,'/')).getTime()/1000;
+                  chartData.push({ time:t, open:o, high:h, low:l, close:c, value:v });
               });
 
               if (chartData.length === 0) {
@@ -789,98 +672,78 @@
                   return;
               }
 
+              // ✅ 桌機用 450 高度 (300*1.5)，手機 300
+              const isDesktop = window.innerWidth > 768;
+              const chartHeight = isDesktop ? 450 : 300;
+              klineChartContainer.style.height = chartHeight + "px";
+
               klineChartContainer.innerHTML = "";
               const width = klineChartContainer.clientWidth || 600;
 
               klineChart = LightweightCharts.createChart(klineChartContainer, {
-                  width: width,
-                  height: 300,
+                  width, height: chartHeight,
                   layout: { backgroundColor: '#ffffff', textColor: '#333' },
                   grid: {
                       vertLines: { color: '#e0e0e0' },
                       horzLines: { color: '#e0e0e0' }
                   },
-                  timeScale: {
-                      timeVisible: true,
-                      secondsVisible: false,
-                  },
+                  timeScale: { timeVisible: true, secondsVisible: false },
                   crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
               });
 
               candleSeries = klineChart.addCandlestickSeries({
-                  upColor: '#ef5350',
-                  downColor: '#26a69a',
-                  borderVisible: false,
-                  wickUpColor: '#ef5350',
-                  wickDownColor: '#26a69a',
-                  title: 'K線',
-                  lastValueVisible: true,
-                  priceLineVisible: true,
+                  upColor: '#ef5350', downColor: '#26a69a',
+                  borderVisible: false, wickUpColor: '#ef5350', wickDownColor: '#26a69a',
+                  title: 'K線', lastValueVisible: true, priceLineVisible: true,
               });
               candleSeries.setData(chartData);
 
               MA_PERIODS.forEach(ma => {
                   const maData = calculateSMA(chartData, ma.period);
-
                   const maSeries = klineChart.addLineSeries({
-                      color: ma.color,
-                      lineWidth: 1,
-                      title: '',
-                      lastValueVisible: false,
-                      priceLineVisible: false,
+                      color: ma.color, lineWidth: 1,
+                      lastValueVisible: false, priceLineVisible: false,
                   });
-
-                  maSeries.setData(maData.filter(d => d.value !== null).map(d => ({
-                      time: d.time,
-                      value: d.value
-                  })));
+                  maSeries.setData(maData.filter(d => d.value !== null).map(d => ({ time: d.time, value: d.value })));
                   ma.series = maSeries;
               });
 
               drawStaticLegend(MA_PERIODS);
 
               klineChart.priceScale('right').applyOptions({
-                  scaleMargins: {
-                      top: 0.05,
-                      bottom: 0.25
-                  }
+                  scaleMargins: { top: 0.05, bottom: 0.25 }
               });
 
               volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
-                  title: '成交量',
-                  lastValueVisible: true,
-                  priceLineVisible: true,
+                  title: '成交量', lastValueVisible: true, priceLineVisible: true,
               });
 
               klineChart.priceScale('volume').applyOptions({
-                  scaleMargins: {
-                      top: 0.8,
-                      bottom: 0
-                  }
+                  scaleMargins: { top: 0.8, bottom: 0 }
               });
 
-              const volumeData = chartData.map(d => ({
-                  time: d.time,
-                  value: ensureFiniteNumber(d.value),
+              volumeSeries.setData(chartData.map(d => ({
+                  time: d.time, value: ensureFiniteNumber(d.value),
                   color: d.close >= d.open ? '#ef535099' : '#26a69a99',
-              }));
-              volumeSeries.setData(volumeData);
+              })));
 
               klineChart.subscribeCrosshairMove(updateCustomTooltip);
               klineChart.timeScale().fitContent();
           })
-          .catch(error => {
-              console.error("[❌ LOG - Kline] K 線圖載入錯誤:", error.message || error);
-              klineChartContainer.innerHTML = `<div class="text-center py-4 text-red-500">K 線圖載入錯誤，請打開 console 查看詳情。</div>`;
+          .catch(err => {
+              console.error("[❌ LOG - Kline] K 線圖載入錯誤:", err);
+              klineChartContainer.innerHTML = `<div class="text-center py-4 text-red-500">K 線圖載入錯誤。</div>`;
           });
   }
 
   window.addEventListener('resize', () => {
       if (klineChart && klineChartContainer) {
-          const width = klineChartContainer.clientWidth || 600;
-          klineChart.applyOptions({ width });
+          const isDesktop = window.innerWidth > 768;
+          const chartHeight = isDesktop ? 450 : 300;
+          klineChartContainer.style.height = chartHeight + "px";
+          klineChart.applyOptions({ width: klineChartContainer.clientWidth || 600, height: chartHeight });
       }
   });
   </script>

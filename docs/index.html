@@ -618,7 +618,7 @@
 
               klineChart = LightweightCharts.createChart(klineChartContainer, {
                   width: width,
-                  height: 450, // 變更：增高 K 線圖高度
+                  height: 450, // 修正 2: 增高 K 線圖高度
                   layout: { backgroundColor: '#ffffff', textColor: '#333' },
                   grid: {
                       vertLines: { color: '#e0e0e0' },
@@ -627,7 +627,7 @@
                   timeScale: {
                       timeVisible: true,
                       secondsVisible: false,
-                      rightOffset: 15, // 新增：增加右側邊距
+                      rightOffset: 15, // 修正 3: 增加右側邊距
                   },
               });
 
@@ -638,10 +638,13 @@
                   borderVisible: false,
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
-                  lastValueVisible: false, // 新增：隱藏最新 K 線價格標籤
-                  priceLineVisible: false, // 新增：隱藏最新 K 線價格線
+                  lastValueVisible: false, // 修正 4: 隱藏最新 K 線價格標籤
+                  priceLineVisible: false, // 修正 4: 隱藏最新 K 線價格線
               });
               candleSeries.setData(chartData);
+              
+              // **重要提醒：** 如果您的 MA 線是作為獨立的 LineSeries 加入的，您需要對它們也設定以下選項：
+              // ma5Series.applyOptions({ lastValueVisible: false, priceLineVisible: false });
 
               // ▶ 調整股價的 price scale，只佔上方 70%
               klineChart.priceScale('right').applyOptions({
@@ -655,8 +658,8 @@
               const volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
-                  lastValueVisible: false, // 新增：隱藏最新成交量標籤
-                  priceLineVisible: false, // 新增：隱藏最新成交量價格線
+                  lastValueVisible: false, // 修正 4: 隱藏最新成交量標籤
+                  priceLineVisible: false, // 修正 4: 隱藏最新成交量價格線
               });
 
               klineChart.priceScale('volume').applyOptions({

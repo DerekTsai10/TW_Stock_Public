@@ -150,6 +150,7 @@
 
   const klineChartContainer = document.getElementById('klineChartContainer');
   let klineChart = null;
+  const klineLegend = document.getElementById('kline-legend'); // MA 圖例
 
   const input = document.getElementById("search-input");
   const suggestions = document.getElementById("suggestions");
@@ -159,7 +160,6 @@
 
   const insightsView = document.getElementById('insights-view');
   const stockView = document.getElementById('stock-view');
-  const klineLegend = document.getElementById('kline-legend');
 
   function toggleView(view) {
     if (view === 'insights') {
@@ -688,28 +688,29 @@
                   timeScale: {
                       timeVisible: true,
                       secondsVisible: false,
-                      // ⬇️ 修改 2: 自訂格式化，隱藏日期中的「日」字
+                      // ⬇️ 修正 3: 移除「月」字，只留下數字
                       tickMarkFormatter: (time, tickMarkType, locale) => {
-                          const date = new Date(time * 1000); // Lightweight Charts time 是秒級的時間戳
+                          // time 參數是一個數值，代表秒級時間戳。我們需要轉換為 Date 物件。
+                          const date = new Date(time * 1000); 
                           const day = date.getDate();
-                          const month = date.getMonth() + 1; // getMonth() 回傳 0-11
-                          
+                          const month = date.getMonth() + 1; 
+
                           if (tickMarkType === LightweightCharts.TickMarkType.Month) {
-                              // 只顯示月份
-                              return `${month}月`;
+                              // 只顯示月份數字 (例如: 6, 7)，移除「月」字
+                              return `${month}`;
                           }
                           if (tickMarkType === LightweightCharts.TickMarkType.Year) {
                               // 顯示年份
-                              return date.getFullYear();
+                              return date.getFullYear().toString();
                           }
-                          // 預設情況 (週/日)，只顯示日期數值，不帶「日」字
-                          return `${day}`; 
+                          // 預設情況 (週/日)，顯示月份/日期 (例如: 6/12, 7/15)，移除「日」字
+                          return `${month}/${day}`; 
                       },
                   },
                   paneContainer: klineChartContainer
               });
 
-              // K 線 series（使用預設 right price scale）
+              // K 線 series
               const candleSeries = klineChart.addCandlestickSeries({
                   upColor: '#ef5350',
                   downColor: '#26a69a',
@@ -734,10 +735,10 @@
                   const maSeries = klineChart.addLineSeries({
                       color: ma.color,
                       lineWidth: 1, 
-                      // ⬇️ 關鍵修改 1: 隱藏圖表上的 MA 價格標籤和數值
-                      title: false, // 不在圖表上顯示 Series 標題
-                      lastValueVisible: false, // 不顯示最新的價格數值
-                      priceLineVisible: false, // 不顯示價格線
+                      // 隱藏圖表上的 MA 價格標籤和數值，使用空字串
+                      title: '', 
+                      lastValueVisible: false, 
+                      priceLineVisible: false, 
                   });
 
                   maSeries.setData(maData.filter(d => d.value !== null));

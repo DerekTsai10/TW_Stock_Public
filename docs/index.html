@@ -113,26 +113,26 @@
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
 
             <!-- ✅ 修正：桌機視覺高度維持 480px（實際高度放大到 720px 抵銷反縮放） -->
-            <div id="klineChartContainer" class="relative no-scale-chart" style="height: 480px; margin-bottom: -15px;">
+            <div id="klineChartContainer" class="relative no-scale-chart" style="height: 720px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
 
             <div id="kline-ma-legend" class="mt-1 text-base text-gray-600 flex items-center space-x-4 mobile-center flex-wrap">
               <div class="flex items-center space-x-2">
                 <span class="inline-block w-6 h-1 rounded" style="background:#f59e0b;"></span>
-                <span>5MA </span>
+                <span>5MA（橘色）</span>
               </div>
               <div class="flex items-center space-x-2">
                 <span class="inline-block w-6 h-1 rounded" style="background:#8b5cf6;"></span>
-                <span>10MA </span>
+                <span>10MA（紫色）</span>
               </div>
               <div class="flex items-center space-x-2">
                 <span class="inline-block w-6 h-1 rounded" style="background:#3b82f6;"></span>
-                <span>20MA </span>
+                <span>20MA（藍色）</span>
               </div>
               <div class="flex items-center space-x-2">
                 <span class="inline-block w-6 h-1 rounded" style="background:#10b981;"></span>
-                <span>60MA </span>
+                <span>60MA（綠色）</span>
               </div>
             </div>
         </div>
@@ -729,7 +729,7 @@
               ma60Series.setData(calcMA(chartData, 60));
 
               klineChart.priceScale('right').applyOptions({
-                  scaleMargins: { top: 0.02, bottom: 0.12 }
+                  scaleMargins: { top: 0.02, bottom: 0.18 }
               });
 
               const volumeSeries = klineChart.addHistogramSeries({
@@ -738,7 +738,7 @@
               });
 
               klineChart.priceScale('volume').applyOptions({
-                  scaleMargins: { top: 0.88, bottom: 0 }
+                  scaleMargins: { top: 0.82, bottom: 0 }
               });
 
               const volumeData = chartData.map(d => ({

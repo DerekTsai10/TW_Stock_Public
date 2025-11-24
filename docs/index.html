@@ -11,15 +11,14 @@
     /* ✅ 桌機維持原本 scale-150（用 transform） */
     .desktop-zoom {
       transform: scale(1.5);
-      transform-origin: top center; /* 修正：將原點改為 top center 才能置中 */
+      transform-origin: top center;
     }
 
     /* ✅ 只讓 lightweight-charts 的外框「視覺上不吃 scale」 */
     .no-scale-chart {
-      /* 假設父層縮放了 1.5 倍 (1 / 1.5 = 0.6666667) */
-      width: 150%;                 /* 先把 layout 放大 1.5 倍 */
-      transform: scale(0.6666667); /* 再反向縮放 2/3 抵銷父層 */
-      transform-origin: top left;  /* 反縮放維持靠左才正常 */
+      width: 150%;
+      transform: scale(0.6666667);
+      transform-origin: top left;
     }
 
     @media (max-width: 768px) {
@@ -47,12 +46,6 @@
     #clear-input-btn:hover {
       color: #6b7280;
     }
-    /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
-    /* .tv-lightweight-charts-logo,
-.tv-lightweight-charts-watermark,
-.tv-lightweight-charts-watermark__text,
-.tv-watermark,
-.tv-logo { display: none !important; } */
   </style>
 </head>
 
@@ -116,16 +109,15 @@
     </div>
 
     <div id="stock-view" class="hidden">
-        <!-- ✅ no-scale-chart 已移到圖表本體，避免外框被放大造成超大空白 -->
-        <div id="kline-chart-wrapper" class="p-3 border rounded bg-white shadow mb-8">
+        <div id="kline-chart-wrapper" class="p-3 border rounded bg-white shadow mb-6">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
 
-            <div id="klineChartContainer" class="relative no-scale-chart" style="height: 480px;">
+            <!-- ✅ 修正：桌機視覺高度維持 480px（實際高度放大到 720px 抵銷反縮放） -->
+            <div id="klineChartContainer" class="relative no-scale-chart" style="height: 720px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
 
-            <!-- ✅ 靜態 MA 說明：5 / 10 / 20 / 60 -->
-            <div id="kline-ma-legend" class="mt-3 text-base text-gray-600 flex items-center space-x-4 mobile-center flex-wrap">
+            <div id="kline-ma-legend" class="mt-1 text-base text-gray-600 flex items-center space-x-4 mobile-center flex-wrap">
               <div class="flex items-center space-x-2">
                 <span class="inline-block w-6 h-1 rounded" style="background:#f59e0b;"></span>
                 <span>5MA（橘色）</span>
@@ -208,7 +200,6 @@
     toggleView('insights');
   });
 
-  // --- 載入 data.json 建股票清單 ---
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -231,7 +222,6 @@
     return a;
   }
 
-  // --- insights.json ---
   fetch("insights.json")
     .then(res => res.json())
     .then(data => {
@@ -325,7 +315,6 @@
       );
     });
 
-  // --- newcomers.json ---
   fetch("newcomers.json")
     .then(res => res.json())
     .then(data => {
@@ -363,7 +352,6 @@
       document.getElementById("newcomers-container").textContent = "無法載入資料";
     });
 
-  // --- explosive.json ---
   fetch("explosive.json")
     .then(res => res.json())
     .then(data => {
@@ -392,7 +380,6 @@
       document.getElementById("explosive-container").textContent = "無法載入資料";
     });
 
-  // --- 搜尋 ---
   input.addEventListener("input", function() {
     if (this.value.trim()) {
       clearBtn.classList.remove("hidden");
@@ -582,7 +569,6 @@
       return (Number.isFinite(num) && num !== null) ? num : 0;
   };
 
-  // ✅ 計算移動平均（回傳 LightweightCharts line 可用的資料）
   function calcMA(data, period) {
       const result = [];
       let sum = 0;
@@ -608,7 +594,6 @@
       return result;
   }
 
-  // --- K 線圖功能 ---
   function loadKlineData(stockId) {
       if (!klineChartContainer) return;
 
@@ -652,7 +637,7 @@
 
               const chartData = [];
 
-              filteredData.forEach((item, index) => {
+              filteredData.forEach((item) => {
                   const validOpen   = ensureFiniteNumber(item.open);
                   const validHigh   = ensureFiniteNumber(item.high);
                   const validLow    = ensureFiniteNumber(item.low);
@@ -679,15 +664,15 @@
                   return;
               }
 
-              // ✅ 保險：確保時間是由舊到新（MA 才正確）
               chartData.sort((a, b) => new Date(a.time) - new Date(b.time));
 
               klineChartContainer.innerHTML = "";
               const width = klineChartContainer.clientWidth || 600;
+              const height = klineChartContainer.clientHeight || 720;
 
               klineChart = LightweightCharts.createChart(klineChartContainer, {
-                  width: width,
-                  height: 420,
+                  width,
+                  height,
                   layout: { backgroundColor: '#ffffff', textColor: '#333' },
                   grid: {
                       vertLines: { color: '#e0e0e0' },
@@ -697,7 +682,6 @@
                       timeVisible: true,
                       secondsVisible: false,
                   },
-                  // ✅ 十字線樣式
                   crosshair: {
                       mode: LightweightCharts.CrosshairMode.Normal,
                       vertLine: {
@@ -715,7 +699,6 @@
                   },
               });
 
-              // K 線 series（使用預設 right price scale）
               const candleSeries = klineChart.addCandlestickSeries({
                   upColor: '#ef5350',
                   downColor: '#26a69a',
@@ -725,61 +708,37 @@
               });
               candleSeries.setData(chartData);
 
-              // ✅ 5MA（橘色）
               const ma5Series = klineChart.addLineSeries({
-                  color: '#f59e0b',
-                  lineWidth: 2,
-                  priceLineVisible: false,
-                  lastValueVisible: false,
+                  color: '#f59e0b', lineWidth: 2, priceLineVisible: false, lastValueVisible: false,
               });
               ma5Series.setData(calcMA(chartData, 5));
 
-              // ✅ 10MA（紫色）
               const ma10Series = klineChart.addLineSeries({
-                  color: '#8b5cf6',
-                  lineWidth: 2,
-                  priceLineVisible: false,
-                  lastValueVisible: false,
+                  color: '#8b5cf6', lineWidth: 2, priceLineVisible: false, lastValueVisible: false,
               });
               ma10Series.setData(calcMA(chartData, 10));
 
-              // ✅ 20MA（藍色）
               const ma20Series = klineChart.addLineSeries({
-                  color: '#3b82f6',
-                  lineWidth: 2,
-                  priceLineVisible: false,
-                  lastValueVisible: false,
+                  color: '#3b82f6', lineWidth: 2, priceLineVisible: false, lastValueVisible: false,
               });
               ma20Series.setData(calcMA(chartData, 20));
 
-              // ✅ 60MA（綠色）
               const ma60Series = klineChart.addLineSeries({
-                  color: '#10b981',
-                  lineWidth: 2,
-                  priceLineVisible: false,
-                  lastValueVisible: false,
+                  color: '#10b981', lineWidth: 2, priceLineVisible: false, lastValueVisible: false,
               });
               ma60Series.setData(calcMA(chartData, 60));
 
-              // ▶ 調整股價的 price scale，只佔上方 70%
               klineChart.priceScale('right').applyOptions({
-                  scaleMargins: {
-                      top: 0.02,
-                      bottom: 0.18
-                  }
+                  scaleMargins: { top: 0.02, bottom: 0.18 }
               });
 
-              // 成交量 series，用獨立的 'volume' scale，佔下方 25%
               const volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
               });
 
               klineChart.priceScale('volume').applyOptions({
-                  scaleMargins: {
-                      top: 0.82,
-                      bottom: 0
-                  }
+                  scaleMargins: { top: 0.82, bottom: 0 }
               });
 
               const volumeData = chartData.map(d => ({
@@ -789,7 +748,6 @@
               }));
               volumeSeries.setData(volumeData);
 
-              // ✅ 自訂 tooltip（OHLC + 量）
               const oldTooltip = klineChartContainer.querySelector('.lw-tooltip');
               if (oldTooltip) oldTooltip.remove();
 
@@ -852,7 +810,6 @@
                   tooltip.style.display = 'block';
               });
 
-              // 一載入就看到全部 180 天
               klineChart.timeScale().fitContent();
           })
           .catch(error => {

@@ -119,8 +119,8 @@
         <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
 
-            <!-- ✅ 第一張圖拉高（300px -> 380px） -->
-            <div id="klineChartContainer" class="relative" style="height: 380px;">
+            <!-- ✅ K 線高度拉高 -->
+            <div id="klineChartContainer" class="relative" style="height: 420px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
 
@@ -687,7 +687,7 @@
 
               klineChart = LightweightCharts.createChart(klineChartContainer, {
                   width: width,
-                  height: 380,  // ✅ 第一張圖拉高
+                  height: 420,
                   layout: { backgroundColor: '#ffffff', textColor: '#333' },
                   grid: {
                       vertLines: { color: '#e0e0e0' },
@@ -696,6 +696,22 @@
                   timeScale: {
                       timeVisible: true,
                       secondsVisible: false,
+                  },
+                  // ✅ 十字線樣式
+                  crosshair: {
+                      mode: LightweightCharts.CrosshairMode.Normal,
+                      vertLine: {
+                          width: 1,
+                          color: 'rgba(0,0,0,0.3)',
+                          style: LightweightCharts.LineStyle.Solid,
+                          labelVisible: true,
+                      },
+                      horzLine: {
+                          width: 1,
+                          color: 'rgba(0,0,0,0.3)',
+                          style: LightweightCharts.LineStyle.Solid,
+                          labelVisible: true,
+                      },
                   },
               });
 
@@ -772,6 +788,69 @@
                   color: d.close >= d.open ? '#ef535099' : '#26a69a99',
               }));
               volumeSeries.setData(volumeData);
+
+              // ✅ 自訂 tooltip（OHLC + 量）
+              const oldTooltip = klineChartContainer.querySelector('.lw-tooltip');
+              if (oldTooltip) oldTooltip.remove();
+
+              const tooltip = document.createElement('div');
+              tooltip.className = 'lw-tooltip';
+              tooltip.style.position = 'absolute';
+              tooltip.style.display = 'none';
+              tooltip.style.pointerEvents = 'none';
+              tooltip.style.zIndex = '50';
+              tooltip.style.background = 'rgba(255,255,255,0.95)';
+              tooltip.style.border = '1px solid #ccc';
+              tooltip.style.borderRadius = '6px';
+              tooltip.style.padding = '8px 10px';
+              tooltip.style.fontSize = '14px';
+              tooltip.style.color = '#111';
+              tooltip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+              tooltip.style.whiteSpace = 'nowrap';
+              klineChartContainer.appendChild(tooltip);
+
+              klineChart.subscribeCrosshairMove(param => {
+                  if (!param || !param.time || !param.point) {
+                      tooltip.style.display = 'none';
+                      return;
+                  }
+
+                  const point = param.point;
+                  const containerWidth = klineChartContainer.clientWidth;
+                  const containerHeight = klineChartContainer.clientHeight;
+
+                  if (point.x < 0 || point.x > containerWidth || point.y < 0 || point.y > containerHeight) {
+                      tooltip.style.display = 'none';
+                      return;
+                  }
+
+                  const candle = param.seriesData.get(candleSeries);
+                  if (!candle) {
+                      tooltip.style.display = 'none';
+                      return;
+                  }
+
+                  const vol = param.seriesData.get(volumeSeries);
+                  const dateStr = param.time;
+
+                  tooltip.innerHTML = `
+                    <div style="font-weight:700; margin-bottom:4px;">${dateStr}</div>
+                    <div>開：${candle.open.toFixed(2)}</div>
+                    <div>高：${candle.high.toFixed(2)}</div>
+                    <div>低：${candle.low.toFixed(2)}</div>
+                    <div>收：${candle.close.toFixed(2)}</div>
+                    <div style="margin-top:4px; color:#555;">
+                      量：${vol ? Number(vol.value).toLocaleString() : '-'}
+                    </div>
+                  `;
+
+                  const left = Math.min(point.x + 15, containerWidth - tooltip.offsetWidth - 10);
+                  const top  = Math.max(point.y - 80, 10);
+
+                  tooltip.style.left = left + 'px';
+                  tooltip.style.top  = top + 'px';
+                  tooltip.style.display = 'block';
+              });
 
               // 一載入就看到全部 180 天
               klineChart.timeScale().fitContent();

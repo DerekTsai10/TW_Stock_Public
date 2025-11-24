@@ -100,7 +100,7 @@
     <div id="stock-view" class="hidden">
         <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
-            <div id="klineChartContainer" class="relative" style="height: 450px;">
+            <div id="klineChartContainer" class="relative" style="height: 300px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
         </div>
@@ -618,7 +618,7 @@
 
               klineChart = LightweightCharts.createChart(klineChartContainer, {
                   width: width,
-                  height: 450, // 修正 2: 增高 K 線圖高度
+                  height: 300,
                   layout: { backgroundColor: '#ffffff', textColor: '#333' },
                   grid: {
                       vertLines: { color: '#e0e0e0' },
@@ -627,7 +627,6 @@
                   timeScale: {
                       timeVisible: true,
                       secondsVisible: false,
-                      rightOffset: 15, // 修正 3: 增加右側邊距
                   },
               });
 
@@ -638,13 +637,17 @@
                   borderVisible: false,
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
-                  lastValueVisible: false, // 修正 4: 隱藏最新 K 線價格標籤
-                  priceLineVisible: false, // 修正 4: 隱藏最新 K 線價格線
+                  lastValueVisible: false, // <-- 隱藏 K 線的靜態價格標籤
+                  priceLineVisible: false, // <-- 隱藏 K 線的靜態價格線
               });
               candleSeries.setData(chartData);
-              
-              // **【重要】** 如果您的 MA 線 (5MA, 10MA, ...) 是作為單獨的 LineSeries 加入的，
-              // 您需要對它們也設定：ma5Series.applyOptions({ lastValueVisible: false, priceLineVisible: false });
+
+              // **【重要提醒】** 如果您的 MA 線 (5MA, 10MA, ...) 是作為單獨的 LineSeries 加入的，
+              // 您需要對每個 MA Series 也設定：
+              // ma5Series.applyOptions({ 
+              //     lastValueVisible: false, 
+              //     priceLineVisible: false 
+              // });
 
 
               // ▶ 調整股價的 price scale，只佔上方 70%
@@ -659,8 +662,8 @@
               const volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
-                  lastValueVisible: false, // 修正 4: 隱藏最新成交量標籤
-                  priceLineVisible: false, // 修正 4: 隱藏最新成交量價格線
+                  lastValueVisible: false, // <-- 隱藏成交量的靜態價格標籤
+                  priceLineVisible: false, // <-- 隱藏成交量的靜態價格線
               });
 
               klineChart.priceScale('volume').applyOptions({

@@ -8,18 +8,18 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
   <style>
-    /* ✅ 桌機維持原本 scale-150（用 transform） + 置中 */
+    /* ✅ 桌機維持 scale-150 + 置中（穩定版：與寬度無關） */
     .desktop-zoom {
-      transform: scale(1.5);
-      transform-origin: top center;                 /* ← 由 top left 改成 top center */
-      margin-left: calc((100% - 150%) / 2);         /* ← = -25%，把放大後偏移拉回置中 */
-      width: 100%;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%) scale(1.5);
+      transform-origin: top left;
     }
 
     /* ✅ 只讓 lightweight-charts 的外框「視覺上不吃 scale」 */
     .no-scale-chart {
-      width: 150%;                 /* 先把 layout 放大 1.5 倍 */
-      transform: scale(0.6666667);  /* 再反向縮放 2/3 抵銷父層 */
+      width: 150%;
+      transform: scale(0.6666667);
       transform-origin: top left;
     }
 
@@ -31,8 +31,12 @@
       h1 { font-size: 1.8rem; }
       h3 { font-size: 1.5rem; }
 
-      /* ✅ 手機不要縮放，也不要反縮放 + margin 歸零 */
-      .desktop-zoom { transform: none !important; margin-left: 0 !important; }
+      /* ✅ 手機不要縮放，也不要反縮放 + 取消 left/translate */
+      .desktop-zoom { 
+        position: static !important;
+        left: 0 !important;
+        transform: none !important; 
+      }
       .no-scale-chart { width: 100% !important; transform: none !important; }
     }
 
@@ -129,7 +133,6 @@
     </div>
 
     <div id="stock-view" class="hidden">
-        <!-- ✅ 只在這塊套 no-scale-chart -->
         <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
             <div id="klineChartContainer" class="relative" style="height: 300px;">
@@ -171,6 +174,7 @@
   </div>
 
   <script>
+  /* JS 原封不動 */
   let records = [];
   let stockList = [];
   let tradingChart;

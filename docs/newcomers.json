@@ -3,18 +3,6 @@
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "3163",
-        "name": "波若威",
-        "foreign_ratio": 2.8196288881921263,
-        "invest_ratio": 0.8380851623900506
-      },
-      {
-        "stock_id": "6425",
-        "name": "易發",
-        "foreign_ratio": 1.787992263692852,
-        "invest_ratio": 0.0
-      },
-      {
         "stock_id": "6415",
         "name": "矽力*-KY",
         "foreign_ratio": 1.5477126621034265,
@@ -27,19 +15,19 @@
         "invest_ratio": -0.07739999668040015
       },
       {
-        "stock_id": "2377",
-        "name": "微星",
-        "foreign_ratio": 0.7443946090996251,
-        "invest_ratio": -0.7028896760216586
+        "stock_id": "2408",
+        "name": "南亞科",
+        "foreign_ratio": 0.7150029870608272,
+        "invest_ratio": 0.0938802624746526
+      },
+      {
+        "stock_id": "3135",
+        "name": "凌航",
+        "foreign_ratio": 0.6387640341781343,
+        "invest_ratio": 0.0
       }
     ],
     "invest": [
-      {
-        "stock_id": "3163",
-        "name": "波若威",
-        "foreign_ratio": 2.8196288881921263,
-        "invest_ratio": 0.8380851623900506
-      },
       {
         "stock_id": "6515",
         "name": "穎崴",

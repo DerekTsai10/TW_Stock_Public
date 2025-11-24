@@ -41,6 +41,12 @@
         margin-right: 5px;
         border-radius: 2px;
     }
+    /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
+    /* .tv-lightweight-charts-logo,
+.tv-lightweight-charts-watermark,
+.tv-lightweight-charts-watermark__text,
+.tv-watermark,
+.tv-logo { display: none !important; } */
   </style>
 </head>
 
@@ -176,7 +182,7 @@
     toggleView('insights');
   });
 
-  // --- 載入 data.json 建股票清單 (省略) ---
+  // --- 載入 data.json 建股票清單 ---
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -199,11 +205,224 @@
     return a;
   }
 
-  // --- insights.json, newcomers.json, explosive.json (省略) ---
-  // ... (保持不變)
+  // --- insights.json (恢復內容) ---
+  fetch("insights.json")
+    .then(res => res.json())
+    .then(data => {
+      if (data.date) {
+        document.getElementById("insights-title").textContent =
+          `📊 指標觀察清單 (資料日期：${data.date})`;
+      }
 
-  // --- 搜尋 (省略) ---
-  // ... (保持不變)
+      const dailyForeign = (data.foreign_ratio_ranking || []).slice(0, 10);
+      const dailyInvest  = (data.invest_ratio_ranking  || []).slice(0, 10);
+
+      const foreignList = document.getElementById("foreign_ratio_list");
+      const investList  = document.getElementById("invest_ratio_list");
+      foreignList.innerHTML = "";
+      investList.innerHTML  = "";
+
+      const dailyBoth = new Set(
+        dailyForeign
+          .map(i => i.stock_id)
+          .filter(id => dailyInvest.some(j => j.stock_id === id))
+      );
+
+      const renderListItem = (listEl, items, ratioKey, bothSet) => {
+        items.forEach(item => {
+          const li = document.createElement("li");
+          const a = createStockLink(item.stock_id, item.name);
+
+          const ratioValue = (item[ratioKey] * 100).toFixed(2);
+          const text = document.createTextNode(` : ${ratioValue}%`);
+
+          if (bothSet.has(item.stock_id)) {
+            li.classList.add("text-red-600", "font-bold");
+            a.className = "hover:underline text-red-600 font-bold";
+          }
+
+          li.appendChild(a);
+          li.appendChild(text);
+          listEl.appendChild(li);
+        });
+      };
+
+      renderListItem(foreignList, dailyForeign, 'foreign_ratio', dailyBoth);
+      renderListItem(investList, dailyInvest, 'invest_ratio', dailyBoth);
+
+      const periodRoot = document.getElementById("period-section");
+
+      function buildPeriodBlock(titleHTML, foreignKey, investKey, prefix) {
+        const section = document.createElement("div");
+        section.className = "mt-6 border-t pt-4";
+        section.innerHTML = `
+          <h4 class="font-bold text-xl mb-3">${titleHTML}</h4>
+          <div class="grid grid-cols-2 gap-6 text-gray-700">
+            <div>
+              <h5 class="font-semibold mb-2 text-base">🌏 外資</h5>
+              <ul id="${prefix}-foreign" class="list-disc pl-6 space-y-2 text-base"></ul>
+            </div>
+            <div>
+              <h5 class="font-semibold mb-2 text-base">🏦 投信</h5>
+              <ul id="${prefix}-invest" class="list-disc pl-6 space-y-2 text-base"></ul>
+            </div>
+          </div>
+        `;
+        periodRoot.appendChild(section);
+
+        const fList = (data[foreignKey] || []).slice(0, 10);
+        const iList = (data[investKey]  || []).slice(0, 10);
+
+        const both = new Set(
+          fList.map(i => i.stock_id).filter(id => iList.some(j => j.stock_id === id))
+        );
+
+        const fUl = document.getElementById(`${prefix}-foreign`);
+        const iUl = document.getElementById(`${prefix}-invest`);
+
+        renderListItem(fUl, fList, 'foreign_ratio', both);
+        renderListItem(iUl, iList, 'invest_ratio', both);
+      }
+
+      buildPeriodBlock(
+        "📅 近5日外/投本比前 10",
+        "foreign_ratio_5d_ranking",
+        "invest_ratio_5d_ranking",
+        "p5d"
+      );
+
+      buildPeriodBlock(
+        "🗓️ 近10日外/投本比前 10",
+        "foreign_ratio_10d_ranking",
+        "invest_ratio_10d_ranking",
+        "p10d"
+      );
+    });
+
+  // --- newcomers.json (恢復內容) ---
+  fetch("newcomers.json")
+    .then(res => res.json())
+    .then(data => {
+      const newcomers = data.newcomers || {};
+      const container = document.getElementById("newcomers-container");
+      container.innerHTML = "";
+
+      const addList = (title, items) => {
+        if (items && items.length > 0) {
+          const header = document.createElement("p");
+          header.className = "font-semibold mt-2";
+          header.textContent = title;
+          container.appendChild(header);
+
+          const ul = document.createElement("ul");
+          ul.className = "list-disc pl-6 space-y-1";
+          items.slice(0, 10).forEach(stock => {
+            const li = document.createElement("li");
+            const a = createStockLink(stock.stock_id, stock.name);
+            li.appendChild(a);
+            ul.appendChild(li);
+          });
+          container.appendChild(ul);
+        }
+      };
+
+      addList("🌏 外資新上榜：", newcomers.foreign);
+      addList("🏦 投信新上榜：", newcomers.invest);
+      if ((!newcomers.foreign || newcomers.foreign.length === 0) &&
+          (!newcomers.invest || newcomers.invest.length === 0)) {
+        container.textContent = "（今日無新上榜股票）";
+      }
+    })
+    .catch(() => {
+      document.getElementById("newcomers-container").textContent = "無法載入資料";
+    });
+
+  // --- explosive.json (恢復內容) ---
+  fetch("explosive.json")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("explosive-container");
+      container.innerHTML = "";
+
+      if (!data || !data.explosive || data.explosive.length === 0) {
+        container.textContent = "（今日無爆量股票）";
+        return;
+      }
+
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6 space-y-1";
+      data.explosive.slice(0, 10).forEach(stock => {
+        const li = document.createElement("li");
+        const a = createStockLink(stock.stock_id, stock.name);
+        li.appendChild(a);
+
+        const tag = document.createTextNode(` ${stock.tag}`);
+        li.appendChild(tag);
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    })
+    .catch(() => {
+      document.getElementById("explosive-container").textContent = "無法載入資料";
+    });
+
+  // --- 搜尋 (保持不變) ---
+  input.addEventListener("input", function() {
+    if (this.value.trim()) {
+      clearBtn.classList.remove("hidden");
+    } else {
+      clearBtn.classList.add("hidden");
+      suggestions.classList.add("hidden");
+      toggleView('insights');
+    }
+
+    const keyword = this.value.trim();
+    suggestions.innerHTML = "";
+    if (!keyword) { suggestions.classList.add("hidden"); return; }
+
+    const matched = stockList.filter(s =>
+      s.id.includes(keyword) || s.name.includes(keyword)
+    ).slice(0, 10);
+
+    if (matched.length === 0) { suggestions.classList.add("hidden"); return; }
+
+    matched.forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = `${s.name} (${s.id})`;
+      li.className = "p-2 hover:bg-gray-100 cursor-pointer";
+      li.addEventListener("click", () => {
+        input.value = s.id;
+        suggestions.classList.add("hidden");
+        clearBtn.classList.remove("hidden");
+        showStockData(s.id);
+      });
+      suggestions.appendChild(li);
+    });
+    suggestions.classList.remove("hidden");
+  });
+
+  clearBtn.addEventListener("click", () => {
+    input.value = "";
+    clearBtn.classList.add("hidden");
+    suggestions.classList.add("hidden");
+
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="5" class="border px-4 py-8 text-gray-500">
+          請輸入股票代碼或名稱進行查詢
+        </td>
+      </tr>
+    `;
+    toggleView('insights');
+    input.focus();
+  });
+
+  input.addEventListener("keyup", e => {
+    if (e.key === "Enter") {
+      const keyword = e.target.value.trim();
+      if (keyword) { showStockData(keyword); suggestions.classList.add("hidden"); }
+    }
+  });
 
   function showStockData(keyword) {
     tableBody.innerHTML = "";
@@ -447,9 +666,8 @@
                   if (!dateStr) return;
 
                   chartData.push({
-                      // LightWeightCharts 的時間軸需要是 "YYYY-MM-DD" 格式的字串，或秒級 Unix Time。
-                      // 這裡確保傳入 "YYYY-MM-DD" 字串，並讓 LightWeightCharts 內部解析。
-                      time: dateStr,
+                      // 使用 LightWeightCharts 預期的 'YYYY-MM-DD' 格式字串，讓它自行解析並獲取秒級時間戳
+                      time: dateStr, 
                       open: validOpen,
                       high: validHigh,
                       low: validLow,
@@ -481,22 +699,15 @@
                       tickMarkFormatter: (time, tickMarkType, locale) => {
                           // time 參數是秒級時間戳 (Number)，必須乘 1000 轉為毫秒級。
                           const date = new Date(time * 1000); 
-                          const day = date.getDate();
                           const month = date.getMonth() + 1; // 0-11 月
 
-                          if (tickMarkType === LightweightCharts.TickMarkType.Month) {
-                              // 只顯示月份數字 (例如: 6, 7)，移除「月」字
-                              return `${month}`;
-                          }
                           if (tickMarkType === LightweightCharts.TickMarkType.Year) {
-                              // 顯示年份
+                              // 年級別，顯示年份
                               return date.getFullYear().toString();
                           }
-                          // 預設情況 (週/日)，只顯示月份數字，以確保只顯示「月」層級，並隱藏「日」。
-                          // LightWeightCharts 會根據間距自動選擇顯示 Year/Month/Day。
-                          // 這裡僅在 LightWeightCharts 判定為 Month 級別時，顯示月份。
-                          // 為了滿足「只保留月」的要求，我們在非 Year/Month 級別時，嘗試讓它保持精簡。
-                          // 經驗上，LightWeightCharts 會將多餘的 TickMark 擠壓掉，所以只返回月份是最乾淨的。
+                          
+                          // 月、週、日級別：一律只顯示月份數字，以符合「只保留月，不用日/月」的要求
+                          // LightWeightCharts 會自動調整間距，確保不會太擠
                           return `${month}`; 
                       },
                   },
@@ -516,7 +727,7 @@
               });
               candleSeries.setData(chartData);
 
-              // ----- 新增：計算並繪製移動平均線 (MA) -----
+              // ----- 恢復：計算並繪製移動平均線 (MA) -----
               const periods = [
                   { period: 5, color: 'rgb(255, 165, 0)', title: '5MA' },    // 橙色
                   { period: 10, color: 'rgb(50, 205, 50)', title: '10MA' },  // 綠色
@@ -530,7 +741,7 @@
                   const maSeries = klineChart.addLineSeries({
                       color: ma.color,
                       lineWidth: 1, 
-                      // ⬇️ 修正：隱藏圖表上的 MA 價格標籤和數值，使用空字串
+                      // 隱藏圖表上的 MA 價格標籤和數值，使用空字串
                       title: '', 
                       lastValueVisible: false, 
                       priceLineVisible: false, 

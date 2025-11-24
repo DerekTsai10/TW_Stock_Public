@@ -8,10 +8,12 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
   <style>
-    /* ✅ 桌機維持原本 scale-150（用 transform） */
+    /* ✅ 桌機維持原本 scale-150（用 transform） + 置中 */
     .desktop-zoom {
       transform: scale(1.5);
-      transform-origin: top left;
+      transform-origin: top center;                 /* ← 由 top left 改成 top center */
+      margin-left: calc((100% - 150%) / 2);         /* ← = -25%，把放大後偏移拉回置中 */
+      width: 100%;
     }
 
     /* ✅ 只讓 lightweight-charts 的外框「視覺上不吃 scale」 */
@@ -29,8 +31,8 @@
       h1 { font-size: 1.8rem; }
       h3 { font-size: 1.5rem; }
 
-      /* ✅ 手機不要縮放，也不要反縮放 */
-      .desktop-zoom { transform: none !important; }
+      /* ✅ 手機不要縮放，也不要反縮放 + margin 歸零 */
+      .desktop-zoom { transform: none !important; margin-left: 0 !important; }
       .no-scale-chart { width: 100% !important; transform: none !important; }
     }
 
@@ -672,7 +674,6 @@
                   return;
               }
 
-              // ✅ 桌機用 450 高度 (300*1.5)，手機 300
               const isDesktop = window.innerWidth > 768;
               const chartHeight = isDesktop ? 450 : 300;
               klineChartContainer.style.height = chartHeight + "px";

@@ -1,44 +1,50 @@
 {
-  "date": "20251121",
+  "date": "20251124",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "6442",
-        "name": "光聖",
-        "foreign_ratio": 1.2363032668547276,
-        "invest_ratio": 0.3219421911292437
+        "stock_id": "3163",
+        "name": "波若威",
+        "foreign_ratio": 2.8196288881921263,
+        "invest_ratio": 0.8380851623900506
       },
       {
-        "stock_id": "5289",
-        "name": "宜鼎",
-        "foreign_ratio": 1.144424681294511,
-        "invest_ratio": -0.28991048071744746
+        "stock_id": "6425",
+        "name": "易發",
+        "foreign_ratio": 1.787992263692852,
+        "invest_ratio": 0.0
       },
       {
-        "stock_id": "3260",
-        "name": "威剛",
-        "foreign_ratio": 1.0273933245825488,
-        "invest_ratio": -0.06943215620106137
+        "stock_id": "6415",
+        "name": "矽力*-KY",
+        "foreign_ratio": 1.5477126621034265,
+        "invest_ratio": -0.18821027568873783
+      },
+      {
+        "stock_id": "2344",
+        "name": "華邦電",
+        "foreign_ratio": 0.9647491364007594,
+        "invest_ratio": -0.07739999668040015
+      },
+      {
+        "stock_id": "2377",
+        "name": "微星",
+        "foreign_ratio": 0.7443946090996251,
+        "invest_ratio": -0.7028896760216586
       }
     ],
     "invest": [
       {
-        "stock_id": "2472",
-        "name": "立隆電",
-        "foreign_ratio": 0.8435832362831011,
-        "invest_ratio": 0.9876460053570721
+        "stock_id": "3163",
+        "name": "波若威",
+        "foreign_ratio": 2.8196288881921263,
+        "invest_ratio": 0.8380851623900506
       },
       {
-        "stock_id": "2312",
-        "name": "金寶",
-        "foreign_ratio": -0.5905831956606746,
-        "invest_ratio": 0.46139743018415513
-      },
-      {
-        "stock_id": "3023",
-        "name": "信邦",
-        "foreign_ratio": -0.40144122889595407,
-        "invest_ratio": 0.39446990022627404
+        "stock_id": "6515",
+        "name": "穎崴",
+        "foreign_ratio": -0.5590806471003975,
+        "invest_ratio": 0.502094610634993
       }
     ]
   },

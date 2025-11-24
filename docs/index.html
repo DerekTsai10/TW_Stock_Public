@@ -118,12 +118,14 @@
     <div id="stock-view" class="hidden">
         <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
-            <div id="klineChartContainer" class="relative" style="height: 300px;">
+
+            <!-- ✅ 第一張圖拉高（300px -> 380px） -->
+            <div id="klineChartContainer" class="relative" style="height: 380px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
 
-            <!-- ✅ 靜態 MA 說明 -->
-            <div id="kline-ma-legend" class="mt-3 text-base text-gray-600 flex items-center space-x-4 mobile-center">
+            <!-- ✅ 靜態 MA 說明：5 / 10 / 20 / 60 -->
+            <div id="kline-ma-legend" class="mt-3 text-base text-gray-600 flex items-center space-x-4 mobile-center flex-wrap">
               <div class="flex items-center space-x-2">
                 <span class="inline-block w-6 h-1 rounded" style="background:#f59e0b;"></span>
                 <span>5MA（橘色）</span>
@@ -131,6 +133,14 @@
               <div class="flex items-center space-x-2">
                 <span class="inline-block w-6 h-1 rounded" style="background:#8b5cf6;"></span>
                 <span>10MA（紫色）</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="inline-block w-6 h-1 rounded" style="background:#3b82f6;"></span>
+                <span>20MA（藍色）</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="inline-block w-6 h-1 rounded" style="background:#10b981;"></span>
+                <span>60MA（綠色）</span>
               </div>
             </div>
         </div>
@@ -655,7 +665,7 @@
                   if (!dateStr) return;
 
                   chartData.push({
-                      time: dateStr, 
+                      time: dateStr,
                       open: validOpen,
                       high: validHigh,
                       low: validLow,
@@ -677,7 +687,7 @@
 
               klineChart = LightweightCharts.createChart(klineChartContainer, {
                   width: width,
-                  height: 300,
+                  height: 380,  // ✅ 第一張圖拉高
                   layout: { backgroundColor: '#ffffff', textColor: '#333' },
                   grid: {
                       vertLines: { color: '#e0e0e0' },
@@ -716,6 +726,24 @@
                   lastValueVisible: false,
               });
               ma10Series.setData(calcMA(chartData, 10));
+
+              // ✅ 20MA（藍色）
+              const ma20Series = klineChart.addLineSeries({
+                  color: '#3b82f6',
+                  lineWidth: 2,
+                  priceLineVisible: false,
+                  lastValueVisible: false,
+              });
+              ma20Series.setData(calcMA(chartData, 20));
+
+              // ✅ 60MA（綠色）
+              const ma60Series = klineChart.addLineSeries({
+                  color: '#10b981',
+                  lineWidth: 2,
+                  priceLineVisible: false,
+                  lastValueVisible: false,
+              });
+              ma60Series.setData(calcMA(chartData, 60));
 
               // ▶ 調整股價的 price scale，只佔上方 70%
               klineChart.priceScale('right').applyOptions({

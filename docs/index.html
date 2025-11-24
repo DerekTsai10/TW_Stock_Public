@@ -8,6 +8,20 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
   <style>
+    /* ✅ 桌機維持原本 scale-150（用 transform） */
+    .desktop-zoom {
+      transform: scale(1.5);
+      transform-origin: top center; /* 修正：將原點改為 top center 才能置中 */
+    }
+
+    /* ✅ 只讓 lightweight-charts 的外框「視覺上不吃 scale」 */
+    .no-scale-chart {
+      /* 假設父層縮放了 1.5 倍 (1 / 1.5 = 0.6666667) */
+      width: 150%;                 /* 先把 layout 放大 1.5 倍 */
+      transform: scale(0.6666667); /* 再反向縮放 2/3 抵銷父層 */
+      transform-origin: top left;  /* 反縮放維持靠左才正常 */
+    }
+
     @media (max-width: 768px) {
       .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
       .mobile-col { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
@@ -15,6 +29,10 @@
       input, select, button { font-size: 1rem; padding: 0.6rem 0.8rem; }
       h1 { font-size: 1.8rem; }
       h3 { font-size: 1.5rem; }
+
+      /* ✅ 手機不要縮放，也不要反縮放 */
+      .desktop-zoom { transform: none !important; }
+      .no-scale-chart { width: 100% !important; transform: none !important; }
     }
     #suggestions { z-index: 20; }
     #clear-input-btn {
@@ -39,7 +57,7 @@
 </head>
 
 <body class="p-6 bg-gray-50 text-lg">
-  <div class="max-w-7xl mx-auto transform scale-150 origin-top mobile-reset transition-transform duration-300">
+  <div class="max-w-7xl mx-auto desktop-zoom mobile-reset transition-transform duration-300">
 
     <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">
       法人買賣超查詢
@@ -98,7 +116,7 @@
     </div>
 
     <div id="stock-view" class="hidden">
-        <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8">
+        <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
             <div id="klineChartContainer" class="relative" style="height: 300px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
@@ -599,7 +617,8 @@
                   if (!dateStr) return;
 
                   chartData.push({
-                      time: dateStr,
+                      // LightweightCharts 推薦使用 UTC timestamp 或 'yyyy-mm-dd'
+                      time: dateStr, 
                       open: validOpen,
                       high: validHigh,
                       low: validLow,
@@ -637,18 +656,8 @@
                   borderVisible: false,
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
-                  lastValueVisible: false, // <-- 隱藏 K 線的靜態價格標籤
-                  priceLineVisible: false, // <-- 隱藏 K 線的靜態價格線
               });
               candleSeries.setData(chartData);
-
-              // **【重要提醒】** 如果您的 MA 線 (5MA, 10MA, ...) 是作為單獨的 LineSeries 加入的，
-              // 您需要對每個 MA Series 也設定：
-              // ma5Series.applyOptions({ 
-              //     lastValueVisible: false, 
-              //     priceLineVisible: false 
-              // });
-
 
               // ▶ 調整股價的 price scale，只佔上方 70%
               klineChart.priceScale('right').applyOptions({
@@ -662,8 +671,6 @@
               const volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
-                  lastValueVisible: false, // <-- 隱藏成交量的靜態價格標籤
-                  priceLineVisible: false, // <-- 隱藏成交量的靜態價格線
               });
 
               klineChart.priceScale('volume').applyOptions({

@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-  <!-- Lightweight Charts (standalone 版本) -->
   <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
   <style>
     @media (max-width: 768px) {
@@ -30,12 +29,12 @@
     #clear-input-btn:hover {
       color: #6b7280;
     }
-    /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
-    /* .tv-lightweight-charts-logo,
-.tv-lightweight-charts-watermark,
-.tv-lightweight-charts-watermark__text,
-.tv-watermark,
-.tv-logo { display: none !important; } */
+    /* ✅ 根據您的需求，解除註解以隱藏 TradingView 的 Logo 和 Watermark */
+    .tv-lightweight-charts-logo,
+    .tv-lightweight-charts-watermark,
+    .tv-lightweight-charts-watermark__text,
+    .tv-watermark,
+    .tv-logo { display: none !important; }
   </style>
 </head>
 
@@ -64,7 +63,6 @@
       </div>
     </div>
 
-    <!-- ⬇️ 總覽模式 -->
     <div id="insights-view">
       <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
         <div class="p-6 border rounded bg-white shadow">
@@ -99,9 +97,7 @@
       </div>
     </div>
 
-    <!-- ⬇️ 個股模式 -->
     <div id="stock-view" class="hidden">
-        <!-- K 線圖外框 -->
         <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
             <div id="klineChartContainer" class="relative" style="height: 300px;">
@@ -475,6 +471,10 @@
     } else {
       toggleView('insights');
       pageTitle.textContent = "法人買賣超查詢";
+      // 可以在這裡加入錯誤提示
+      const errorRow = document.createElement("tr");
+      errorRow.innerHTML = `<td colspan="5" class="border px-4 py-8 text-red-500">找不到 ${keyword} 的法人買賣超資料。</td>`;
+      tableBody.appendChild(errorRow);
       console.log(`[🔍 LOG - Search] 查詢失敗或無法人買賣超資料: ${keyword}`);
     }
   }
@@ -546,7 +546,7 @@
       return (Number.isFinite(num) && num !== null) ? num : 0;
   };
 
-  // --- K 線圖功能 ---
+  // --- K 線圖功能 (已針對您的 Kline.json 格式調整載入邏輯) ---
   function loadKlineData(stockId) {
       if (!klineChartContainer) return;
 
@@ -571,9 +571,12 @@
           .then(klineData => {
               let filteredData = [];
 
-              if (!Array.isArray(klineData) && klineData[stockId]) {
+              // ✅ 核心修改：專門處理 {"0050": [...]} 這種頂層物件格式
+              if (klineData && klineData[stockId]) {
                   filteredData = klineData[stockId];
-              } else if (Array.isArray(klineData)) {
+              }
+              // 保留原有的其他兼容性檢查 (以防未來檔案格式變動)
+              else if (Array.isArray(klineData)) {
                   filteredData = klineData.filter(item =>
                       String(item.stock_id).replace(/\s|　/g, "") === String(stockId)
                   );
@@ -599,16 +602,18 @@
 
                   if (validOpen === 0 || validHigh === 0 || validLow === 0 || validClose === 0) return;
 
+                  // 兼容處理 'date' 和 'Date' 欄位
                   const dateStr = (item.date || item.Date || item.trade_date || "").toString();
                   if (!dateStr) return;
 
                   chartData.push({
-                      time: dateStr,
+                      // Lightweight Charts 需要時間戳記 (timestamp) 或 ISO 8601 格式的字串 (YYYY-MM-DD)
+                      time: dateStr, 
                       open: validOpen,
                       high: validHigh,
                       low: validLow,
                       close: validClose,
-                      value: validVolume
+                      value: validVolume // 暫存 volume
                   });
               });
 
@@ -618,7 +623,8 @@
               }
 
               klineChartContainer.innerHTML = "";
-              const width = klineChartContainer.clientWidth || 600;
+              // 確保寬度可以自動調整
+              const width = klineChartContainer.parentElement.clientWidth; 
 
               klineChart = LightweightCharts.createChart(klineChartContainer, {
                   width: width,
@@ -644,10 +650,10 @@
               });
               candleSeries.setData(chartData);
 
-              // ▶ 調整股價的 price scale，只佔上方 70%
+              // ▶ 調整股價的 price scale，只佔上方 75% (從 70% 改成 75%，讓 K 線更大一點)
               klineChart.priceScale('right').applyOptions({
                   scaleMargins: {
-                      top: 0.05,   // 上方留一點空間
+                      top: 0.1,   // 上方留一點空間
                       bottom: 0.25 // 底部空出 25% 給成交量
                   }
               });
@@ -658,32 +664,35 @@
                   priceFormat: { type: 'volume' },
               });
 
+              // ▶ 調整成交量的 price scale
               klineChart.priceScale('volume').applyOptions({
                   scaleMargins: {
-                      top: 0.8,  // 從 80% 開始
-                      bottom: 0  // 到最底
+                      top: 0.75,  // 從 75% 開始
+                      bottom: 0.05 // 底部留一點空間
                   }
               });
 
               const volumeData = chartData.map(d => ({
                   time: d.time,
                   value: ensureFiniteNumber(d.value),
+                  // 根據收盤價和開盤價來決定成交量的顏色
                   color: d.close >= d.open ? '#ef535099' : '#26a69a99',
               }));
               volumeSeries.setData(volumeData);
 
-              // 一載入就看到全部 180 天
+              // 一載入就看到全部
               klineChart.timeScale().fitContent();
           })
           .catch(error => {
               console.error("[❌ LOG - Kline] K 線圖載入錯誤:", error.message || error);
-              klineChartContainer.innerHTML = `<div class="text-center py-4 text-red-500">K 線圖載入錯誤，請打開 console 查看詳情。</div>`;
+              klineChartContainer.innerHTML = `<div class="text-center py-4 text-red-500">K 線圖載入錯誤: ${error.message}</div>`;
           });
   }
 
   window.addEventListener('resize', () => {
       if (klineChart && klineChartContainer) {
-          const width = klineChartContainer.clientWidth || 600;
+          // 重新計算父容器寬度
+          const width = klineChartContainer.parentElement.clientWidth; 
           klineChart.applyOptions({ width });
       }
   });

@@ -116,11 +116,11 @@
     </div>
 
     <div id="stock-view" class="hidden">
-        <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
+        <!-- ✅ no-scale-chart 已移到圖表本體，避免外框被放大造成超大空白 -->
+        <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
 
-            <!-- ✅ K 線高度拉高 -->
-            <div id="klineChartContainer" class="relative" style="height: 420px;">
+            <div id="klineChartContainer" class="relative no-scale-chart" style="height: 420px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
 

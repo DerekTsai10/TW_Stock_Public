@@ -21,6 +21,27 @@
       transform-origin: top left;
     }
 
+    /* ✅ MA legend：放在 no-scale-chart 裡 → 位置跟 chart 一起縮放
+       再用 scale(1.5) 抵銷縮放，字體大小維持正常 */
+    #kline-ma-legend{
+      position: absolute;
+      left: 12px;
+      bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: rgba(255,255,255,0.88);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #4b5563;
+      transform: scale(1.5);
+      transform-origin: bottom left;
+      pointer-events: none;
+      z-index: 5;
+    }
+
     @media (max-width: 768px) {
       .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
       .mobile-col { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
@@ -32,7 +53,19 @@
       /* ✅ 手機不要縮放，也不要反縮放 */
       .desktop-zoom { transform: none !important; }
       .no-scale-chart { width: 100% !important; transform: none !important; }
+
+      /* ✅ 手機版 legend 回到圖下方正常排版 */
+      #kline-ma-legend{
+        position: static !important;
+        transform: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin-top: .5rem !important;
+        pointer-events: auto !important;
+        justify-content: center;
+      }
     }
+
     #suggestions { z-index: 20; }
     #clear-input-btn {
       position: absolute;
@@ -112,28 +145,29 @@
         <div id="kline-chart-wrapper" class="pt-2 px-3 pb-2 border rounded bg-white shadow mb-6">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
 
-            <!-- ✅ 修正：桌機視覺高度維持 480px（實際高度放大到 720px 抵銷反縮放） -->
+            <!-- ✅ 桌機視覺高度維持 480px（實際高度 720px 抵銷反縮放） -->
             <div id="klineChartContainer" class="relative no-scale-chart" style="height: 720px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
-            </div>
 
-            <div id="kline-ma-legend" class="mt-1 text-base text-gray-600 flex items-center space-x-4 mobile-center flex-wrap">
-              <div class="flex items-center space-x-2">
-                <span class="inline-block w-6 h-1 rounded" style="background:#f59e0b;"></span>
-                <span>5MA（橘色）</span>
-              </div>
-              <div class="flex items-center space-x-2">
-                <span class="inline-block w-6 h-1 rounded" style="background:#8b5cf6;"></span>
-                <span>10MA（紫色）</span>
-              </div>
-              <div class="flex items-center space-x-2">
-                <span class="inline-block w-6 h-1 rounded" style="background:#3b82f6;"></span>
-                <span>20MA（藍色）</span>
-              </div>
-              <div class="flex items-center space-x-2">
-                <span class="inline-block w-6 h-1 rounded" style="background:#10b981;"></span>
-                <span>60MA（綠色）</span>
-              </div>
+                <!-- ✅ MA legend 移進來（一起縮放定位） -->
+                <div id="kline-ma-legend">
+                  <div class="flex items-center space-x-2">
+                    <span class="inline-block w-6 h-1 rounded" style="background:#f59e0b;"></span>
+                    <span>5MA（橘色）</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span class="inline-block w-6 h-1 rounded" style="background:#8b5cf6;"></span>
+                    <span>10MA（紫色）</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span class="inline-block w-6 h-1 rounded" style="background:#3b82f6;"></span>
+                    <span>20MA（藍色）</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span class="inline-block w-6 h-1 rounded" style="background:#10b981;"></span>
+                    <span>60MA（綠色）</span>
+                  </div>
+                </div>
             </div>
         </div>
 

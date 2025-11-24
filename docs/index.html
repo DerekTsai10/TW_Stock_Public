@@ -52,6 +52,12 @@
         margin-right: 5px;
         border-radius: 2px;
     }
+    /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
+    /* .tv-lightweight-charts-logo,
+.tv-lightweight-charts-watermark,
+.tv-lightweight-charts-watermark__text,
+.tv-watermark,
+.tv-logo { display: none !important; } */
   </style>
 </head>
 
@@ -119,7 +125,7 @@
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
             <div id="klineChartContainer" class="relative" style="height: 300px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
-                <div id="kline-legend" class="hidden"></div>
+                 <div id="kline-legend" class="hidden"></div>
             </div>
              <div id="kline-static-legend" class="mt-4 flex flex-wrap justify-center text-sm"></div>
         </div>
@@ -164,6 +170,7 @@
   let klineChart = null;
   const klineLegend = document.getElementById('kline-legend'); // 動態圖例
   const klineStaticLegend = document.getElementById('kline-static-legend'); // 靜態圖例
+
 
   const input = document.getElementById("search-input");
   const suggestions = document.getElementById("suggestions");
@@ -583,6 +590,9 @@
   function calculateSMA(data, period) {
       const result = [];
       for (let i = 0; i < data.length; i++) {
+          // 確保 close 存在且是數字
+          const currentClose = ensureFiniteNumber(data[i].close);
+          
           if (i < period - 1) {
               result.push({ time: data[i].time, value: null });
               continue;
@@ -590,7 +600,7 @@
   
           let sum = 0;
           for (let j = 0; j < period; j++) {
-              sum += data[i - j].close;
+              sum += ensureFiniteNumber(data[i - j].close);
           }
   
           result.push({
@@ -711,6 +721,7 @@
       klineLegend.style.left = `${left}px`;
   }
 
+
   // --- K 線圖功能 ---
   function loadKlineData(stockId) {
       if (!klineChartContainer) return;
@@ -720,7 +731,7 @@
           <div id="kline-legend" class="hidden"></div>`; 
       
       // 重設全域變數和靜態圖例
-      klineStaticLegend.innerHTML = '';
+      if(klineStaticLegend) klineStaticLegend.innerHTML = '';
       if (klineChart) {
           try { klineChart.remove(); } catch (e) {}
           klineChart = null;
@@ -774,14 +785,17 @@
 
                   const dateStr = (item.date || item.Date || item.trade_date || "").toString();
                   if (!dateStr) return;
+                  
+                  // 將日期字串轉換為時間戳記 (Lightweight Charts 偏好)
+                  const timeStamp = new Date(dateStr.replace(/-/g, '/')).getTime() / 1000;
 
                   chartData.push({
-                      time: dateStr, 
+                      time: timeStamp, 
                       open: validOpen,
                       high: validHigh,
                       low: validLow,
                       close: validClose,
-                      value: validVolume
+                      value: validVolume // 存成交量用
                   });
               });
 
@@ -790,6 +804,7 @@
                   return;
               }
 
+              klineChartContainer.innerHTML = "";
               const width = klineChartContainer.clientWidth || 600;
               
               // 重新初始化圖表
@@ -805,7 +820,7 @@
                       timeVisible: true,
                       secondsVisible: false,
                   },
-                  // 啟用 Normal 模式，讓 K 線和 MA 線的標籤可以被隱藏
+                  // 啟用 Normal 模式，讓 MA 線的標籤可以被隱藏 (如果 title 設為 '')
                   crosshair: { mode: LightweightCharts.CrosshairMode.Normal }, 
               });
 
@@ -822,20 +837,23 @@
               });
               candleSeries.setData(chartData);
 
-              // ----- 修正：MA 價格標籤不顯示 (title: '') -----
+              // ----- 繪製 MA 均線系列 -----
               MA_PERIODS.forEach(ma => {
                   const maData = calculateSMA(chartData, ma.period);
                   
                   const maSeries = klineChart.addLineSeries({
                       color: ma.color,
                       lineWidth: 1, 
-                      // ⬇️ 關鍵修正：將 title 設為空字串 ''，以移除價格軸上的 MA 標籤 (例如 5MA)
+                      // 移除價格軸上的 MA 標籤
                       title: '', 
                       lastValueVisible: false, // MA 軸標籤不顯示
                       priceLineVisible: false, // MA 價格線不顯示
                   });
 
-                  maSeries.setData(maData.filter(d => d.value !== null));
+                  maSeries.setData(maData.filter(d => d.value !== null).map(d => ({
+                      time: d.time,
+                      value: d.value
+                  })));
                   ma.series = maSeries; // 儲存 series 引用給 tooltip 使用
               });
               
@@ -874,7 +892,7 @@
               }));
               volumeSeries.setData(volumeData);
               
-              // ⬇️ 修復滑鼠移動數值不跟隨的問題：監聽滑鼠移動事件，並用自訂 tooltip 顯示
+              // 監聽滑鼠移動事件，並用自訂 tooltip 顯示
               klineChart.subscribeCrosshairMove(updateCustomTooltip);
 
 

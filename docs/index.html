@@ -176,7 +176,7 @@
     toggleView('insights');
   });
 
-  // --- 載入 data.json 建股票清單 ---
+  // --- 載入 data.json 建股票清單 (省略，未修改) ---
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -688,8 +688,24 @@
                   timeScale: {
                       timeVisible: true,
                       secondsVisible: false,
+                      // ⬇️ 修改 2: 自訂格式化，隱藏日期中的「日」字
+                      tickMarkFormatter: (time, tickMarkType, locale) => {
+                          const date = new Date(time * 1000); // Lightweight Charts time 是秒級的時間戳
+                          const day = date.getDate();
+                          const month = date.getMonth() + 1; // getMonth() 回傳 0-11
+                          
+                          if (tickMarkType === LightweightCharts.TickMarkType.Month) {
+                              // 只顯示月份
+                              return `${month}月`;
+                          }
+                          if (tickMarkType === LightweightCharts.TickMarkType.Year) {
+                              // 顯示年份
+                              return date.getFullYear();
+                          }
+                          // 預設情況 (週/日)，只顯示日期數值，不帶「日」字
+                          return `${day}`; 
+                      },
                   },
-                  // 隱藏預設的標籤 (pane)
                   paneContainer: klineChartContainer
               });
 
@@ -700,7 +716,7 @@
                   borderVisible: false,
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
-                  title: 'K線' // 讓 K 線顯示標籤
+                  title: 'K線' // 保留 K 線標籤
               });
               candleSeries.setData(chartData);
 
@@ -718,8 +734,8 @@
                   const maSeries = klineChart.addLineSeries({
                       color: ma.color,
                       lineWidth: 1, 
-                      title: ma.title, 
-                      // ⬇️ 關鍵修改：隱藏圖表上的價格標籤和數值
+                      // ⬇️ 關鍵修改 1: 隱藏圖表上的 MA 價格標籤和數值
+                      title: false, // 不在圖表上顯示 Series 標題
                       lastValueVisible: false, // 不顯示最新的價格數值
                       priceLineVisible: false, // 不顯示價格線
                   });
@@ -727,7 +743,7 @@
                   maSeries.setData(maData.filter(d => d.value !== null));
               });
               
-              // 繪製 MA 客製化圖例
+              // 繪製 MA 客製化圖例 (放在圖表下方)
               drawLegend(periods);
               // ------------------------------------------------
 
@@ -743,7 +759,7 @@
               const volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
-                  title: '成交量' // 讓成交量顯示標籤
+                  title: '成交量' // 保留成交量標籤
               });
 
               klineChart.priceScale('volume').applyOptions({

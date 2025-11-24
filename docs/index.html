@@ -29,12 +29,17 @@
     #clear-input-btn:hover {
       color: #6b7280;
     }
-    /* ✅ 根據您的需求，解除註解以隱藏 TradingView 的 Logo 和 Watermark */
+    /* ✅ 增強樣式以隱藏 Lightweight Charts 的 Logo 和 Watermark */
+    /* 如果 Logo 仍然存在，請清除您的瀏覽器快取 (Ctrl+F5) */
     .tv-lightweight-charts-logo,
     .tv-lightweight-charts-watermark,
     .tv-lightweight-charts-watermark__text,
     .tv-watermark,
-    .tv-logo { display: none !important; }
+    .tv-logo {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
   </style>
 </head>
 
@@ -471,7 +476,7 @@
     } else {
       toggleView('insights');
       pageTitle.textContent = "法人買賣超查詢";
-      // 可以在這裡加入錯誤提示
+      // 顯示查詢失敗信息
       const errorRow = document.createElement("tr");
       errorRow.innerHTML = `<td colspan="5" class="border px-4 py-8 text-red-500">找不到 ${keyword} 的法人買賣超資料。</td>`;
       tableBody.appendChild(errorRow);
@@ -571,11 +576,11 @@
           .then(klineData => {
               let filteredData = [];
 
-              // ✅ 核心修改：專門處理 {"0050": [...]} 這種頂層物件格式
+              // 處理 {"0050": [...]} 這種頂層物件格式
               if (klineData && klineData[stockId]) {
                   filteredData = klineData[stockId];
               }
-              // 保留原有的其他兼容性檢查 (以防未來檔案格式變動)
+              // 保留原有的其他兼容性檢查
               else if (Array.isArray(klineData)) {
                   filteredData = klineData.filter(item =>
                       String(item.stock_id).replace(/\s|　/g, "") === String(stockId)
@@ -593,7 +598,7 @@
 
               const chartData = [];
 
-              filteredData.forEach((item, index) => {
+              filteredData.forEach((item) => {
                   const validOpen   = ensureFiniteNumber(item.open);
                   const validHigh   = ensureFiniteNumber(item.high);
                   const validLow    = ensureFiniteNumber(item.low);
@@ -602,12 +607,10 @@
 
                   if (validOpen === 0 || validHigh === 0 || validLow === 0 || validClose === 0) return;
 
-                  // 兼容處理 'date' 和 'Date' 欄位
                   const dateStr = (item.date || item.Date || item.trade_date || "").toString();
                   if (!dateStr) return;
 
                   chartData.push({
-                      // Lightweight Charts 需要時間戳記 (timestamp) 或 ISO 8601 格式的字串 (YYYY-MM-DD)
                       time: dateStr, 
                       open: validOpen,
                       high: validHigh,
@@ -623,7 +626,6 @@
               }
 
               klineChartContainer.innerHTML = "";
-              // 確保寬度可以自動調整
               const width = klineChartContainer.parentElement.clientWidth; 
 
               klineChart = LightweightCharts.createChart(klineChartContainer, {
@@ -637,10 +639,29 @@
                   timeScale: {
                       timeVisible: true,
                       secondsVisible: false,
+                      // ✅ X 軸刻度格式化器，只顯示月份
+                      tickMarkFormatter: (time, tickMarkType, locale) => {
+                          const dateStr = String(time); // 格式為 YYYY-MM-DD
+                          if (!dateStr || dateStr.length < 7) {
+                              return '';
+                          }
+
+                          const month = dateStr.substring(5, 7); // 取得 MM
+                          const year = dateStr.substring(0, 4);  // 取得 YYYY
+
+                          // 如果是年份刻度，顯示年份
+                          if (tickMarkType === LightweightCharts.TickMarkType.Year) {
+                              return year;
+                          }
+                          
+                          // 對於月份和每日刻度，顯示 'X月'
+                          // parseInt(month, 10) 會自動移除前導零
+                          return parseInt(month, 10) + '月';
+                      },
                   },
               });
 
-              // K 線 series（使用預設 right price scale）
+              // K 線 series
               const candleSeries = klineChart.addCandlestickSeries({
                   upColor: '#ef5350',
                   downColor: '#26a69a',
@@ -650,32 +671,31 @@
               });
               candleSeries.setData(chartData);
 
-              // ▶ 調整股價的 price scale，只佔上方 75% (從 70% 改成 75%，讓 K 線更大一點)
+              // 調整股價的 price scale
               klineChart.priceScale('right').applyOptions({
                   scaleMargins: {
-                      top: 0.1,   // 上方留一點空間
-                      bottom: 0.25 // 底部空出 25% 給成交量
+                      top: 0.1, 
+                      bottom: 0.25 
                   }
               });
 
-              // 成交量 series，用獨立的 'volume' scale，佔下方 25%
+              // 成交量 series
               const volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
               });
 
-              // ▶ 調整成交量的 price scale
+              // 調整成交量的 price scale
               klineChart.priceScale('volume').applyOptions({
                   scaleMargins: {
-                      top: 0.75,  // 從 75% 開始
-                      bottom: 0.05 // 底部留一點空間
+                      top: 0.75,  
+                      bottom: 0.05 
                   }
               });
 
               const volumeData = chartData.map(d => ({
                   time: d.time,
                   value: ensureFiniteNumber(d.value),
-                  // 根據收盤價和開盤價來決定成交量的顏色
                   color: d.close >= d.open ? '#ef535099' : '#26a69a99',
               }));
               volumeSeries.setData(volumeData);
@@ -691,7 +711,6 @@
 
   window.addEventListener('resize', () => {
       if (klineChart && klineChartContainer) {
-          // 重新計算父容器寬度
           const width = klineChartContainer.parentElement.clientWidth; 
           klineChart.applyOptions({ width });
       }

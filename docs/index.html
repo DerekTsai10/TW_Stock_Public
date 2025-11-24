@@ -608,7 +608,7 @@
       klineStaticLegend.innerHTML = '';
       periods.forEach(ma => {
           const item = document.createElement('div');
-          item.className = 'legend-item';
+          item.className = 'legend-item mx-2';
           
           const colorBox = document.createElement('span');
           colorBox.className = 'legend-color w-3 h-1.5';
@@ -630,7 +630,7 @@
       if (!klineLegend) return;
       
       // 如果沒有時間點數據，則隱藏圖例
-      if (!param.time || !param.point) {
+      if (!param.time) {
           klineLegend.classList.add('hidden');
           return;
       }
@@ -697,7 +697,7 @@
       // 調整 tooltip 位置，避免超出邊界
       const chartWidth = klineChartContainer.clientWidth;
       const tooltipWidth = klineLegend.offsetWidth;
-      const pointX = param.point.x;
+      const pointX = param.point ? param.point.x : chartWidth / 2; // 如果沒有點，預設中間
       
       let left = pointX + 15; // 預設在游標右側
 
@@ -715,8 +715,9 @@
   function loadKlineData(stockId) {
       if (!klineChartContainer) return;
 
+      // 重設容器內容，並確保動態圖例容器存在
       klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">載入中...</div>
-          <div id="kline-legend" class="hidden"></div>`; // 重新創建動態圖例容器
+          <div id="kline-legend" class="hidden"></div>`; 
       
       // 重設全域變數和靜態圖例
       klineStaticLegend.innerHTML = '';
@@ -727,7 +728,7 @@
           volumeSeries = null;
           MA_PERIODS.forEach(ma => ma.series = null);
       }
-      klineLegend.classList.add('hidden');
+      if (klineLegend) klineLegend.classList.add('hidden'); // 確保隱藏
 
       if (typeof LightweightCharts === 'undefined' || typeof LightweightCharts.createChart !== 'function') {
           console.error("[❌ LOG - Kline] LightweightCharts 未載入或不支援 createChart");
@@ -791,6 +792,7 @@
 
               const width = klineChartContainer.clientWidth || 600;
               
+              // 重新初始化圖表
               klineChart = LightweightCharts.createChart(klineChartContainer, {
                   width: width,
                   height: 300,
@@ -803,6 +805,7 @@
                       timeVisible: true,
                       secondsVisible: false,
                   },
+                  // 啟用 Normal 模式，讓 K 線和 MA 線的標籤可以被隱藏
                   crosshair: { mode: LightweightCharts.CrosshairMode.Normal }, 
               });
 
@@ -814,7 +817,7 @@
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
                   title: 'K線', 
-                  lastValueVisible: true,
+                  lastValueVisible: true, // K 線價格標籤保留
                   priceLineVisible: true,
               });
               candleSeries.setData(chartData);
@@ -826,7 +829,7 @@
                   const maSeries = klineChart.addLineSeries({
                       color: ma.color,
                       lineWidth: 1, 
-                      // ⬇️ 這裡修正：將 title 設為空字串，以移除價格軸上的 MA 標籤
+                      // ⬇️ 關鍵修正：將 title 設為空字串 ''，以移除價格軸上的 MA 標籤 (例如 5MA)
                       title: '', 
                       lastValueVisible: false, // MA 軸標籤不顯示
                       priceLineVisible: false, // MA 價格線不顯示
@@ -871,7 +874,7 @@
               }));
               volumeSeries.setData(volumeData);
               
-              // ⬇️ 修復滑鼠移動數值不跟隨的問題：監聽滑鼠移動事件
+              // ⬇️ 修復滑鼠移動數值不跟隨的問題：監聽滑鼠移動事件，並用自訂 tooltip 顯示
               klineChart.subscribeCrosshairMove(updateCustomTooltip);
 
 

@@ -1,781 +1,751 @@
 <!DOCTYPE html>
 <html lang="zh-tw">
 <head>
-  <meta charset="utf-8">
-  <title>法人買賣超查詢</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
-  <style>
-    /* ✅ 桌機維持 scale-150 + 置中（穩定版：與寬度無關） */
-    .desktop-zoom {
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%) scale(1.5);
-      /* 核心修正：將縮放原點從 top left 改為 top center，確保縮放後置中 */
-      transform-origin: top center; 
-    }
+  <meta charset="utf-8">
+  <title>法人買賣超查詢</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+  <style>
+    /* ✅ 桌機維持原本 scale-150（用 transform） */
+    .desktop-zoom {
+      transform: scale(1.5);
+      transform-origin: top left;
+    }
 
-    /* ✅ 只讓 lightweight-charts 的外框「視覺上不吃 scale」 */
-    .no-scale-chart {
-      width: 150%;
-      transform: scale(0.6666667);
-      transform-origin: top left;
-    }
+    /* ✅ 只讓 lightweight-charts 的外框「視覺上不吃 scale」 */
+    .no-scale-chart {
+      width: 150%;                 /* 先把 layout 放大 1.5 倍 */
+      transform: scale(0.6666667);  /* 再反向縮放 2/3 抵銷父層 */
+      transform-origin: top left;
+    }
 
-    @media (max-width: 768px) {
-      .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
-      .mobile-col { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
-      .mobile-center { text-align: center !important; }
-      input, select, button { font-size: 1rem; padding: 0.6rem 0.8rem; }
-      h1 { font-size: 1.8rem; }
-      h3 { font-size: 1.5rem; }
+    @media (max-width: 768px) {
+      .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
+      .mobile-col { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+      .mobile-center { text-align: center !important; }
+      input, select, button { font-size: 1rem; padding: 0.6rem 0.8rem; }
+      h1 { font-size: 1.8rem; }
+      h3 { font-size: 1.5rem; }
 
-      /* ✅ 手機不要縮放，也不要反縮放 + 取消 left/translate */
-      .desktop-zoom { 
-        position: static !important;
-        left: 0 !important;
-        transform: none !important; 
-      }
-      .no-scale-chart { width: 100% !important; transform: none !important; }
-    }
+      /* ✅ 手機不要縮放，也不要反縮放 */
+      .desktop-zoom { transform: none !important; }
+      .no-scale-chart { width: 100% !important; transform: none !important; }
+    }
 
-    #suggestions { z-index: 20; }
-    #clear-input-btn {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #9ca3af;
-      transition: color 0.15s;
-    }
-    #clear-input-btn:hover {
-      color: #6b7280;
-    }
+    #suggestions { z-index: 20; }
+    #clear-input-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #9ca3af;
+      transition: color 0.15s;
+    }
+    #clear-input-btn:hover {
+      color: #6b7280;
+    }
 
-    #kline-legend {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        z-index: 10;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 5px 10px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        font-size: 0.8rem;
-        line-height: 1.4;
-    }
-    .legend-item { display: flex; align-items: center; }
-    .legend-color {
-        width: 10px; height: 3px; margin-right: 5px; border-radius: 2px;
-    }
-  </style>
+    #kline-legend {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 5px 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+    .legend-item { display: flex; align-items: center; }
+    .legend-color {
+        width: 10px; height: 3px; margin-right: 5px; border-radius: 2px;
+    }
+  </style>
 </head>
 
 <body class="p-6 bg-gray-50 text-lg">
-  <div class="max-w-7xl mx-auto desktop-zoom origin-top mobile-reset transition-transform duration-300">
-
-    <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">
-      法人買賣超查詢
-    </h1>
-
-    <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-80 mx-auto md:mx-0">
-      <label for="search-input" class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">
-        輸入股票代碼或名稱：
-      </label>
-      <div class="relative w-full md:w-80">
-        <input type="text" id="search-input"
-               placeholder="台積電 或 2330"
-               class="w-full border p-3 rounded text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
-               autocomplete="off"
-               autofocus>
-        <button id="clear-input-btn" class="absolute hidden focus:outline-none" title="清除輸入">
-            &times;
-        </button>
-        <ul id="suggestions"
-            class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-20 text-lg"></ul>
-      </div>
-    </div>
-
-        <div id="insights-view">
-      <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
-        <div class="p-6 border rounded bg-white shadow">
-          <h3 id="insights-title" class="font-bold text-2xl mb-6 mobile-center">📊 指標觀察清單</h3>
-
-          <div class="grid grid-cols-2 gap-6 text-gray-700">
-            <div>
-              <h4 class="font-semibold mb-3">🌏 當日外本比前 10</h4>
-              <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
-            </div>
-            <div>
-              <h4 class="font-semibold mb-3">🏦 當日投本比前 10</h4>
-              <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
-            </div>
-          </div>
-
-          <div id="period-section" class="mt-8"></div>
-        </div>
-
-        <div class="p-6 border rounded bg-white shadow">
-          <div class="grid grid-cols-2 gap-6 mobile-col">
-            <div>
-              <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
-              <div id="newcomers-container" class="text-gray-700 text-base">（此區塊暫不顯示內容）</div>
-            </div>
-            <div>
-              <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 爆量偵測</h3>
-              <div id="explosive-container" class="text-gray-700 text-base">（此區塊暫不顯示內容）</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-        <div id="stock-view" class="hidden">
-                <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
-            <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
-            <div id="klineChartContainer" class="relative" style="height: 300px;">
-                <div class="text-center py-4 text-gray-500">載入中...</div>
-                                 <div id="kline-legend" class="hidden"></div>
-            </div>
-                         <div id="kline-static-legend" class="mt-4 flex flex-wrap justify-center text-sm"></div>
-        </div>
-
-        <div id="chart-container" class="p-6 border rounded bg-white shadow mb-8">
-            <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超趨勢圖 (Chart.js)</h3>
-            <div class="relative h-96">
-                <canvas id="tradingChart"></canvas>
-            </div>
-        </div>
-
-        <div class="p-6 border rounded bg-white shadow overflow-x-auto">
-            <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超 (張)</h3>
-            <table id="trading-table" class="min-w-full text-center border-collapse border text-lg">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="border px-4 py-3 whitespace-nowrap">日期</th>
-                        <th class="border px-4 py-3 whitespace-nowrap">外資</th>
-                        <th class="border px-4 py-3 whitespace-nowrap">投信</th>
-                        <th class="border px-4 py-3 whitespace-nowrap">自營商</th>
-                        <th class="border px-4 py-3 whitespace-nowrap">合計</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="5" class="border px-4 py-8 text-gray-500">
-                            請輸入股票代碼或名稱進行查詢
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-  </div>
-
-  <script>
-  let records = [];
-  let stockList = [];
-  let tradingChart;
-
-  const klineChartContainer = document.getElementById('klineChartContainer');
-  let klineChart = null;
-  let klineLegend = document.getElementById('kline-legend');
-  const klineStaticLegend = document.getElementById('kline-static-legend');
-
-  const input = document.getElementById("search-input");
-  const suggestions = document.getElementById("suggestions");
-  const tableBody = document.querySelector("#trading-table tbody");
-  const pageTitle = document.getElementById("page-title");
-  const clearBtn = document.getElementById("clear-input-btn");
-
-  const insightsView = document.getElementById('insights-view');
-  const stockView = document.getElementById('stock-view');
-
-  const MA_PERIODS = [
-      { period: 5, color: 'rgb(255, 165, 0)', title: '5MA', series: null },
-      { period: 10, color: 'rgb(50, 205, 50)', title: '10MA', series: null },
-      { period: 20, color: 'rgb(255, 0, 255)', title: '20MA', series: null },
-      { period: 60, color: 'rgb(65, 105, 225)', title: '60MA', series: null }
-  ];
-  let candleSeries = null;
-  let volumeSeries = null;
-
-  function toggleView(view) {
-    if (view === 'insights') {
-      insightsView.classList.remove('hidden');
-      stockView.classList.add('hidden');
-      pageTitle.textContent = "法人買賣超查詢";
-    } else if (view === 'stock') {
-      insightsView.classList.add('hidden');
-      stockView.classList.remove('hidden');
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    toggleView('insights');
-  });
-
-  fetch("data.json")
-    .then(res => res.json())
-    .then(data => {
-      records = data.records;
-      records.forEach(day => {
-        day.stocks.forEach(s => {
-          if (!stockList.find(x => x.id === s.stock_id)) {
-            stockList.push({ id: s.stock_id, name: s.name.trim() });
-          }
-        });
-      });
-    });
-
-  function createStockLink(stock_id, name) {
-    const a = document.createElement("a");
-    a.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${stock_id}`;
-    a.target = "_blank";
-    a.textContent = `${name} (${stock_id})`;
-    a.className = "hover:underline text-black";
-    return a;
-  }
-
-  fetch("insights.json")
-    .then(res => res.json())
-    .then(data => {
-      if (data.date) {
-        document.getElementById("insights-title").textContent =
-          `📊 指標觀察清單 (資料日期：${data.date})`;
-      }
-
-      const dailyForeign = (data.foreign_ratio_ranking || []).slice(0, 10);
-      const dailyInvest  = (data.invest_ratio_ranking  || []).slice(0, 10);
-
-      const foreignList = document.getElementById("foreign_ratio_list");
-      const investList  = document.getElementById("invest_ratio_list");
-      foreignList.innerHTML = "";
-      investList.innerHTML  = "";
-
-      const dailyBoth = new Set(
-        dailyForeign
-          .map(i => i.stock_id)
-          .filter(id => dailyInvest.some(j => j.stock_id === id))
-      );
-
-      const renderListItem = (listEl, items, ratioKey, bothSet) => {
-        items.forEach(item => {
-          const li = document.createElement("li");
-          const a = createStockLink(item.stock_id, item.name);
-
-          const ratioValue = (item[ratioKey] * 100).toFixed(2);
-          const text = document.createTextNode(` : ${ratioValue}%`);
-
-          if (bothSet.has(item.stock_id)) {
-            li.classList.add("text-red-600", "font-bold");
-            a.className = "hover:underline text-red-600 font-bold";
-          }
-
-          li.appendChild(a);
-          li.appendChild(text);
-          listEl.appendChild(li);
-        });
-      };
-
-      renderListItem(foreignList, dailyForeign, 'foreign_ratio', dailyBoth);
-      renderListItem(investList, dailyInvest, 'invest_ratio', dailyBoth);
-
-      const periodRoot = document.getElementById("period-section");
-
-      function buildPeriodBlock(titleHTML, foreignKey, investKey, prefix) {
-        const section = document.createElement("div");
-        section.className = "mt-6 border-t pt-4";
-        section.innerHTML = `
-          <h4 class="font-bold text-xl mb-3">${titleHTML}</h4>
-          <div class="grid grid-cols-2 gap-6 text-gray-700">
-            <div>
-              <h5 class="font-semibold mb-2 text-base">🌏 外資</h5>
-              <ul id="${prefix}-foreign" class="list-disc pl-6 space-y-2 text-base"></ul>
-            </div>
-            <div>
-              <h5 class="font-semibold mb-2 text-base">🏦 投信</h5>
-              <ul id="${prefix}-invest" class="list-disc pl-6 space-y-2 text-base"></ul>
-            </div>
-          </div>
-        `;
-        periodRoot.appendChild(section);
-
-        const fList = (data[foreignKey] || []).slice(0, 10);
-        const iList = (data[investKey]  || []).slice(0, 10);
-
-        const both = new Set(
-          fList.map(i => i.stock_id).filter(id => iList.some(j => j.stock_id === id))
-      );
-
-        const fUl = document.getElementById(`${prefix}-foreign`);
-        const iUl = document.getElementById(`${prefix}-invest`);
-
-        renderListItem(fUl, fList, 'foreign_ratio', both);
-        renderListItem(iUl, iList, 'invest_ratio', both);
-      }
-
-      buildPeriodBlock(
-        "📅 近5日外/投本比前 10",
-        "foreign_ratio_5d_ranking",
-        "invest_ratio_5d_ranking",
-        "p5d"
-      );
-
-      buildPeriodBlock(
-        "🗓️ 近10日外/投本比前 10",
-        "foreign_ratio_10d_ranking",
-        "invest_ratio_10d_ranking",
-        "p10d"
-      );
-    });
-
-  fetch("newcomers.json")
-    .then(res => res.json())
-    .then(data => {
-      const newcomers = data.newcomers || {};
-      const container = document.getElementById("newcomers-container");
-      container.innerHTML = "";
-
-      const addList = (title, items) => {
-        if (items && items.length > 0) {
-          const header = document.createElement("p");
-          header.className = "font-semibold mt-2";
-          header.textContent = title;
-          container.appendChild(header);
-
-          const ul = document.createElement("ul");
-          ul.className = "list-disc pl-6 space-y-1";
-          items.slice(0, 10).forEach(stock => {
-            const li = document.createElement("li");
-            const a = createStockLink(stock.stock_id, stock.name);
-            li.appendChild(a);
-            ul.appendChild(li);
-          });
-          container.appendChild(ul);
-        }
-      };
-
-      addList("🌏 外資新上榜：", newcomers.foreign);
-      addList("🏦 投信新上榜：", newcomers.invest);
-      if ((!newcomers.foreign || newcomers.foreign.length === 0) &&
-          (!newcomers.invest || newcomers.invest.length === 0)) {
-        container.textContent = "（今日無新上榜股票）";
-      }
-    })
-    .catch(() => {
-      document.getElementById("newcomers-container").textContent = "無法載入資料";
-    });
-
-  fetch("explosive.json")
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("explosive-container");
-      container.innerHTML = "";
-
-      if (!data || !data.explosive || data.explosive.length === 0) {
-        container.textContent = "（今日無爆量股票）";
-        return;
-      }
-
-      const ul = document.createElement("ul");
-      ul.className = "list-disc pl-6 space-y-1";
-      data.explosive.slice(0, 10).forEach(stock => {
-        const li = document.createElement("li");
-        const a = createStockLink(stock.stock_id, stock.name);
-        li.appendChild(a);
-
-        const tag = document.createTextNode(` ${stock.tag}`);
-        li.appendChild(tag);
-        ul.appendChild(li);
-      });
-      container.appendChild(ul);
-    })
-    .catch(() => {
-      document.getElementById("explosive-container").textContent = "無法載入資料";
-    });
-
-  // --- 搜尋 ---
-  input.addEventListener("input", function() {
-    if (this.value.trim()) {
-      clearBtn.classList.remove("hidden");
-    } else {
-      clearBtn.classList.add("hidden");
-      suggestions.classList.add("hidden");
-      toggleView('insights');
-    }
-
-    const keyword = this.value.trim();
-    suggestions.innerHTML = "";
-    if (!keyword) { suggestions.classList.add("hidden"); return; }
-
-    const matched = stockList.filter(s =>
-      s.id.includes(keyword) || s.name.includes(keyword)
-    ).slice(0, 10);
-
-    if (matched.length === 0) { suggestions.classList.add("hidden"); return; }
-
-    matched.forEach(s => {
-      const li = document.createElement("li");
-      li.textContent = `${s.name} (${s.id})`;
-      li.className = "p-2 hover:bg-gray-100 cursor-pointer";
-      li.addEventListener("click", () => {
-        input.value = s.id;
-        suggestions.classList.add("hidden");
-        clearBtn.classList.remove("hidden");
-        showStockData(s.id);
-      });
-      suggestions.appendChild(li);
-    });
-    suggestions.classList.remove("hidden");
-  });
-
-  clearBtn.addEventListener("click", () => {
-    input.value = "";
-    clearBtn.classList.add("hidden");
-    suggestions.classList.add("hidden");
-
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="5" class="border px-4 py-8 text-gray-500">
-          請輸入股票代碼或名稱進行查詢
-        </td>
-      </tr>
-    `;
-    toggleView('insights');
-    input.focus();
-  });
-
-  input.addEventListener("keyup", e => {
-    if (e.key === "Enter") {
-      const keyword = e.target.value.trim();
-      if (keyword) { showStockData(keyword); suggestions.classList.add("hidden"); }
-    }
-  });
-
-  function showStockData(keyword) {
-    tableBody.innerHTML = "";
-    const colorize = (val) => {
-      const num = Number(val);
-      const formattedVal = num.toLocaleString();
-      if (num > 0) return `<span class="text-red-600">${formattedVal}</span>`;
-      if (num < 0) return `<span class="text-green-600">${formattedVal}</span>`;
-      return formattedVal;
-    };
-
-    const kw = keyword.toString().replace(/\s|　/g, "").trim();
-    let foundStock = null;
-    let dataFound = false;
-
-    const chartLabels = [];
-    const chartForeignData = [];
-    const chartInvestData = [];
-    const chartDealerData = [];
-    const chartTotalData = [];
-
-    for (let i = records.length - 1; i >= 0; i--) {
-      const day = records[i];
-      const stock = day.stocks.find(s =>
-        s.stock_id.toString().replace(/\s|　/g, "").trim() === kw ||
-        s.name.replace(/\s|　/g, "").includes(kw)
-      );
-      if (stock) {
-        dataFound = true;
-        if (!foundStock) foundStock = stock;
-
-        const foreign = Math.round(stock.foreign_net/1000);
-        const invest  = Math.round(stock.invest_net/1000);
-        const dealer  = Math.round(stock.dealer_net/1000);
-        const total   = Math.round((stock.foreign_net + stock.invest_net + stock.dealer_net)/1000);
-
-        const tr = document.createElement("tr");
-        tr.className = "hover:bg-gray-50";
-        tr.innerHTML = `
-          <td class="border px-4 py-2">${day.date}</td>
-          <td class="border px-4 py-2">${colorize(foreign)}</td>
-          <td class="border px-4 py-2">${colorize(invest)}</td>
-          <td class="border px-4 py-2">${colorize(dealer)}</td>
-          <td class="border px-4 py-2">${colorize(total)}</td>`;
-        tableBody.prepend(tr);
-
-        chartLabels.push(day.date);
-        chartForeignData.push(foreign);
-        chartInvestData.push(invest);
-        chartDealerData.push(dealer);
-        chartTotalData.push(total);
-      }
-    }
-
-    if (foundStock && dataFound) {
-      toggleView('stock');
-      pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
-      loadKlineData(foundStock.stock_id.toString());
-      updateChart(chartLabels, chartForeignData, chartInvestData, chartDealerData, chartTotalData);
-    } else {
-      toggleView('insights');
-      pageTitle.textContent = "法人買賣超查詢";
-      console.log(`[🔍 LOG - Search] 查詢失敗或無法人買賣超資料: ${keyword}`);
-    }
-  }
-
-  function updateChart(labels, foreignData, investData, dealerData, totalData) {
-    const ctx = document.getElementById('tradingChart').getContext('2d');
-
-    if (tradingChart) tradingChart.destroy();
-
-    tradingChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          { label: '外資', data: foreignData, borderColor: 'rgb(255, 99, 132)', backgroundColor: 'rgba(255, 99, 132, 0.5)', tension: 0.3, fill: false },
-          { label: '投信', data: investData, borderColor: 'rgb(54, 162, 235)', backgroundColor: 'rgba(54, 162, 235, 0.5)', tension: 0.3, fill: false },
-          { label: '自營商', data: dealerData, borderColor: 'rgb(75, 192, 192)', backgroundColor: 'rgba(75, 192, 192, 0.5)', tension: 0.3, fill: false },
-          { label: '合計', data: totalData, borderColor: 'rgb(153, 102, 255)', backgroundColor: 'rgba(153, 102, 255, 0.5)', tension: 0.3, fill: false, borderWidth: 2 }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { title: { display: false }, tooltip: { mode: 'index', intersect: false } },
-        scales: { x: { title: { display: true, text: '日期' } }, y: { title: { display: true, text: '買賣超張數' } } }
-      }
-    });
-  }
-
-  const ensureFiniteNumber = (value) => {
-      const num = Number(value);
-      return (Number.isFinite(num) && num !== null) ? num : 0;
-  };
-
-  /**
-   * 計算簡單移動平均線 (Simple Moving Average, SMA)
-   */
-  function calculateSMA(data, period) {
-      const result = [];
-      for (let i = 0; i < data.length; i++) {
-          const currentClose = ensureFiniteNumber(data[i].close);
-          if (i < period - 1) { result.push({ time: data[i].time, value: null }); continue; }
-          let sum = 0;
-          for (let j = 0; j < period; j++) sum += ensureFiniteNumber(data[i - j].close);
-          result.push({ time: data[i].time, value: sum / period });
-      }
-      return result;
-  }
-
-  /**
-   * 繪製靜態圖例 (圖表下方)
-   */
-  function drawStaticLegend(periods) {
-      klineStaticLegend.innerHTML = '';
-      periods.forEach(ma => {
-          const item = document.createElement('div');
-          item.className = 'legend-item mx-2';
-          const colorBox = document.createElement('span');
-          colorBox.className = 'legend-color w-3 h-1.5';
-          colorBox.style.backgroundColor = ma.color;
-          const titleText = document.createTextNode(` ${ma.title}`);
-          item.appendChild(colorBox);
-          item.appendChild(titleText);
-          klineStaticLegend.appendChild(item);
-      });
-  }
-
-  /**
-   * 監聽滑鼠移動事件，更新自訂圖例 (Tooltip)
-   */
-  function updateCustomTooltip(param) {
-      if (!klineLegend) return;
-      
-      // 如果沒有時間點數據，則隱藏圖例
-      if (!param.time) { klineLegend.classList.add('hidden'); return; }
-
-      // 將時間戳記 (秒) 轉換為 Date 物件
-      const date = new Date(param.time * 1000);
-      // 格式化日期為 YYYY-MM-DD
-      const formattedDate = date.toLocaleDateString('zh-TW', {
-          year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Taipei'
-      }).replace(/\//g, '-');
-
-      let html = `<div class="font-bold mb-1">${formattedDate}</div>`;
-      const maData = {};
-      let volumeValue = null, openValue = null, highValue = null, lowValue = null, closeValue = null;
-
-      param.seriesData.forEach((data, series) => {
-          if (series === candleSeries) {
-              if (data.value) {
-                  openValue = data.value.open.toFixed(2);
-                  highValue = data.value.high.toFixed(2);
-                  lowValue  = data.value.low.toFixed(2);
-                  closeValue= data.value.close.toFixed(2);
-              }
-          } else if (series === volumeSeries) {
-              volumeValue = data.value;
-          } else {
-              const ma = MA_PERIODS.find(m => m.series === series);
-              if (ma && data.value) maData[ma.title] = { value: data.value, color: ma.color };
-          }
-      });
-
-      if (openValue !== null) {
-          // 判斷紅綠K線
-          const closeColor = closeValue > openValue ? 'text-red-600' : (closeValue < openValue ? 'text-green-600' : 'text-gray-700');
-          html += `<div class="${closeColor}">
-                       <span class="text-gray-600">O:</span> ${openValue}
-                       <span class="text-gray-600">H:</span> ${highValue}
-                       <span class="text-gray-600">L:</span> ${lowValue}
-                       <span class="text-gray-600">C:</span> <span class="font-bold">${closeValue}</span>
-                   </div>`;
-      }
-
-      MA_PERIODS.forEach(ma => {
-          const data = maData[ma.title];
-          const value = data ? data.value.toFixed(2) : '-';
-          html += `<div class="legend-item"><span class="legend-color" style="background-color: ${ma.color}"></span> ${ma.title}: ${value}</div>`;
-      });
-
-      const vol = volumeValue !== null ? (volumeValue / 1000000).toFixed(2) + 'M' : '-';
-      html += `<div class="mt-1"><span class="font-semibold text-gray-600">成交量:</span> ${vol}</div>`;
-
-      klineLegend.innerHTML = html;
-      klineLegend.classList.remove('hidden');
-
-      // 調整 tooltip 位置
-      const chartWidth = klineChartContainer.clientWidth;
-      const tooltipWidth = klineLegend.offsetWidth;
-      const pointX = param.point ? param.point.x : chartWidth / 2;
-      let left = pointX + 15;
-      if (left + tooltipWidth > chartWidth) {
-          left = pointX - tooltipWidth - 15;
-          if (left < 10) left = 10;
-      }
-      klineLegend.style.left = `${left}px`;
-  }
-
-  // --- K 線圖功能 ---
-  function loadKlineData(stockId) {
-      if (!klineChartContainer) return;
-
-      klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">載入中...</div>
-          <div id="kline-legend" class="hidden"></div>`;
-      klineLegend = document.getElementById('kline-legend');
-
-      if(klineStaticLegend) klineStaticLegend.innerHTML = '';
-      if (klineChart) { try { klineChart.remove(); } catch (e) {} klineChart = null; }
-      candleSeries = null; volumeSeries = null; MA_PERIODS.forEach(ma => ma.series = null);
-
-      fetch("Kline.json")
-          .then(res => { if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`); return res.json(); })
-          .then(klineData => {
-              let filteredData = [];
-              if (!Array.isArray(klineData) && klineData[stockId]) filteredData = klineData[stockId];
-              else if (Array.isArray(klineData)) filteredData = klineData.filter(item => String(item.stock_id).trim() === String(stockId));
-              else if (Array.isArray(klineData.stocks)) filteredData = klineData.stocks.filter(item => String(item.stock_id).trim() === String(stockId));
-
-              if (!filteredData || filteredData.length === 0) {
-                  klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">找不到 ${stockId} 的 K 線資料。</div>`;
-                  return;
-              }
-
-              const chartData = [];
-              filteredData.forEach(item => {
-                  const o = ensureFiniteNumber(item.open), h = ensureFiniteNumber(item.high),
-                        l = ensureFiniteNumber(item.low),  c = ensureFiniteNumber(item.close),
-                        v = ensureFiniteNumber(item.volume);
-                  if (!o || !h || !l || !c) return;
-                  const dateStr = (item.date || item.Date || item.trade_date || "").toString();
-                  if (!dateStr) return;
-                  // ⭐ 修正日期偏移問題：將日期字串轉換為當日午夜的 Unix 時間戳記 (秒)
-                  const t = new Date(dateStr.replace(/-/g,'/')).getTime()/1000;
-                  chartData.push({ time:t, open:o, high:h, low:l, close:c, value:v });
-              });
-
-              if (chartData.length === 0) {
-                  klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">找到原始資料，但無法繪製有效 K 線。</div>`;
-                  return;
-              }
-              
-              // 根據螢幕寬度設定圖表高度
-              const isDesktop = window.innerWidth > 768;
-              const chartHeight = isDesktop ? 450 : 300;
-              klineChartContainer.style.height = chartHeight + "px";
-
-              klineChartContainer.innerHTML = "";
-              const width = klineChartContainer.clientWidth || 600;
-
-              // 重新初始化圖表
-              klineChart = LightweightCharts.createChart(klineChartContainer, {
-                  width, height: chartHeight,
-                  layout: { backgroundColor: '#ffffff', textColor: '#333' },
-                  grid: {
-                      vertLines: { color: '#e0e0e0' },
-                      horzLines: { color: '#e0e0e0' }
-                  },
-                  timeScale: { timeVisible: true, secondsVisible: false },
-                  crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
-              });
-
-              candleSeries = klineChart.addCandlestickSeries({
-                  upColor: '#ef5350', downColor: '#26a69a',
-                  borderVisible: false, wickUpColor: '#ef5350', wickDownColor: '#26a69a',
-                  title: 'K線', lastValueVisible: true, priceLineVisible: true,
-              });
-              candleSeries.setData(chartData);
-
-              // ----- 繪製 MA 均線系列 -----
-              MA_PERIODS.forEach(ma => {
-                  const maData = calculateSMA(chartData, ma.period);
-                  const maSeries = klineChart.addLineSeries({
-                      color: ma.color, lineWidth: 1,
-                      title: '', 
-                      lastValueVisible: false, priceLineVisible: false,
-                  });
-                  maSeries.setData(maData.filter(d => d.value !== null).map(d => ({ time: d.time, value: d.value })));
-                  ma.series = maSeries;
-              });
-
-              drawStaticLegend(MA_PERIODS);
-
-              // ▶ 調整股價的 price scale
-              klineChart.priceScale('right').applyOptions({
-                  scaleMargins: { top: 0.05, bottom: 0.25 }
-              });
-
-              // 成交量 series
-              volumeSeries = klineChart.addHistogramSeries({
-                  priceScaleId: 'volume',
-                  priceFormat: { type: 'volume' },
-                  title: '成交量', lastValueVisible: true, priceLineVisible: true,
-              });
-
-              klineChart.priceScale('volume').applyOptions({
-                  scaleMargins: { top: 0.8, bottom: 0 }
-              });
-
-              volumeSeries.setData(chartData.map(d => ({
-                  time: d.time, value: ensureFiniteNumber(d.value),
-                  color: d.close >= d.open ? '#ef535099' : '#26a69a99',
-              })));
-
-              klineChart.subscribeCrosshairMove(updateCustomTooltip);
-              klineChart.timeScale().fitContent();
-          })
-          .catch(err => {
-              console.error("[❌ LOG - Kline] K 線圖載入錯誤:", err);
-              klineChartContainer.innerHTML = `<div class="text-center py-4 text-red-500">K 線圖載入錯誤。</div>`;
-          });
-  }
-
-  window.addEventListener('resize', () => {
-      if (klineChart && klineChartContainer) {
-          const isDesktop = window.innerWidth > 768;
-          const chartHeight = isDesktop ? 450 : 300;
-          klineChartContainer.style.height = chartHeight + "px";
-          // 更新圖表尺寸
-          klineChart.applyOptions({ width: klineChartContainer.clientWidth || 600, height: chartHeight });
-      }
-  });
-  </script>
+  <div class="max-w-7xl mx-auto desktop-zoom origin-top mobile-reset transition-transform duration-300">
+
+    <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">
+      法人買賣超查詢
+    </h1>
+
+    <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-80 mx-auto md:mx-0">
+      <label for="search-input" class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">
+        輸入股票代碼或名稱：
+      </label>
+      <div class="relative w-full md:w-80">
+        <input type="text" id="search-input"
+               placeholder="台積電 或 2330"
+               class="w-full border p-3 rounded text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
+               autocomplete="off"
+               autofocus>
+        <button id="clear-input-btn" class="absolute hidden focus:outline-none" title="清除輸入">
+            &times;
+        </button>
+        <ul id="suggestions"
+            class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-20 text-lg"></ul>
+      </div>
+    </div>
+
+    <div id="insights-view">
+      <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
+        <div class="p-6 border rounded bg-white shadow">
+          <h3 id="insights-title" class="font-bold text-2xl mb-6 mobile-center">📊 指標觀察清單</h3>
+
+          <div class="grid grid-cols-2 gap-6 text-gray-700">
+            <div>
+              <h4 class="font-semibold mb-3">🌏 當日外本比前 10</h4>
+              <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3">🏦 當日投本比前 10</h4>
+              <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
+            </div>
+          </div>
+
+          <div id="period-section" class="mt-8"></div>
+        </div>
+
+        <div class="p-6 border rounded bg-white shadow">
+          <div class="grid grid-cols-2 gap-6 mobile-col">
+            <div>
+              <h3 class="font-bold text-2xl mb-4 mobile-center">🚀 新上榜</h3>
+              <div id="newcomers-container" class="text-gray-700 text-base">（此區塊暫不顯示內容）</div>
+            </div>
+            <div>
+              <h3 class="font-bold text-2xl mb-4 mobile-center">🔥 爆量偵測</h3>
+              <div id="explosive-container" class="text-gray-700 text-base">（此區塊暫不顯示內容）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="stock-view" class="hidden">
+        <!-- ✅ 只在這塊套 no-scale-chart -->
+        <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
+            <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
+            <div id="klineChartContainer" class="relative" style="height: 300px;">
+                <div class="text-center py-4 text-gray-500">載入中...</div>
+                 <div id="kline-legend" class="hidden"></div>
+            </div>
+             <div id="kline-static-legend" class="mt-4 flex flex-wrap justify-center text-sm"></div>
+        </div>
+
+        <div id="chart-container" class="p-6 border rounded bg-white shadow mb-8">
+            <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超趨勢圖 (Chart.js)</h3>
+            <div class="relative h-96">
+                <canvas id="tradingChart"></canvas>
+            </div>
+        </div>
+
+        <div class="p-6 border rounded bg-white shadow overflow-x-auto">
+            <h3 class="font-bold text-2xl mb-4 mobile-center">法人買賣超 (張)</h3>
+            <table id="trading-table" class="min-w-full text-center border-collapse border text-lg">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="border px-4 py-3 whitespace-nowrap">日期</th>
+                        <th class="border px-4 py-3 whitespace-nowrap">外資</th>
+                        <th class="border px-4 py-3 whitespace-nowrap">投信</th>
+                        <th class="border px-4 py-3 whitespace-nowrap">自營商</th>
+                        <th class="border px-4 py-3 whitespace-nowrap">合計</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="border px-4 py-8 text-gray-500">
+                            請輸入股票代碼或名稱進行查詢
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+
+  <script>
+  let records = [];
+  let stockList = [];
+  let tradingChart;
+
+  const klineChartContainer = document.getElementById('klineChartContainer');
+  let klineChart = null;
+  let klineLegend = document.getElementById('kline-legend');
+  const klineStaticLegend = document.getElementById('kline-static-legend');
+
+  const input = document.getElementById("search-input");
+  const suggestions = document.getElementById("suggestions");
+  const tableBody = document.querySelector("#trading-table tbody");
+  const pageTitle = document.getElementById("page-title");
+  const clearBtn = document.getElementById("clear-input-btn");
+
+  const insightsView = document.getElementById('insights-view');
+  const stockView = document.getElementById('stock-view');
+
+  const MA_PERIODS = [
+      { period: 5, color: 'rgb(255, 165, 0)', title: '5MA', series: null },
+      { period: 10, color: 'rgb(50, 205, 50)', title: '10MA', series: null },
+      { period: 20, color: 'rgb(255, 0, 255)', title: '20MA', series: null },
+      { period: 60, color: 'rgb(65, 105, 225)', title: '60MA', series: null }
+  ];
+  let candleSeries = null;
+  let volumeSeries = null;
+
+  function toggleView(view) {
+    if (view === 'insights') {
+      insightsView.classList.remove('hidden');
+      stockView.classList.add('hidden');
+      pageTitle.textContent = "法人買賣超查詢";
+    } else if (view === 'stock') {
+      insightsView.classList.add('hidden');
+      stockView.classList.remove('hidden');
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    toggleView('insights');
+  });
+
+  fetch("data.json")
+    .then(res => res.json())
+    .then(data => {
+      records = data.records;
+      records.forEach(day => {
+        day.stocks.forEach(s => {
+          if (!stockList.find(x => x.id === s.stock_id)) {
+            stockList.push({ id: s.stock_id, name: s.name.trim() });
+          }
+        });
+      });
+    });
+
+  function createStockLink(stock_id, name) {
+    const a = document.createElement("a");
+    a.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${stock_id}`;
+    a.target = "_blank";
+    a.textContent = `${name} (${stock_id})`;
+    a.className = "hover:underline text-black";
+    return a;
+  }
+
+  fetch("insights.json")
+    .then(res => res.json())
+    .then(data => {
+      if (data.date) {
+        document.getElementById("insights-title").textContent =
+          `📊 指標觀察清單 (資料日期：${data.date})`;
+      }
+
+      const dailyForeign = (data.foreign_ratio_ranking || []).slice(0, 10);
+      const dailyInvest  = (data.invest_ratio_ranking  || []).slice(0, 10);
+
+      const foreignList = document.getElementById("foreign_ratio_list");
+      const investList  = document.getElementById("invest_ratio_list");
+      foreignList.innerHTML = "";
+      investList.innerHTML  = "";
+
+      const dailyBoth = new Set(
+        dailyForeign
+          .map(i => i.stock_id)
+          .filter(id => dailyInvest.some(j => j.stock_id === id))
+      );
+
+      const renderListItem = (listEl, items, ratioKey, bothSet) => {
+        items.forEach(item => {
+          const li = document.createElement("li");
+          const a = createStockLink(item.stock_id, item.name);
+
+          const ratioValue = (item[ratioKey] * 100).toFixed(2);
+          const text = document.createTextNode(` : ${ratioValue}%`);
+
+          if (bothSet.has(item.stock_id)) {
+            li.classList.add("text-red-600", "font-bold");
+            a.className = "hover:underline text-red-600 font-bold";
+          }
+
+          li.appendChild(a);
+          li.appendChild(text);
+          listEl.appendChild(li);
+        });
+      };
+
+      renderListItem(foreignList, dailyForeign, 'foreign_ratio', dailyBoth);
+      renderListItem(investList, dailyInvest, 'invest_ratio', dailyBoth);
+
+      const periodRoot = document.getElementById("period-section");
+
+      function buildPeriodBlock(titleHTML, foreignKey, investKey, prefix) {
+        const section = document.createElement("div");
+        section.className = "mt-6 border-t pt-4";
+        section.innerHTML = `
+          <h4 class="font-bold text-xl mb-3">${titleHTML}</h4>
+          <div class="grid grid-cols-2 gap-6 text-gray-700">
+            <div>
+              <h5 class="font-semibold mb-2 text-base">🌏 外資</h5>
+              <ul id="${prefix}-foreign" class="list-disc pl-6 space-y-2 text-base"></ul>
+            </div>
+            <div>
+              <h5 class="font-semibold mb-2 text-base">🏦 投信</h5>
+              <ul id="${prefix}-invest" class="list-disc pl-6 space-y-2 text-base"></ul>
+            </div>
+          </div>
+        `;
+        periodRoot.appendChild(section);
+
+        const fList = (data[foreignKey] || []).slice(0, 10);
+        const iList = (data[investKey]  || []).slice(0, 10);
+
+        const both = new Set(
+          fList.map(i => i.stock_id).filter(id => iList.some(j => j.stock_id === id))
+        );
+
+        const fUl = document.getElementById(`${prefix}-foreign`);
+        const iUl = document.getElementById(`${prefix}-invest`);
+
+        renderListItem(fUl, fList, 'foreign_ratio', both);
+        renderListItem(iUl, iList, 'invest_ratio', both);
+      }
+
+      buildPeriodBlock(
+        "📅 近5日外/投本比前 10",
+        "foreign_ratio_5d_ranking",
+        "invest_ratio_5d_ranking",
+        "p5d"
+      );
+
+      buildPeriodBlock(
+        "🗓️ 近10日外/投本比前 10",
+        "foreign_ratio_10d_ranking",
+        "invest_ratio_10d_ranking",
+        "p10d"
+      );
+    });
+
+  fetch("newcomers.json")
+    .then(res => res.json())
+    .then(data => {
+      const newcomers = data.newcomers || {};
+      const container = document.getElementById("newcomers-container");
+      container.innerHTML = "";
+
+      const addList = (title, items) => {
+        if (items && items.length > 0) {
+          const header = document.createElement("p");
+          header.className = "font-semibold mt-2";
+          header.textContent = title;
+          container.appendChild(header);
+
+          const ul = document.createElement("ul");
+          ul.className = "list-disc pl-6 space-y-1";
+          items.slice(0, 10).forEach(stock => {
+            const li = document.createElement("li");
+            const a = createStockLink(stock.stock_id, stock.name);
+            li.appendChild(a);
+            ul.appendChild(li);
+          });
+          container.appendChild(ul);
+        }
+      };
+
+      addList("🌏 外資新上榜：", newcomers.foreign);
+      addList("🏦 投信新上榜：", newcomers.invest);
+      if ((!newcomers.foreign || newcomers.foreign.length === 0) &&
+          (!newcomers.invest || newcomers.invest.length === 0)) {
+        container.textContent = "（今日無新上榜股票）";
+      }
+    })
+    .catch(() => {
+      document.getElementById("newcomers-container").textContent = "無法載入資料";
+    });
+
+  fetch("explosive.json")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("explosive-container");
+      container.innerHTML = "";
+
+      if (!data || !data.explosive || data.explosive.length === 0) {
+        container.textContent = "（今日無爆量股票）";
+        return;
+      }
+
+      const ul = document.createElement("ul");
+      ul.className = "list-disc pl-6 space-y-1";
+      data.explosive.slice(0, 10).forEach(stock => {
+        const li = document.createElement("li");
+        const a = createStockLink(stock.stock_id, stock.name);
+        li.appendChild(a);
+
+        const tag = document.createTextNode(` ${stock.tag}`);
+        li.appendChild(tag);
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    })
+    .catch(() => {
+      document.getElementById("explosive-container").textContent = "無法載入資料";
+    });
+
+  input.addEventListener("input", function() {
+    if (this.value.trim()) {
+      clearBtn.classList.remove("hidden");
+    } else {
+      clearBtn.classList.add("hidden");
+      suggestions.classList.add("hidden");
+      toggleView('insights');
+    }
+
+    const keyword = this.value.trim();
+    suggestions.innerHTML = "";
+    if (!keyword) { suggestions.classList.add("hidden"); return; }
+
+    const matched = stockList.filter(s =>
+      s.id.includes(keyword) || s.name.includes(keyword)
+    ).slice(0, 10);
+
+    if (matched.length === 0) { suggestions.classList.add("hidden"); return; }
+
+    matched.forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = `${s.name} (${s.id})`;
+      li.className = "p-2 hover:bg-gray-100 cursor-pointer";
+      li.addEventListener("click", () => {
+        input.value = s.id;
+        suggestions.classList.add("hidden");
+        clearBtn.classList.remove("hidden");
+        showStockData(s.id);
+      });
+      suggestions.appendChild(li);
+    });
+    suggestions.classList.remove("hidden");
+  });
+
+  clearBtn.addEventListener("click", () => {
+    input.value = "";
+    clearBtn.classList.add("hidden");
+    suggestions.classList.add("hidden");
+
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="5" class="border px-4 py-8 text-gray-500">
+          請輸入股票代碼或名稱進行查詢
+        </td>
+      </tr>
+    `;
+    toggleView('insights');
+    input.focus();
+  });
+
+  input.addEventListener("keyup", e => {
+    if (e.key === "Enter") {
+      const keyword = e.target.value.trim();
+      if (keyword) { showStockData(keyword); suggestions.classList.add("hidden"); }
+    }
+  });
+
+  function showStockData(keyword) {
+    tableBody.innerHTML = "";
+    const colorize = (val) => {
+      const num = Number(val);
+      const formattedVal = num.toLocaleString();
+      if (num > 0) return `<span class="text-red-600">${formattedVal}</span>`;
+      if (num < 0) return `<span class="text-green-600">${formattedVal}</span>`;
+      return formattedVal;
+    };
+
+    const kw = keyword.toString().replace(/\s|　/g, "").trim();
+    let foundStock = null;
+    let dataFound = false;
+
+    const chartLabels = [];
+    const chartForeignData = [];
+    const chartInvestData = [];
+    const chartDealerData = [];
+    const chartTotalData = [];
+
+    for (let i = records.length - 1; i >= 0; i--) {
+      const day = records[i];
+      const stock = day.stocks.find(s =>
+        s.stock_id.toString().replace(/\s|　/g, "").trim() === kw ||
+        s.name.replace(/\s|　/g, "").includes(kw)
+      );
+      if (stock) {
+        dataFound = true;
+        if (!foundStock) foundStock = stock;
+
+        const foreign = Math.round(stock.foreign_net/1000);
+        const invest  = Math.round(stock.invest_net/1000);
+        const dealer  = Math.round(stock.dealer_net/1000);
+        const total   = Math.round((stock.foreign_net + stock.invest_net + stock.dealer_net)/1000);
+
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-gray-50";
+        tr.innerHTML = `
+          <td class="border px-4 py-2">${day.date}</td>
+          <td class="border px-4 py-2">${colorize(foreign)}</td>
+          <td class="border px-4 py-2">${colorize(invest)}</td>
+          <td class="border px-4 py-2">${colorize(dealer)}</td>
+          <td class="border px-4 py-2">${colorize(total)}</td>`;
+        tableBody.prepend(tr);
+
+        chartLabels.push(day.date);
+        chartForeignData.push(foreign);
+        chartInvestData.push(invest);
+        chartDealerData.push(dealer);
+        chartTotalData.push(total);
+      }
+    }
+
+    if (foundStock && dataFound) {
+      toggleView('stock');
+      pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
+      loadKlineData(foundStock.stock_id.toString());
+      updateChart(chartLabels, chartForeignData, chartInvestData, chartDealerData, chartTotalData);
+    } else {
+      toggleView('insights');
+      pageTitle.textContent = "法人買賣超查詢";
+      console.log(`[🔍 LOG - Search] 查詢失敗或無法人買賣超資料: ${keyword}`);
+    }
+  }
+
+  function updateChart(labels, foreignData, investData, dealerData, totalData) {
+    const ctx = document.getElementById('tradingChart').getContext('2d');
+
+    if (tradingChart) tradingChart.destroy();
+
+    tradingChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: '外資', data: foreignData, borderColor: 'rgb(255, 99, 132)', backgroundColor: 'rgba(255, 99, 132, 0.5)', tension: 0.3, fill: false },
+          { label: '投信', data: investData, borderColor: 'rgb(54, 162, 235)', backgroundColor: 'rgba(54, 162, 235, 0.5)', tension: 0.3, fill: false },
+          { label: '自營商', data: dealerData, borderColor: 'rgb(75, 192, 192)', backgroundColor: 'rgba(75, 192, 192, 0.5)', tension: 0.3, fill: false },
+          { label: '合計', data: totalData, borderColor: 'rgb(153, 102, 255)', backgroundColor: 'rgba(153, 102, 255, 0.5)', tension: 0.3, fill: false, borderWidth: 2 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { title: { display: false }, tooltip: { mode: 'index', intersect: false } },
+        scales: { x: { title: { display: true, text: '日期' } }, y: { title: { display: true, text: '買賣超張數' } } }
+      }
+    });
+  }
+
+  const ensureFiniteNumber = (value) => {
+      const num = Number(value);
+      return (Number.isFinite(num) && num !== null) ? num : 0;
+  };
+
+  function calculateSMA(data, period) {
+      const result = [];
+      for (let i = 0; i < data.length; i++) {
+          const currentClose = ensureFiniteNumber(data[i].close);
+          if (i < period - 1) { result.push({ time: data[i].time, value: null }); continue; }
+          let sum = 0;
+          for (let j = 0; j < period; j++) sum += ensureFiniteNumber(data[i - j].close);
+          result.push({ time: data[i].time, value: sum / period });
+      }
+      return result;
+  }
+
+  function drawStaticLegend(periods) {
+      klineStaticLegend.innerHTML = '';
+      periods.forEach(ma => {
+          const item = document.createElement('div');
+          item.className = 'legend-item mx-2';
+          const colorBox = document.createElement('span');
+          colorBox.className = 'legend-color w-3 h-1.5';
+          colorBox.style.backgroundColor = ma.color;
+          const titleText = document.createTextNode(` ${ma.title}`);
+          item.appendChild(colorBox);
+          item.appendChild(titleText);
+          klineStaticLegend.appendChild(item);
+      });
+  }
+
+  function updateCustomTooltip(param) {
+      if (!klineLegend) return;
+      if (!param.time) { klineLegend.classList.add('hidden'); return; }
+
+      const date = new Date(param.time * 1000);
+      const formattedDate = date.toLocaleDateString('zh-TW', {
+          year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Taipei'
+      }).replace(/\//g, '-');
+
+      let html = `<div class="font-bold mb-1">${formattedDate}</div>`;
+      const maData = {};
+      let volumeValue = null, openValue = null, highValue = null, lowValue = null, closeValue = null;
+
+      param.seriesData.forEach((data, series) => {
+          if (series === candleSeries) {
+              if (data.value) {
+                  openValue = data.value.open.toFixed(2);
+                  highValue = data.value.high.toFixed(2);
+                  lowValue  = data.value.low.toFixed(2);
+                  closeValue= data.value.close.toFixed(2);
+              }
+          } else if (series === volumeSeries) {
+              volumeValue = data.value;
+          } else {
+              const ma = MA_PERIODS.find(m => m.series === series);
+              if (ma && data.value) maData[ma.title] = { value: data.value, color: ma.color };
+          }
+      });
+
+      if (openValue !== null) {
+          const closeColor = closeValue > openValue ? 'text-red-600' : (closeValue < openValue ? 'text-green-600' : 'text-gray-700');
+          html += `<div class="${closeColor}">
+                       <span class="text-gray-600">O:</span> ${openValue}
+                       <span class="text-gray-600">H:</span> ${highValue}
+                       <span class="text-gray-600">L:</span> ${lowValue}
+                       <span class="text-gray-600">C:</span> <span class="font-bold">${closeValue}</span>
+                   </div>`;
+      }
+
+      MA_PERIODS.forEach(ma => {
+          const data = maData[ma.title];
+          const value = data ? data.value.toFixed(2) : '-';
+          html += `<div class="legend-item"><span class="legend-color" style="background-color: ${ma.color}"></span> ${ma.title}: ${value}</div>`;
+      });
+
+      const vol = volumeValue !== null ? (volumeValue / 1000000).toFixed(2) + 'M' : '-';
+      html += `<div class="mt-1"><span class="font-semibold text-gray-600">成交量:</span> ${vol}</div>`;
+
+      klineLegend.innerHTML = html;
+      klineLegend.classList.remove('hidden');
+
+      const chartWidth = klineChartContainer.clientWidth;
+      const tooltipWidth = klineLegend.offsetWidth;
+      const pointX = param.point ? param.point.x : chartWidth / 2;
+      let left = pointX + 15;
+      if (left + tooltipWidth > chartWidth) {
+          left = pointX - tooltipWidth - 15;
+          if (left < 10) left = 10;
+      }
+      klineLegend.style.left = `${left}px`;
+  }
+
+  function loadKlineData(stockId) {
+      if (!klineChartContainer) return;
+
+      klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">載入中...</div>
+          <div id="kline-legend" class="hidden"></div>`;
+      klineLegend = document.getElementById('kline-legend');
+
+      if(klineStaticLegend) klineStaticLegend.innerHTML = '';
+      if (klineChart) { try { klineChart.remove(); } catch (e) {} klineChart = null; }
+      candleSeries = null; volumeSeries = null; MA_PERIODS.forEach(ma => ma.series = null);
+
+      fetch("Kline.json")
+          .then(res => { if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`); return res.json(); })
+          .then(klineData => {
+              let filteredData = [];
+              if (!Array.isArray(klineData) && klineData[stockId]) filteredData = klineData[stockId];
+              else if (Array.isArray(klineData)) filteredData = klineData.filter(item => String(item.stock_id).trim() === String(stockId));
+              else if (Array.isArray(klineData.stocks)) filteredData = klineData.stocks.filter(item => String(item.stock_id).trim() === String(stockId));
+
+              if (!filteredData || filteredData.length === 0) {
+                  klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">找不到 ${stockId} 的 K 線資料。</div>`;
+                  return;
+              }
+
+              const chartData = [];
+              filteredData.forEach(item => {
+                  const o = ensureFiniteNumber(item.open), h = ensureFiniteNumber(item.high),
+                        l = ensureFiniteNumber(item.low),  c = ensureFiniteNumber(item.close),
+                        v = ensureFiniteNumber(item.volume);
+                  if (!o || !h || !l || !c) return;
+                  const dateStr = (item.date || item.Date || item.trade_date || "").toString();
+                  if (!dateStr) return;
+                  const t = new Date(dateStr.replace(/-/g,'/')).getTime()/1000;
+                  chartData.push({ time:t, open:o, high:h, low:l, close:c, value:v });
+              });
+
+              if (chartData.length === 0) {
+                  klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">找到原始資料，但無法繪製有效 K 線。</div>`;
+                  return;
+              }
+
+              // ✅ 桌機用 450 高度 (300*1.5)，手機 300
+              const isDesktop = window.innerWidth > 768;
+              const chartHeight = isDesktop ? 450 : 300;
+              klineChartContainer.style.height = chartHeight + "px";
+
+              klineChartContainer.innerHTML = "";
+              const width = klineChartContainer.clientWidth || 600;
+
+              klineChart = LightweightCharts.createChart(klineChartContainer, {
+                  width, height: chartHeight,
+                  layout: { backgroundColor: '#ffffff', textColor: '#333' },
+                  grid: {
+                      vertLines: { color: '#e0e0e0' },
+                      horzLines: { color: '#e0e0e0' }
+                  },
+                  timeScale: { timeVisible: true, secondsVisible: false },
+                  crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+              });
+
+              candleSeries = klineChart.addCandlestickSeries({
+                  upColor: '#ef5350', downColor: '#26a69a',
+                  borderVisible: false, wickUpColor: '#ef5350', wickDownColor: '#26a69a',
+                  title: 'K線', lastValueVisible: true, priceLineVisible: true,
+              });
+              candleSeries.setData(chartData);
+
+              MA_PERIODS.forEach(ma => {
+                  const maData = calculateSMA(chartData, ma.period);
+                  const maSeries = klineChart.addLineSeries({
+                      color: ma.color, lineWidth: 1,
+                      lastValueVisible: false, priceLineVisible: false,
+                  });
+                  maSeries.setData(maData.filter(d => d.value !== null).map(d => ({ time: d.time, value: d.value })));
+                  ma.series = maSeries;
+              });
+
+              drawStaticLegend(MA_PERIODS);
+
+              klineChart.priceScale('right').applyOptions({
+                  scaleMargins: { top: 0.05, bottom: 0.25 }
+              });
+
+              volumeSeries = klineChart.addHistogramSeries({
+                  priceScaleId: 'volume',
+                  priceFormat: { type: 'volume' },
+                  title: '成交量', lastValueVisible: true, priceLineVisible: true,
+              });
+
+              klineChart.priceScale('volume').applyOptions({
+                  scaleMargins: { top: 0.8, bottom: 0 }
+              });
+
+              volumeSeries.setData(chartData.map(d => ({
+                  time: d.time, value: ensureFiniteNumber(d.value),
+                  color: d.close >= d.open ? '#ef535099' : '#26a69a99',
+              })));
+
+              klineChart.subscribeCrosshairMove(updateCustomTooltip);
+              klineChart.timeScale().fitContent();
+          })
+          .catch(err => {
+              console.error("[❌ LOG - Kline] K 線圖載入錯誤:", err);
+              klineChartContainer.innerHTML = `<div class="text-center py-4 text-red-500">K 線圖載入錯誤。</div>`;
+          });
+  }
+
+  window.addEventListener('resize', () => {
+      if (klineChart && klineChartContainer) {
+          const isDesktop = window.innerWidth > 768;
+          const chartHeight = isDesktop ? 450 : 300;
+          klineChartContainer.style.height = chartHeight + "px";
+          klineChart.applyOptions({ width: klineChartContainer.clientWidth || 600, height: chartHeight });
+      }
+  });
+  </script>
 </body>
 </html>

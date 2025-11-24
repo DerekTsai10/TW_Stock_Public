@@ -23,7 +23,7 @@
     }
 
     @media (max-width: 768px) {
-      .mobile-reset { transform: none !important; padding: 1rem !important; }
+      .mobile-reset { transform: scale(1) !important; padding: 1rem !important; }
       .mobile-col { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
       .mobile-center { text-align: center !important; }
       input, select, button { font-size: 1rem; padding: 0.6rem 0.8rem; }
@@ -47,6 +47,12 @@
     #clear-input-btn:hover {
       color: #6b7280;
     }
+    /* 如果不想顯示左下角 TV Logo，可打開下面這行 */
+    /* .tv-lightweight-charts-logo,
+.tv-lightweight-charts-watermark,
+.tv-lightweight-charts-watermark__text,
+.tv-watermark,
+.tv-logo { display: none !important; } */
   </style>
 </head>
 
@@ -431,7 +437,14 @@
   });
 
   function showStockData(keyword) {
-    // ... (其他代碼略) ...
+    tableBody.innerHTML = "";
+    const colorize = (val) => {
+      const num = Number(val);
+      const formattedVal = num.toLocaleString();
+      if (num > 0) return `<span class="text-red-600">${formattedVal}</span>`;
+      if (num < 0) return `<span class="text-green-600">${formattedVal}</span>`;
+      return formattedVal;
+    };
 
     const kw = keyword.toString().replace(/\s|　/g, "").trim();
     let foundStock = null;
@@ -489,7 +502,65 @@
   }
 
   function updateChart(labels, foreignData, investData, dealerData, totalData) {
-    // ... (Chart.js 代碼略) ...
+    const ctx = document.getElementById('tradingChart').getContext('2d');
+
+    if (tradingChart) {
+      tradingChart.destroy();
+    }
+
+    tradingChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: '外資',
+            data: foreignData,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            tension: 0.3,
+            fill: false,
+          },
+          {
+            label: '投信',
+            data: investData,
+            borderColor: 'rgb(54, 162, 235)',
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            tension: 0.3,
+            fill: false,
+          },
+          {
+            label: '自營商',
+            data: dealerData,
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            tension: 0.3,
+            fill: false,
+          },
+          {
+            label: '合計',
+            data: totalData,
+            borderColor: 'rgb(153, 102, 255)',
+            backgroundColor: 'rgba(153, 102, 255, 0.5)',
+            tension: 0.3,
+            fill: false,
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: { display: false },
+          tooltip: { mode: 'index', intersect: false }
+        },
+        scales: {
+          x: { title: { display: true, text: '日期' } },
+          y: { title: { display: true, text: '買賣超張數' } }
+        }
+      }
+    });
   }
 
   const ensureFiniteNumber = (value) => {
@@ -507,7 +578,8 @@
       const maData = [];
       for (let i = 0; i < data.length; i++) {
           if (i < period - 1) {
-              maData.push(null); // 週期不足，MA 為空
+              // 週期不足，MA 為 null/undefined，讓 Lightweight Charts 不繪製此點（即「空」線條）
+              maData.push(null); 
           } else {
               const slice = data.slice(i - period + 1, i + 1);
               const sum = slice.reduce((a, b) => a + b, 0);
@@ -610,7 +682,11 @@
                   },
                   // ⬇️ 啟用圖例 (Legend) 來顯示最新的 MA 數值
                   watermark: { visible: false },
-                  crosshair: { mode: LightweightCharts.CrosshairMode.Normal }
+                  crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+                  // 讓 MA 數值顯示在左上角 (取代預設的圖例位置)
+                  localization: {
+                      priceFormatter: price => price.toFixed(2),
+                  },
               });
 
               // K 線 series（使用預設 right price scale）
@@ -620,6 +696,7 @@
                   borderVisible: false,
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
+                  title: 'K線' // 新增 Title
               });
               candleSeries.setData(chartData);
 
@@ -664,45 +741,65 @@
                   const maValues = calculateSMA(closePrices, period);
                   const maChartData = chartData.map((d, index) => ({
                       time: d.time,
-                      value: maValues[index] !== null ? maValues[index] : undefined, // 使用 undefined 或 null 來實現「空」線條
+                      // 使用 undefined/null 讓 Lightweight Charts 不繪製該點
+                      value: maValues[index] !== null ? maValues[index] : undefined, 
                   }));
 
                   const series = klineChart.addLineSeries({
                       color: color,
                       lineWidth: 2,
                       title: name,
-                      // ⬇️ 讓 MA 線條更像「空」的，只用實體線條
                       lineStyle: LightweightCharts.LineStyle.Solid,
+                      // ⬇️ 讓 MA 數值顯示在右側價格軸上
+                      lastValueVisible: true, 
+                      priceLineVisible: false,
                   });
                   series.setData(maChartData);
                   maSeries[name] = series;
               });
               
-              // ⬇️ 監聽十字線移動事件，更新 MA 數值
+              // ⬇️ 監聽滑鼠移動事件，更新左上角 MA 數值
               klineChart.subscribeCrosshairMove(param => {
-                if (param.time) {
-                    // 檢查是否有最新的 MA 數值
-                    Object.keys(maSeries).forEach(name => {
-                        const series = maSeries[name];
-                        const maDataPoint = param.seriesData.get(series);
-                        if (maDataPoint && maDataPoint.value !== null) {
-                            // 設置 MA 線上的標籤來顯示數值
-                            series.applyOptions({
-                                lastValueVisible: true,
-                                priceLineVisible: true,
-                                lastValueText: `${name}: ${maDataPoint.value.toFixed(2)}`,
-                            });
-                            // 讓價格線隨著 MA 數值移動 (但 Lightweight Charts 預設不會這麼做，通常會顯示在圖例區)
-                        } else {
-                            // 沒有數值時清空標籤，讓它看起來是「空」的
-                             series.applyOptions({
-                                lastValueVisible: true, // 保持 visible 才能在圖例顯示
-                                priceLineVisible: false,
-                                lastValueText: `${name}: --`
-                            });
-                        }
-                    });
-                }
+                  let maTexts = '';
+                  
+                  if (param.time) {
+                      // 檢查 K 線資料點
+                      const candleData = param.seriesData.get(candleSeries);
+                      if (candleData) {
+                          maTexts += `O:${candleData.open.toFixed(2)} H:${candleData.high.toFixed(2)} L:${candleData.low.toFixed(2)} C:${candleData.close.toFixed(2)}`;
+                      }
+                      
+                      // 檢查 MA 資料點
+                      Object.keys(maSeries).forEach(name => {
+                          const series = maSeries[name];
+                          const maDataPoint = param.seriesData.get(series);
+                          const color = maPeriods.find(p => p.name === name)?.color || 'black';
+                          
+                          if (maDataPoint && maDataPoint.value !== null) {
+                              const maValue = maDataPoint.value.toFixed(2);
+                              maTexts += ` <span style="color:${color};">${name}:${maValue}</span>`;
+                              
+                              // 💡 修正 MA 的 Price Line 數值，顯示在右側價格軸上
+                              series.applyOptions({
+                                  lastValueText: `${name}: ${maValue}`
+                              });
+                          } else {
+                              // 沒資料時清空價格軸上的顯示
+                              series.applyOptions({
+                                  lastValueText: `${name}: --`
+                              });
+                          }
+                      });
+                  } else {
+                     // 沒有十字線時，顯示最新的 K 線和 MA 數值 (可選)
+                     // 這裡暫時省略，讓 Lightweight Charts 處理預設的最新值顯示
+                  }
+                  
+                  // ⬇️ 將 K 線與 MA 數值顯示在左上角圖例 (Legend)
+                  const legendEl = klineChartContainer.querySelector('.tv-lightweight-charts-pane canvas').parentNode.querySelector('div:first-child');
+                  if (legendEl) {
+                       legendEl.innerHTML = `<div style="font-size:14px; padding: 4px 8px;">${param.time ? `日期: ${param.time}` : ''} ${maTexts}</div>`;
+                  }
               });
 
               // 一載入就看到全部 180 天

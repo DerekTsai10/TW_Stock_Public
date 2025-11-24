@@ -643,8 +643,9 @@
               });
               candleSeries.setData(chartData);
               
-              // **重要提醒：** 如果您的 MA 線是作為獨立的 LineSeries 加入的，您需要對它們也設定以下選項：
-              // ma5Series.applyOptions({ lastValueVisible: false, priceLineVisible: false });
+              // **【重要】** 如果您的 MA 線 (5MA, 10MA, ...) 是作為單獨的 LineSeries 加入的，
+              // 您需要對它們也設定：ma5Series.applyOptions({ lastValueVisible: false, priceLineVisible: false });
+
 
               // ▶ 調整股價的 price scale，只佔上方 70%
               klineChart.priceScale('right').applyOptions({

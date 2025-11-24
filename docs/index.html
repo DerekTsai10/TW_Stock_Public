@@ -121,6 +121,18 @@
             <div id="klineChartContainer" class="relative" style="height: 300px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
+
+            <!-- ✅ 靜態 MA 說明 -->
+            <div id="kline-ma-legend" class="mt-3 text-base text-gray-600 flex items-center space-x-4 mobile-center">
+              <div class="flex items-center space-x-2">
+                <span class="inline-block w-6 h-1 rounded" style="background:#f59e0b;"></span>
+                <span>5MA（橘色）</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="inline-block w-6 h-1 rounded" style="background:#8b5cf6;"></span>
+                <span>10MA（紫色）</span>
+              </div>
+            </div>
         </div>
 
         <div id="chart-container" class="p-6 border rounded bg-white shadow mb-8">
@@ -560,6 +572,32 @@
       return (Number.isFinite(num) && num !== null) ? num : 0;
   };
 
+  // ✅ 計算移動平均（回傳 LightweightCharts line 可用的資料）
+  function calcMA(data, period) {
+      const result = [];
+      let sum = 0;
+      const q = [];
+
+      for (let i = 0; i < data.length; i++) {
+          const close = ensureFiniteNumber(data[i].close);
+          q.push(close);
+          sum += close;
+
+          if (q.length > period) {
+              sum -= q.shift();
+          }
+
+          if (q.length === period) {
+              const avg = sum / period;
+              result.push({
+                  time: data[i].time,
+                  value: Number(avg.toFixed(4))
+              });
+          }
+      }
+      return result;
+  }
+
   // --- K 線圖功能 ---
   function loadKlineData(stockId) {
       if (!klineChartContainer) return;
@@ -617,7 +655,6 @@
                   if (!dateStr) return;
 
                   chartData.push({
-                      // LightweightCharts 推薦使用 UTC timestamp 或 'yyyy-mm-dd'
                       time: dateStr, 
                       open: validOpen,
                       high: validHigh,
@@ -631,6 +668,9 @@
                   klineChartContainer.innerHTML = `<div class="text-center py-4 text-gray-500">找到原始資料，但無法繪製有效 K 線。</div>`;
                   return;
               }
+
+              // ✅ 保險：確保時間是由舊到新（MA 才正確）
+              chartData.sort((a, b) => new Date(a.time) - new Date(b.time));
 
               klineChartContainer.innerHTML = "";
               const width = klineChartContainer.clientWidth || 600;
@@ -659,11 +699,29 @@
               });
               candleSeries.setData(chartData);
 
+              // ✅ 5MA（橘色）
+              const ma5Series = klineChart.addLineSeries({
+                  color: '#f59e0b',
+                  lineWidth: 2,
+                  priceLineVisible: false,
+                  lastValueVisible: false,
+              });
+              ma5Series.setData(calcMA(chartData, 5));
+
+              // ✅ 10MA（紫色）
+              const ma10Series = klineChart.addLineSeries({
+                  color: '#8b5cf6',
+                  lineWidth: 2,
+                  priceLineVisible: false,
+                  lastValueVisible: false,
+              });
+              ma10Series.setData(calcMA(chartData, 10));
+
               // ▶ 調整股價的 price scale，只佔上方 70%
               klineChart.priceScale('right').applyOptions({
                   scaleMargins: {
-                      top: 0.05,   // 上方留一點空間
-                      bottom: 0.25 // 底部空出 25% 給成交量
+                      top: 0.05,
+                      bottom: 0.25
                   }
               });
 
@@ -675,8 +733,8 @@
 
               klineChart.priceScale('volume').applyOptions({
                   scaleMargins: {
-                      top: 0.8,  // 從 80% 開始
-                      bottom: 0  // 到最底
+                      top: 0.8,
+                      bottom: 0
                   }
               });
 

@@ -120,7 +120,7 @@
         <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
 
-            <div id="klineChartContainer" class="relative no-scale-chart" style="height: 420px;">
+            <div id="klineChartContainer" class="relative no-scale-chart" style="height: 480px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
 
@@ -764,8 +764,8 @@
               // ▶ 調整股價的 price scale，只佔上方 70%
               klineChart.priceScale('right').applyOptions({
                   scaleMargins: {
-                      top: 0.05,
-                      bottom: 0.25
+                      top: 0.02,
+                      bottom: 0.18
                   }
               });
 

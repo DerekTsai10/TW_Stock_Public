@@ -29,8 +29,7 @@
     #clear-input-btn:hover {
       color: #6b7280;
     }
-    /* ✅ 增強樣式以隱藏 Lightweight Charts 的 Logo 和 Watermark */
-    /* 如果 Logo 仍然存在，請清除您的瀏覽器快取 (Ctrl+F5) */
+    /* ✅ 增強樣式：隱藏 Lightweight Charts 的 Logo 和 Watermark */
     .tv-lightweight-charts-logo,
     .tv-lightweight-charts-watermark,
     .tv-lightweight-charts-watermark__text,
@@ -147,7 +146,7 @@
   let tradingChart;
 
   const klineChartContainer = document.getElementById('klineChartContainer');
-  let klineChart = null;
+  let klineChart = null; // Lightweight Charts 實例
 
   const input = document.getElementById("search-input");
   const suggestions = document.getElementById("suggestions");
@@ -173,7 +172,7 @@
     toggleView('insights');
   });
 
-  // --- 載入 data.json 建股票清單 ---
+  // --- 載入 data.json 建股票清單 (保持不變) ---
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -196,7 +195,7 @@
     return a;
   }
 
-  // --- insights.json ---
+  // --- insights.json (保持不變，總覽頁面資料來源) ---
   fetch("insights.json")
     .then(res => res.json())
     .then(data => {
@@ -289,8 +288,8 @@
         "p10d"
       );
     });
-
-  // --- newcomers.json ---
+    
+  // --- newcomers.json (保持不變) ---
   fetch("newcomers.json")
     .then(res => res.json())
     .then(data => {
@@ -328,7 +327,7 @@
       document.getElementById("newcomers-container").textContent = "無法載入資料";
     });
 
-  // --- explosive.json ---
+  // --- explosive.json (保持不變) ---
   fetch("explosive.json")
     .then(res => res.json())
     .then(data => {
@@ -357,7 +356,7 @@
       document.getElementById("explosive-container").textContent = "無法載入資料";
     });
 
-  // --- 搜尋 ---
+  // --- 搜尋邏輯 (保持不變) ---
   input.addEventListener("input", function() {
     if (this.value.trim()) {
       clearBtn.classList.remove("hidden");
@@ -476,7 +475,6 @@
     } else {
       toggleView('insights');
       pageTitle.textContent = "法人買賣超查詢";
-      // 顯示查詢失敗信息
       const errorRow = document.createElement("tr");
       errorRow.innerHTML = `<td colspan="5" class="border px-4 py-8 text-red-500">找不到 ${keyword} 的法人買賣超資料。</td>`;
       tableBody.appendChild(errorRow);
@@ -551,7 +549,37 @@
       return (Number.isFinite(num) && num !== null) ? num : 0;
   };
 
-  // --- K 線圖功能 (已針對您的 Kline.json 格式調整載入邏輯) ---
+  /**
+   * 根據指定週期計算簡易移動平均線 (Simple Moving Average, SMA)
+   * @param {Array<Object>} data - 包含 {time, close} 的股價數據
+   * @param {number} period - 移動平均線的週期 (例如 5, 10, 20, 60)
+   * @returns {Array<Object>} 包含 {time, value} 的 SMA 數據
+   */
+  function calculateSMA(data, period) {
+    const smaData = [];
+    let sum = 0;
+
+    for (let i = 0; i < data.length; i++) {
+        const item = data[i];
+        sum += item.close;
+
+        if (i < period - 1) {
+            // 資料點不足一個週期時，MA 值為 undefined
+            smaData.push({ time: item.time, value: undefined });
+        } else {
+            if (i >= period) {
+                // 移除最舊的資料點 (window 滑動)
+                sum -= data[i - period].close;
+            }
+            // 計算平均
+            const value = sum / period;
+            smaData.push({ time: item.time, value: value });
+        }
+    }
+    return smaData;
+  }
+
+  // --- K 線圖功能 (新增 MA 線繪製邏輯) ---
   function loadKlineData(stockId) {
       if (!klineChartContainer) return;
 
@@ -576,11 +604,10 @@
           .then(klineData => {
               let filteredData = [];
 
-              // 處理 {"0050": [...]} 這種頂層物件格式
+              // 處理資料格式兼容性
               if (klineData && klineData[stockId]) {
                   filteredData = klineData[stockId];
               }
-              // 保留原有的其他兼容性檢查
               else if (Array.isArray(klineData)) {
                   filteredData = klineData.filter(item =>
                       String(item.stock_id).replace(/\s|　/g, "") === String(stockId)
@@ -639,8 +666,8 @@
                   timeScale: {
                       timeVisible: true,
                       secondsVisible: false,
-                      // ✅ X 軸刻度格式化器，只顯示月份
-                      tickMarkFormatter: (time, tickMarkType, locale) => {
+                      // X 軸刻度格式化器：只顯示月份
+                      tickMarkFormatter: (time, tickMarkType) => {
                           const dateStr = String(time); // 格式為 YYYY-MM-DD
                           if (!dateStr || dateStr.length < 7) {
                               return '';
@@ -655,7 +682,6 @@
                           }
                           
                           // 對於月份和每日刻度，顯示 'X月'
-                          // parseInt(month, 10) 會自動移除前導零
                           return parseInt(month, 10) + '月';
                       },
                   },
@@ -670,6 +696,28 @@
                   wickDownColor: '#26a69a',
               });
               candleSeries.setData(chartData);
+
+              // 2. ✅ 計算並繪製移動平均線 (5T, 10T, 20T, 60T)
+              const maPeriods = [5, 10, 20, 60];
+              const maColors = {
+                  5: '#FF9900',  // 5T - 橘色
+                  10: '#00FF00', // 10T - 綠色
+                  20: '#FF00FF', // 20T - 紫色
+                  60: '#0000FF'  // 60T - 藍色
+              };
+              
+              maPeriods.forEach(period => {
+                  const maData = calculateSMA(chartData, period);
+                  const maSeries = klineChart.addLineSeries({
+                      color: maColors[period],
+                      lineWidth: 1.5,
+                      lastValueVisible: true,
+                      title: `${period}MA`
+                  });
+                  // 只傳入有數值的資料點 (排除開頭不足計算週期的 undefined)
+                  maSeries.setData(maData.filter(d => d.value !== undefined)); 
+              });
+              // -----------------------------------------------------
 
               // 調整股價的 price scale
               klineChart.priceScale('right').applyOptions({

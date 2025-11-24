@@ -168,9 +168,9 @@
 
   const klineChartContainer = document.getElementById('klineChartContainer');
   let klineChart = null;
-  const klineLegend = document.getElementById('kline-legend'); // 動態圖例
-  const klineStaticLegend = document.getElementById('kline-static-legend'); // 靜態圖例
-
+  // 引用新增的圖例元素
+  const klineLegend = document.getElementById('kline-legend'); 
+  const klineStaticLegend = document.getElementById('kline-static-legend'); 
 
   const input = document.getElementById("search-input");
   const suggestions = document.getElementById("suggestions");
@@ -645,6 +645,7 @@
           return;
       }
       
+      // 將時間戳記 (秒) 轉換為 Date 物件
       const date = new Date(param.time * 1000);
       // 格式化日期為 YYYY-MM-DD
       const formattedDate = date.toLocaleDateString('zh-TW', {
@@ -786,11 +787,12 @@
                   const dateStr = (item.date || item.Date || item.trade_date || "").toString();
                   if (!dateStr) return;
                   
-                  // 將日期字串轉換為時間戳記 (Lightweight Charts 偏好)
-                  const timeStamp = new Date(dateStr.replace(/-/g, '/')).getTime() / 1000;
+                  // ⭐ 修正日期偏移問題：將日期字串轉換為當日午夜的 Unix 時間戳記 (秒)
+                  const dateObject = new Date(dateStr.replace(/-/g, '/'));
+                  const timeStamp = dateObject.getTime() / 1000;
 
                   chartData.push({
-                      time: timeStamp, 
+                      time: timeStamp, // ⭐ 使用時間戳記
                       open: validOpen,
                       high: validHigh,
                       low: validLow,

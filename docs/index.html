@@ -11,14 +11,14 @@
     /* ✅ 桌機維持原本 scale-150（用 transform） */
     .desktop-zoom {
       transform: scale(1.5);
-      transform-origin: top center; /* 修正：從 top left 改為 top center 實現水平置中縮放 */
+      transform-origin: top left;
     }
 
     /* ✅ 只讓 lightweight-charts 的外框「視覺上不吃 scale」 */
     .no-scale-chart {
       width: 150%;                 /* 先把 layout 放大 1.5 倍 */
       transform: scale(0.6666667);  /* 再反向縮放 2/3 抵銷父層 */
-      transform-origin: top center; /* 修正：從 top left 改為 top center 以匹配父層的縮放原點 */
+      transform-origin: top left;
     }
 
     @media (max-width: 768px) {
@@ -127,7 +127,8 @@
     </div>
 
     <div id="stock-view" class="hidden">
-                <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
+        <!-- ✅ 只在這塊套 no-scale-chart -->
+        <div id="kline-chart-wrapper" class="p-6 border rounded bg-white shadow mb-8 no-scale-chart">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
             <div id="klineChartContainer" class="relative" style="height: 300px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>

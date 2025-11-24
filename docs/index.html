@@ -688,7 +688,14 @@
       
       // 組合 OHLC 數值
       if (openValue !== null) {
-          html += `<div><span class="text-gray-600">O:</span> ${openValue} <span class="text-gray-600">H:</span> ${highValue} <span class="text-gray-600">L:</span> ${lowValue} <span class="text-gray-600">C:</span> ${closeValue}</div>`;
+          // 判斷紅綠K線
+          const closeColor = closeValue > openValue ? 'text-red-600' : (closeValue < openValue ? 'text-green-600' : 'text-gray-700');
+          html += `<div class="${closeColor}">
+                       <span class="text-gray-600">O:</span> ${openValue} 
+                       <span class="text-gray-600">H:</span> ${highValue} 
+                       <span class="text-gray-600">L:</span> ${lowValue} 
+                       <span class="text-gray-600">C:</span> <span class="font-bold">${closeValue}</span>
+                   </div>`;
       }
 
       // 組合 MA 數值
@@ -732,6 +739,7 @@
           <div id="kline-legend" class="hidden"></div>`; 
       
       // 重設全域變數和靜態圖例
+      const klineLegendRef = document.getElementById('kline-legend'); 
       if(klineStaticLegend) klineStaticLegend.innerHTML = '';
       if (klineChart) {
           try { klineChart.remove(); } catch (e) {}
@@ -740,7 +748,7 @@
           volumeSeries = null;
           MA_PERIODS.forEach(ma => ma.series = null);
       }
-      if (klineLegend) klineLegend.classList.add('hidden'); // 確保隱藏
+      if (klineLegendRef) klineLegendRef.classList.add('hidden'); // 確保隱藏
 
       if (typeof LightweightCharts === 'undefined' || typeof LightweightCharts.createChart !== 'function') {
           console.error("[❌ LOG - Kline] LightweightCharts 未載入或不支援 createChart");
@@ -788,8 +796,10 @@
                   if (!dateStr) return;
                   
                   // ⭐ 修正日期偏移問題：將日期字串轉換為當日午夜的 Unix 時間戳記 (秒)
+                  // 替換所有破折號為斜線，確保 Chrome 和 Safari 都能正確解析
                   const dateObject = new Date(dateStr.replace(/-/g, '/'));
-                  const timeStamp = dateObject.getTime() / 1000;
+                  // 取得當日 00:00:00 的秒級時間戳記
+                  const timeStamp = dateObject.getTime() / 1000; 
 
                   chartData.push({
                       time: timeStamp, // ⭐ 使用時間戳記
@@ -822,7 +832,7 @@
                       timeVisible: true,
                       secondsVisible: false,
                   },
-                  // 啟用 Normal 模式，讓 MA 線的標籤可以被隱藏 (如果 title 設為 '')
+                  // 啟用 Normal 模式，讓 MA 線的標籤可以被隱藏
                   crosshair: { mode: LightweightCharts.CrosshairMode.Normal }, 
               });
 
@@ -834,7 +844,7 @@
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
                   title: 'K線', 
-                  lastValueVisible: true, // K 線價格標籤保留
+                  lastValueVisible: true, 
                   priceLineVisible: true,
               });
               candleSeries.setData(chartData);
@@ -848,8 +858,8 @@
                       lineWidth: 1, 
                       // 移除價格軸上的 MA 標籤
                       title: '', 
-                      lastValueVisible: false, // MA 軸標籤不顯示
-                      priceLineVisible: false, // MA 價格線不顯示
+                      lastValueVisible: false, 
+                      priceLineVisible: false, 
                   });
 
                   maSeries.setData(maData.filter(d => d.value !== null).map(d => ({

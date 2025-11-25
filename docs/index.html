@@ -244,44 +244,46 @@
           .filter(id => dailyInvest.some(j => j.stock_id === id))
       );
 
-      // 【核心修改】調整 renderListItem 處理百分比數字的點擊事件
+      // ✅ 名稱：底線、可點，觸發個股查詢
+      // ✅ 百分比：不加底線，跳 CMoney
       const renderListItem = (listEl, items, ratioKey, bothSet) => {
         items.forEach(item => {
           const li = document.createElement("li");
-
-          // 名稱 + 代碼：改成內部查詢用的 clickable span
+      
+          // 名稱：超連結樣式，但不跳轉 CMoney → 改成內部查詢
           const nameSpan = document.createElement("span");
           nameSpan.textContent = `${item.name} (${item.stock_id})`;
-          nameSpan.className = "cursor-pointer hover:text-blue-600";
-
+          nameSpan.className = "cursor-pointer underline underline-offset-2 hover:text-blue-600";
+      
           nameSpan.addEventListener("click", () => {
-              input.value = item.stock_id;
-              suggestions.classList.add("hidden");
-              clearBtn.classList.remove("hidden");
-              showStockData(item.stock_id);   // 觸發查詢（停留在上方）
+            input.value = item.stock_id;
+            suggestions.classList.add("hidden");
+            clearBtn.classList.remove("hidden");
+            showStockData(item.stock_id); // 不捲動，停留在上方
           });
-
-          // 百分比：改成連到 CMoney 的超連結
+      
+          // 百分比：外部 CMoney（不加底線）
           const ratioValue = (item[ratioKey] * 100).toFixed(2);
           const ratioLink = document.createElement("a");
           ratioLink.textContent = ` : ${ratioValue}%`;
           ratioLink.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}`;
           ratioLink.target = "_blank";
           ratioLink.rel = "noopener";
-          ratioLink.className = "ml-1 text-gray-700 hover:text-blue-600 underline cursor-pointer";
-
-          // 同時出現在外/投本比名單：維持紅色強調
+          ratioLink.className = "ml-1 text-gray-700 hover:text-blue-600";
+      
+          // 如果同時出現在外本比+投本比 → 標紅
           if (bothSet.has(item.stock_id)) {
             nameSpan.classList.add("text-red-600", "font-bold");
-            ratioLink.classList.remove("text-gray-700", "hover:text-blue-600");
+            ratioLink.classList.remove("text-gray-700");
             ratioLink.classList.add("text-red-600", "font-bold", "hover:text-red-800");
           }
-
+      
           li.appendChild(nameSpan);
           li.appendChild(ratioLink);
           listEl.appendChild(li);
         });
       };
+
 
       renderListItem(foreignList, dailyForeign, 'foreign_ratio', dailyBoth);
       renderListItem(investList, dailyInvest, 'invest_ratio', dailyBoth);

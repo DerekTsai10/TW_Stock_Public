@@ -112,7 +112,6 @@
         <div id="kline-chart-wrapper" class="pt-2 px-3 pb-2 border rounded bg-white shadow mb-6">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
 
-            <!-- ✅ 修正：桌機視覺高度維持 480px（實際高度放大到 720px 抵銷反縮放） -->
             <div id="klineChartContainer" class="relative no-scale-chart" style="height: 720px;">
                 <div class="text-center py-4 text-gray-500">載入中...</div>
             </div>
@@ -213,6 +212,7 @@
       });
     });
 
+  // 函式: 建立股票名稱/代碼的外部連結
   function createStockLink(stock_id, name) {
     const a = document.createElement("a");
     a.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${stock_id}`;
@@ -244,21 +244,42 @@
           .filter(id => dailyInvest.some(j => j.stock_id === id))
       );
 
+      // 【核心修改】調整 renderListItem 處理百分比數字的點擊事件
       const renderListItem = (listEl, items, ratioKey, bothSet) => {
         items.forEach(item => {
           const li = document.createElement("li");
-          const a = createStockLink(item.stock_id, item.name);
+          const a = createStockLink(item.stock_id, item.name); // 外部連結 (名稱/代碼)
 
           const ratioValue = (item[ratioKey] * 100).toFixed(2);
-          const text = document.createTextNode(` : ${ratioValue}%`);
+          
+          // 將百分比數字包裝在一個 span 標籤中，用於點擊事件
+          const ratioSpan = document.createElement("span");
+          ratioSpan.textContent = ` : ${ratioValue}%`;
+          // 添加可點擊樣式
+          ratioSpan.className = "cursor-pointer hover:text-blue-600 font-normal ml-1"; 
+          
+          // 新增: 為百分比數字添加點擊事件 (自動搜尋)
+          ratioSpan.addEventListener("click", () => {
+              input.value = item.stock_id;
+              suggestions.classList.add("hidden");
+              clearBtn.classList.remove("hidden");
+              showStockData(item.stock_id); // 觸發查詢
+              document.getElementById('stock-view').scrollIntoView({ behavior: 'smooth' }); // 滾動到圖表
+          });
 
           if (bothSet.has(item.stock_id)) {
             li.classList.add("text-red-600", "font-bold");
             a.className = "hover:underline text-red-600 font-bold";
+            // 處理百分比數字的 hover 顏色
+            ratioSpan.classList.remove("hover:text-blue-600");
+            ratioSpan.classList.add("hover:text-red-800"); 
+          } else {
+             // 非同時上榜的股票，確保百分比數字不會被 li 的 font-bold 影響
+             ratioSpan.classList.remove("font-bold");
           }
 
           li.appendChild(a);
-          li.appendChild(text);
+          li.appendChild(ratioSpan); // 加入百分比數字的 span
           listEl.appendChild(li);
         });
       };
@@ -322,6 +343,7 @@
       const container = document.getElementById("newcomers-container");
       container.innerHTML = "";
 
+      // 由於新人榜沒有百分比，維持點擊連結到 Cmoney
       const addList = (title, items) => {
         if (items && items.length > 0) {
           const header = document.createElement("p");
@@ -333,7 +355,7 @@
           ul.className = "list-disc pl-6 space-y-1";
           items.slice(0, 10).forEach(stock => {
             const li = document.createElement("li");
-            const a = createStockLink(stock.stock_id, stock.name);
+            const a = createStockLink(stock.stock_id, stock.name); 
             li.appendChild(a);
             ul.appendChild(li);
           });
@@ -363,6 +385,7 @@
         return;
       }
 
+      // 爆量偵測也沒有百分比，維持點擊連結到 Cmoney
       const ul = document.createElement("ul");
       ul.className = "list-disc pl-6 space-y-1";
       data.explosive.slice(0, 10).forEach(stock => {
@@ -705,6 +728,8 @@
                   borderVisible: false,
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
+                  lastValueVisible: false, 
+                  priceLineVisible: false,
               });
               candleSeries.setData(chartData);
 
@@ -735,6 +760,8 @@
               const volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
+                  lastValueVisible: false, 
+                  priceLineVisible: false,
               });
 
               klineChart.priceScale('volume').applyOptions({

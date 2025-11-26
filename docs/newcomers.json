@@ -3,6 +3,42 @@
   "newcomers": {
     "foreign": [
       {
+        "stock_id": "4577",
+        "name": "達航科技",
+        "foreign_ratio": 3.4535391531417297,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "2316",
+        "name": "楠梓電",
+        "foreign_ratio": 2.7661624019752242,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "8155",
+        "name": "博智",
+        "foreign_ratio": 2.7273925427959447,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "4903",
+        "name": "聯光通",
+        "foreign_ratio": 2.058025028432166,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "4939",
+        "name": "亞電",
+        "foreign_ratio": 1.716889101224645,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "5284",
+        "name": "jpp-KY",
+        "foreign_ratio": 1.3370341884937182,
+        "invest_ratio": 0.0
+      },
+      {
         "stock_id": "1560",
         "name": "中砂",
         "foreign_ratio": 1.1998006275712687,
@@ -15,31 +51,19 @@
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "9933",
-        "name": "中鼎",
-        "foreign_ratio": 0.940174908118603,
-        "invest_ratio": 0.00022409126638508
-      },
-      {
-        "stock_id": "2605",
-        "name": "新興",
-        "foreign_ratio": 0.9368700967614094,
-        "invest_ratio": 0.0
-      },
-      {
-        "stock_id": "2455",
-        "name": "全新",
-        "foreign_ratio": 0.8334508795981315,
-        "invest_ratio": 0.04542850813460713
-      },
-      {
-        "stock_id": "8422",
-        "name": "可寧衛*",
-        "foreign_ratio": 0.8029584550368556,
+        "stock_id": "8027",
+        "name": "鈦昇",
+        "foreign_ratio": 1.069773551105207,
         "invest_ratio": 0.0
       }
     ],
     "invest": [
+      {
+        "stock_id": "3081",
+        "name": "聯亞",
+        "foreign_ratio": 0.6465803032741289,
+        "invest_ratio": 1.0873162858352186
+      },
       {
         "stock_id": "3450",
         "name": "聯鈞",
@@ -47,10 +71,16 @@
         "invest_ratio": 0.44206060593247254
       },
       {
-        "stock_id": "8996",
-        "name": "高力",
-        "foreign_ratio": -0.9193657014345517,
-        "invest_ratio": 0.21646101867757953
+        "stock_id": "5469",
+        "name": "瀚宇博",
+        "foreign_ratio": 0.010695935133267238,
+        "invest_ratio": 0.2209121987140195
+      },
+      {
+        "stock_id": "2881",
+        "name": "富邦金",
+        "foreign_ratio": -0.16972601257601616,
+        "invest_ratio": 0.22069090871788974
       }
     ]
   },

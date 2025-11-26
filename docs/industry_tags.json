@@ -1,0 +1,115 @@
+{
+  "2330": {
+    "name": "台積電",
+    "sector_lv1": "電子",
+    "sector_lv2": "晶圓代工",
+    "themes": ["AI", "HPC"],
+    "ai_chain": ["AI-晶圓代工"],
+    "notes": "先進製程、CoWoS、AI 伺服器核心晶圓代工"
+  },
+  "2382": {
+    "name": "廣達",
+    "sector_lv1": "電子",
+    "sector_lv2": "伺服器 / ODM",
+    "themes": ["AI", "伺服器"],
+    "ai_chain": ["AI-伺服器 / ODM"],
+    "notes": "AI 伺服器與雲端伺服器代工"
+  },
+  "3231": {
+    "name": "緯創",
+    "sector_lv1": "電子",
+    "sector_lv2": "伺服器 / ODM",
+    "themes": ["AI", "伺服器"],
+    "ai_chain": ["AI-伺服器 / ODM"],
+    "notes": "AI 伺服器相關 ODM"
+  },
+  "3706": {
+    "name": "神達",
+    "sector_lv1": "電子",
+    "sector_lv2": "伺服器 / IPC",
+    "themes": ["AI", "伺服器"],
+    "ai_chain": ["AI-伺服器 / ODM"],
+    "notes": "伺服器與工業電腦，AI 伺服器題材"
+  },
+  "2337": {
+    "name": "旺宏",
+    "sector_lv1": "電子",
+    "sector_lv2": "記憶體 / NOR / NAND",
+    "themes": ["記憶體"],
+    "ai_chain": [],
+    "notes": "以非揮發性記憶體為主，可視為廣義記憶體族群"
+  },
+  "2344": {
+    "name": "華邦電",
+    "sector_lv1": "電子",
+    "sector_lv2": "記憶體",
+    "themes": ["記憶體", "車用"],
+    "ai_chain": [],
+    "notes": "利基型 DRAM 與快閃記憶體，車用/工控應用較多"
+  },
+  "2408": {
+    "name": "南亞科",
+    "sector_lv1": "電子",
+    "sector_lv2": "DRAM",
+    "themes": ["AI", "記憶體"],
+    "ai_chain": ["AI-記憶體 / HBM"],
+    "notes": "DRAM 廠，受惠 AI 帶動記憶體需求"
+  },
+  "3006": {
+    "name": "晶豪科",
+    "sector_lv1": "電子",
+    "sector_lv2": "記憶體設計",
+    "themes": ["記憶體"],
+    "ai_chain": [],
+    "notes": "利基型 DRAM / 快閃記憶體設計"
+  },
+  "2451": {
+    "name": "創見",
+    "sector_lv1": "電子",
+    "sector_lv2": "模組 / 儲存",
+    "themes": ["記憶體", "儲存"],
+    "ai_chain": [],
+    "notes": "記憶體與儲存裝置模組廠"
+  },
+  "6274": {
+    "name": "台燿",
+    "sector_lv1": "電子",
+    "sector_lv2": "PCB / CCL",
+    "themes": ["AI", "高速傳輸"],
+    "ai_chain": ["AI-PCB/CCL / ABF"],
+    "notes": "高速銅箔基板，伺服器 / 網通應用"
+  },
+  "2383": {
+    "name": "台光電",
+    "sector_lv1": "電子",
+    "sector_lv2": "PCB / CCL",
+    "themes": ["AI", "高速傳輸"],
+    "ai_chain": ["AI-PCB/CCL / ABF"],
+    "notes": "高階 CCL，伺服器 / 網通與高速運算應用"
+  },
+  "8046": {
+    "name": "南電",
+    "sector_lv1": "電子",
+    "sector_lv2": "ABF 載板",
+    "themes": ["AI", "HPC"],
+    "ai_chain": ["AI-PCB/CCL / ABF"],
+    "notes": "ABF 載板，HPC / AI 晶片封裝關鍵供應商"
+  },
+  "3017": {
+    "name": "奇鋐",
+    "sector_lv1": "電子",
+    "sector_lv2": "散熱",
+    "themes": ["AI", "伺服器"],
+    "ai_chain": ["AI-散熱 / 機構件"],
+    "notes": "伺服器與 AI 相關散熱模組"
+  },
+  "3324": {
+    "name": "雙鴻",
+    "sector_lv1": "電子",
+    "sector_lv2": "散熱",
+    "themes": ["AI", "伺服器", "液冷"],
+    "ai_chain": ["AI-散熱 / 機構件"],
+    "notes": "高階散熱與液冷方案，伺服器 / AI 需求受惠"
+  }
+}
+

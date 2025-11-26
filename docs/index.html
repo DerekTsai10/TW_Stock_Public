@@ -204,6 +204,51 @@
   </div>
 
   <script>
+
+  let industryTags = {};
+  fetch("industry_tags.json")
+    .then(r => r.json())
+    .then(d => industryTags = d);
+
+  function renderIndustryTagsBlock(stockId) {
+    const data = industryTags[stockId];
+    if (!data) return "";
+    const tags = [];
+    if (Array.isArray(data.themes)) tags.push(...data.themes);
+    if (Array.isArray(data.ai_chain)) tags.push(...data.ai_chain);
+    if (data.sector_lv2) tags.push(data.sector_lv2);
+    if (tags.length===0) return "";
+    const maxVisible=4;
+    const vis=tags.slice(0,maxVisible);
+    const hid=tags.slice(maxVisible);
+    let html = `<div class="flex flex-wrap gap-2 mt-2">`;
+    vis.forEach(t=> html+=`<span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs whitespace-nowrap">${t}</span>`);
+    if (hid.length>0){
+      html+=`<button id="industry-expand-btn" class="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs" onclick="toggleIndustryTags(true)">+${hid.length}</button>`;
+    }
+    html+=`</div>`;
+    html+=`<div id="industry-tags-hidden" class="hidden mt-2 flex flex-wrap gap-2">`;
+    hid.forEach(t=> html+=`<span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs whitespace-nowrap">${t}</span>`);
+    if (hid.length>0){
+      html+=`<button class="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs" onclick="toggleIndustryTags(false)">- 收合</button>`;
+    }
+    html+=`</div>`;
+    return html;
+  }
+
+  function toggleIndustryTags(expand){
+    const hid=document.getElementById("industry-tags-hidden");
+    const btn=document.getElementById("industry-expand-btn");
+    if(!hid) return;
+    if(expand){
+      hid.classList.remove("hidden");
+      if(btn) btn.classList.add("hidden");
+    } else {
+      hid.classList.add("hidden");
+      if(btn) btn.classList.remove("hidden");
+    }
+  }
+
   let records = [];
   let stockList = [];
   let tradingChart;
@@ -618,6 +663,7 @@
       <div class="font-semibold mb-1">
         ${stockName} (${stockId}) - 法人買賣超摘要（單位：張，已換算千張）
       </div>
+      ${renderIndustryTagsBlock(stockId)}
       <div class="text-sm text-gray-500 mb-2">
         連續買超天數以最近一日往前計算；近 5 / 10 日為加總買賣超張數（千張四捨五入）。
       </div>

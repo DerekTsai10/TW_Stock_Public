@@ -74,7 +74,7 @@
       </nav>
     </div>
 
-    <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-80 mx-auto md:mx-0">
+    <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-full mx-auto md:mx-0">
       <label for="search-input" class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">
         輸入股票代碼或名稱：
       </label>
@@ -90,6 +90,8 @@
         <ul id="suggestions"
             class="absolute w-full bg-white border rounded mt-1 shadow-lg hidden max-h-60 overflow-y-auto z-20 text-lg"></ul>
       </div>
+      <div id="industry-tags-inline"
+           class="flex flex-wrap gap-2 mt-4 md:mt-0 md:ml-6 text-sm"></div>
     </div>
 
     <!-- 🔍 觀察清單視圖 -->
@@ -663,7 +665,6 @@
       <div class="font-semibold mb-1">
         ${stockName} (${stockId}) - 法人買賣超摘要（單位：張，已換算千張）
       </div>
-      ${renderIndustryTagsBlock(stockId)}
       <div class="text-sm text-gray-500 mb-2">
         連續買超天數以最近一日往前計算；近 5 / 10 日為加總買賣超張數（千張四捨五入）。
       </div>
@@ -693,6 +694,10 @@
   // 主搜尋：顯示法人表格 / 圖 / 摘要 / K 線
   function showStockData(keyword) {
     tableBody.innerHTML = "";
+    const tagsContainer = document.getElementById("industry-tags-inline");
+    if (tagsContainer) {
+      tagsContainer.innerHTML = "";
+    }
     const kw = keyword.toString().replace(/\s|　/g, "").trim();
     let foundStock = null;
     let dataFound = false;
@@ -753,6 +758,12 @@
     if (foundStock && dataFound) {
       toggleView('stock');
       pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
+
+      // 產業 / 主題 Chips（輸入框右側）
+      const tagsContainer = document.getElementById("industry-tags-inline");
+      if (tagsContainer) {
+        tagsContainer.innerHTML = renderIndustryTagsBlock(foundStock.stock_id.toString());
+      }
 
       // 法人摘要
       updateChipSummary(foundStock.stock_id.toString(), foundStock.name, history);

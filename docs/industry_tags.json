@@ -6259,8 +6259,16 @@
     "name": "鴻海",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "伺服器",
+      "組裝",
+      "電動車"
+    ],
+    "ai_chain": [
+      "AI_伺服器_組裝",
+      "AI_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2321": {
@@ -6323,8 +6331,17 @@
     "name": "台積電",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "HPC",
+      "先進製程",
+      "晶圓代工龍頭"
+    ],
+    "ai_chain": [
+      "AI_晶圓代工",
+      "AI_GPU/ASIC_製程",
+      "AI_供應鏈核心"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2331": {
@@ -6395,8 +6412,14 @@
     "name": "華邦電",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "記憶體",
+      "車用"
+    ],
+    "ai_chain": [
+      "AI_記憶體供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2345": {
@@ -6491,16 +6514,30 @@
     "name": "英業達",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "伺服器",
+      "雲端"
+    ],
+    "ai_chain": [
+      "AI_伺服器_ODM"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2357": {
     "name": "華碩",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "顯卡",
+      "主機板",
+      "NB"
+    ],
+    "ai_chain": [
+      "AI_GPU_通路",
+      "AI_PC/工作站"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2358": {
@@ -6627,16 +6664,31 @@
     "name": "技嘉",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "顯卡",
+      "主機板"
+    ],
+    "ai_chain": [
+      "AI_GPU_通路",
+      "AI_PC/工作站"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2377": {
     "name": "微星",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "顯卡",
+      "主機板",
+      "電競"
+    ],
+    "ai_chain": [
+      "AI_GPU_通路",
+      "AI_工作站/工規PC"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2379": {
@@ -6667,16 +6719,32 @@
     "name": "廣達",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "伺服器",
+      "雲端",
+      "AI伺服器ODM"
+    ],
+    "ai_chain": [
+      "AI_伺服器_ODM",
+      "AI_資料中心"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2383": {
     "name": "台光電",
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "PCB",
+      "高速傳輸",
+      "CCL"
+    ],
+    "ai_chain": [
+      "AI_高速板材",
+      "AI_伺服器材料"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "2384": {
@@ -6827,8 +6895,15 @@
     "name": "南亞科",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "DRAM",
+      "資料中心"
+    ],
+    "ai_chain": [
+      "AI_DRAM",
+      "AI_資料中心"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2409": {
@@ -6851,8 +6926,15 @@
     "name": "中華電",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "電信",
+      "雲端"
+    ],
+    "ai_chain": [
+      "AI_雲端服務",
+      "AI_電信營運商"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2413": {
@@ -6915,8 +6997,14 @@
     "name": "建準",
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "散熱",
+      "風扇"
+    ],
+    "ai_chain": [
+      "AI_散熱_風扇"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "2423": {
@@ -9107,8 +9195,15 @@
     "name": "奇鋐",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "散熱",
+      "伺服器"
+    ],
+    "ai_chain": [
+      "AI_伺服器_散熱",
+      "AI_資料中心_散熱"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "3018": {
@@ -9251,8 +9346,14 @@
     "name": "智原",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "IP",
+      "ASIC服務"
+    ],
+    "ai_chain": [
+      "AI_晶片設計_服務"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3036": {
@@ -9275,8 +9376,15 @@
     "name": "欣興",
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "ABF載板",
+      "PCB"
+    ],
+    "ai_chain": [
+      "AI_ABF載板",
+      "AI_高速封裝"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "3038": {
@@ -9331,8 +9439,15 @@
     "name": "台灣大",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "電信",
+      "雲端"
+    ],
+    "ai_chain": [
+      "AI_雲端服務",
+      "AI_電信營運商"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3046": {
@@ -10035,8 +10150,16 @@
     "name": "緯創",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "伺服器",
+      "雲端",
+      "AI PC"
+    ],
+    "ai_chain": [
+      "AI_伺服器_ODM",
+      "AI_PC/工作站"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3232": {
@@ -10091,8 +10214,13 @@
     "name": "威剛",
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "記憶體模組"
+    ],
+    "ai_chain": [
+      "AI_記憶體模組"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "3264": {
@@ -10339,8 +10467,15 @@
     "name": "雙鴻",
     "sector_lv1": "其他電子類",
     "sector_lv2": "其他電子類",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "散熱",
+      "伺服器"
+    ],
+    "ai_chain": [
+      "AI_伺服器_散熱",
+      "AI_資料中心_散熱"
+    ],
     "notes": "FinMind: 其他電子類"
   },
   "3325": {
@@ -10619,8 +10754,16 @@
     "name": "創意",
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "ASIC",
+      "IP",
+      "HPC"
+    ],
+    "ai_chain": [
+      "AI_晶片設計",
+      "AI_客製ASIC"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "3444": {
@@ -11291,8 +11434,14 @@
     "name": "智易",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "網通",
+      "寬頻"
+    ],
+    "ai_chain": [
+      "AI_資料中心_交換器/閘道"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3597": {
@@ -11539,8 +11688,16 @@
     "name": "世芯-KY",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "ASIC",
+      "IP",
+      "HPC"
+    ],
+    "ai_chain": [
+      "AI_晶片設計",
+      "AI_客製ASIC"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3663": {
@@ -13483,8 +13640,15 @@
     "name": "遠傳",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "雲端",
+      "IDC"
+    ],
+    "ai_chain": [
+      "AI_雲端服務",
+      "AI_IDC運營"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "4905": {
@@ -13763,8 +13927,14 @@
     "name": "天鈺",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "驅動IC",
+      "PMIC"
+    ],
+    "ai_chain": [
+      "AI_周邊IC"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "4966": {
@@ -16635,8 +16805,14 @@
     "name": "啟碁",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "網通",
+      "基地台"
+    ],
+    "ai_chain": [
+      "AI_邊緣/基地台設備"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "6286": {
@@ -17299,8 +17475,14 @@
     "name": "愛普*",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "記憶體",
+      "高速運算"
+    ],
+    "ai_chain": [
+      "AI_DRAM/SRAM_設計"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "6532": {
@@ -17315,8 +17497,16 @@
     "name": "晶心科",
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "IP",
+      "RISC-V",
+      "邊緣AI"
+    ],
+    "ai_chain": [
+      "AI_IP",
+      "AI_邊緣運算"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "6534": {
@@ -18123,8 +18313,16 @@
     "name": "緯穎",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "伺服器",
+      "雲端",
+      "資料中心"
+    ],
+    "ai_chain": [
+      "AI_伺服器_ODM",
+      "AI_資料中心"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "6670": {
@@ -21851,8 +22049,15 @@
     "name": "南電",
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "ABF載板",
+      "伺服器"
+    ],
+    "ai_chain": [
+      "AI_ABF載板",
+      "AI_高速封裝"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "8047": {
@@ -22491,8 +22696,14 @@
     "name": "群聯",
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "AI",
+      "控制IC",
+      "SSD"
+    ],
+    "ai_chain": [
+      "AI_儲存控制IC"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "8329": {

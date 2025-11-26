@@ -5404,7 +5404,9 @@
     "sector_lv1": "玻璃陶瓷",
     "sector_lv2": "玻璃陶瓷",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_玻纖布"
+    ],
     "notes": "FinMind: 玻璃陶瓷"
   },
   "1805": {
@@ -5460,7 +5462,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_玻纖布"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "1817": {
@@ -6172,7 +6176,9 @@
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_電源"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2302": {
@@ -6204,7 +6210,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_電源"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "2311": {
@@ -6308,7 +6316,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_被動元件"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "2328": {
@@ -6373,7 +6383,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_NOR_Flash"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2338": {
@@ -6405,7 +6417,9 @@
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_矽晶圓"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "2344": {
@@ -6418,7 +6432,7 @@
       "車用"
     ],
     "ai_chain": [
-      "AI_記憶體供應鏈"
+      "AI_DRAM"
     ],
     "notes": "FinMind: 電子工業"
   },
@@ -6499,7 +6513,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_機殼機櫃"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2355": {
@@ -6617,7 +6633,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_PCB"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "2369": {
@@ -6657,7 +6675,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_被動元件"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "2376": {
@@ -6670,8 +6690,7 @@
       "主機板"
     ],
     "ai_chain": [
-      "AI_GPU_通路",
-      "AI_PC/工作站"
+      "AI_伺服器_ODM"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -6726,8 +6745,7 @@
       "AI伺服器ODM"
     ],
     "ai_chain": [
-      "AI_伺服器_ODM",
-      "AI_資料中心"
+      "AI_伺服器_ODM"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -6742,7 +6760,7 @@
       "CCL"
     ],
     "ai_chain": [
-      "AI_高速板材",
+      "AI_CCL",
       "AI_伺服器材料"
     ],
     "notes": "FinMind: 電子零組件業"
@@ -6901,8 +6919,7 @@
       "資料中心"
     ],
     "ai_chain": [
-      "AI_DRAM",
-      "AI_資料中心"
+      "AI_DRAM"
     ],
     "notes": "FinMind: 電子工業"
   },
@@ -7003,7 +7020,7 @@
       "風扇"
     ],
     "ai_chain": [
-      "AI_散熱_風扇"
+      "AI_伺服器_散熱"
     ],
     "notes": "FinMind: 電子零組件業"
   },
@@ -7204,7 +7221,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_封測"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2450": {
@@ -7452,7 +7471,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_功率半導體"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2482": {
@@ -7492,7 +7513,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_散熱"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2488": {
@@ -7524,7 +7547,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_被動元件"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "2493": {
@@ -9164,7 +9189,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_機殼機櫃"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3014": {
@@ -9188,7 +9215,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_矽晶圓"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3017": {
@@ -9201,8 +9230,7 @@
       "伺服器"
     ],
     "ai_chain": [
-      "AI_伺服器_散熱",
-      "AI_資料中心_散熱"
+      "AI_伺服器_散熱"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -9382,8 +9410,7 @@
       "PCB"
     ],
     "ai_chain": [
-      "AI_ABF載板",
-      "AI_高速封裝"
+      "AI_ABF載板"
     ],
     "notes": "FinMind: 電子零組件業"
   },
@@ -9911,7 +9938,9 @@
     "sector_lv1": "通信網路業",
     "sector_lv2": "通信網路業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_光通訊"
+    ],
     "notes": "FinMind: 通信網路業"
   },
   "3164": {
@@ -9991,7 +10020,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_ABF載板"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3191": {
@@ -10157,8 +10188,7 @@
       "AI PC"
     ],
     "ai_chain": [
-      "AI_伺服器_ODM",
-      "AI_PC/工作站"
+      "AI_伺服器_ODM"
     ],
     "notes": "FinMind: 電子工業"
   },
@@ -10219,7 +10249,7 @@
       "記憶體模組"
     ],
     "ai_chain": [
-      "AI_記憶體模組"
+      "AI_SSD"
     ],
     "notes": "FinMind: 半導體業"
   },
@@ -10473,8 +10503,7 @@
       "伺服器"
     ],
     "ai_chain": [
-      "AI_伺服器_散熱",
-      "AI_資料中心_散熱"
+      "AI_伺服器_散熱"
     ],
     "notes": "FinMind: 其他電子類"
   },
@@ -10571,7 +10600,9 @@
     "sector_lv1": "通信網路業",
     "sector_lv2": "通信網路業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_光通訊"
+    ],
     "notes": "FinMind: 通信網路業"
   },
   "3367": {
@@ -10787,7 +10818,10 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_CPO",
+      "AI_光通訊"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3454": {
@@ -11561,7 +11595,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_被動元件"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "3625": {
@@ -11673,7 +11709,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_散熱"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "3659": {
@@ -11761,7 +11799,9 @@
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_功率半導體"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "3678": {
@@ -11849,7 +11889,9 @@
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_機殼機櫃"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "3694": {
@@ -11937,7 +11979,9 @@
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_矽晶圓"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "3708": {
@@ -11969,7 +12013,10 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_先進封裝",
+      "AI_CoWoS"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3712": {
@@ -14014,7 +14061,10 @@
     "sector_lv1": "通信網路業",
     "sector_lv2": "通信網路業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_CPO",
+      "AI_光通訊"
+    ],
     "notes": "FinMind: 通信網路業"
   },
   "4980": {
@@ -14046,7 +14096,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_銅箔"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "4991": {
@@ -14054,7 +14106,10 @@
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_CPO",
+      "AI_光通訊"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "4994": {
@@ -14686,7 +14741,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_玻纖布"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "5344": {
@@ -14846,7 +14903,9 @@
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_功率半導體"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "5426": {
@@ -14966,7 +15025,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_PCB"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "5471": {
@@ -15662,7 +15723,9 @@
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_機殼機櫃"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "6118": {
@@ -16054,7 +16117,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_被動元件"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "6174": {
@@ -16110,7 +16175,9 @@
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_矽晶圓"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "6183": {
@@ -16182,7 +16249,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_PCB"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "6192": {
@@ -16718,7 +16787,10 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_CCL",
+      "AI_伺服器材料"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "6275": {
@@ -16782,7 +16854,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_電源"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "6283": {
@@ -16924,7 +16998,9 @@
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_功率半導體"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "6412": {
@@ -17260,7 +17336,9 @@
     "sector_lv1": "半導體業",
     "sector_lv2": "半導體業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_矽晶圓"
+    ],
     "notes": "FinMind: 半導體業"
   },
   "6491": {
@@ -18898,7 +18976,9 @@
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_DRAM_代工"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "6771": {
@@ -22018,7 +22098,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_被動元件"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "8043": {
@@ -22026,7 +22108,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_被動元件"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "8044": {
@@ -22055,8 +22139,7 @@
       "伺服器"
     ],
     "ai_chain": [
-      "AI_ABF載板",
-      "AI_高速封裝"
+      "AI_ABF載板"
     ],
     "notes": "FinMind: 電子零組件業"
   },
@@ -22409,7 +22492,9 @@
     "sector_lv1": "光電業",
     "sector_lv2": "光電業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_光通訊"
+    ],
     "notes": "FinMind: 光電業"
   },
   "8112": {
@@ -22553,7 +22638,9 @@
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_機殼機櫃"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "8213": {
@@ -22702,7 +22789,8 @@
       "SSD"
     ],
     "ai_chain": [
-      "AI_儲存控制IC"
+      "AI_SSD",
+      "AI_控制IC"
     ],
     "notes": "FinMind: 半導體業"
   },
@@ -22767,7 +22855,9 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_材料_銅箔"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "8359": {
@@ -23431,7 +23521,9 @@
     "sector_lv1": "電機機械",
     "sector_lv2": "電機機械",
     "themes": [],
-    "ai_chain": [],
+    "ai_chain": [
+      "AI_伺服器_散熱"
+    ],
     "notes": "FinMind: 電機機械"
   },
   "8999": {

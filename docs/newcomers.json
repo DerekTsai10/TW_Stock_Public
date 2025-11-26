@@ -1,44 +1,74 @@
 {
-  "date": "20251125",
+  "date": "20251126",
   "newcomers": {
     "foreign": [
       {
-        "stock_id": "8422",
-        "name": "可寧衛*",
-        "foreign_ratio": 2.1230721201045695,
+        "stock_id": "4577",
+        "name": "達航科技",
+        "foreign_ratio": 3.4535391531417297,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "3081",
-        "name": "聯亞",
-        "foreign_ratio": 2.043314811451628,
-        "invest_ratio": 0.10484063591055287
-      },
-      {
-        "stock_id": "3680",
-        "name": "家登",
-        "foreign_ratio": 1.8544591164728081,
+        "stock_id": "2316",
+        "name": "楠梓電",
+        "foreign_ratio": 2.7661624019752242,
         "invest_ratio": 0.0
       },
       {
-        "stock_id": "6191",
-        "name": "精成科",
-        "foreign_ratio": 1.6471128753482354,
-        "invest_ratio": 0.06989743702721594
+        "stock_id": "8155",
+        "name": "博智",
+        "foreign_ratio": 2.7273925427959447,
+        "invest_ratio": 0.0
       },
       {
-        "stock_id": "8074",
-        "name": "鉅橡",
-        "foreign_ratio": 1.4794787285167155,
+        "stock_id": "4903",
+        "name": "聯光通",
+        "foreign_ratio": 2.058025028432166,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "4939",
+        "name": "亞電",
+        "foreign_ratio": 1.716889101224645,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "5284",
+        "name": "jpp-KY",
+        "foreign_ratio": 1.3370341884937182,
+        "invest_ratio": 0.0
+      },
+      {
+        "stock_id": "1560",
+        "name": "中砂",
+        "foreign_ratio": 1.1998006275712687,
+        "invest_ratio": -0.01361089764686635
+      },
+      {
+        "stock_id": "3535",
+        "name": "晶彩科",
+        "foreign_ratio": 1.0891515997322079,
         "invest_ratio": 0.0
       }
     ],
     "invest": [
       {
-        "stock_id": "6290",
-        "name": "良維",
-        "foreign_ratio": -0.9972932694003203,
-        "invest_ratio": 0.3644802118791341
+        "stock_id": "3081",
+        "name": "聯亞",
+        "foreign_ratio": 0.6465803032741289,
+        "invest_ratio": 1.0873162858352186
+      },
+      {
+        "stock_id": "6919",
+        "name": "康霈*",
+        "foreign_ratio": -6.44241910295756,
+        "invest_ratio": 0.25432622622872153
+      },
+      {
+        "stock_id": "5469",
+        "name": "瀚宇博",
+        "foreign_ratio": 0.010695935133267238,
+        "invest_ratio": 0.2209121987140195
       }
     ]
   },

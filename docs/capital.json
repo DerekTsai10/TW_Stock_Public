@@ -452,7 +452,7 @@
     "abbreviation": "東和",
     "industry": "04",
     "market": "TWSE",
-    "share_capital": 2200000000,
+    "share_capital": 1980000000,
     "shares_issued": 0
   },
   "1416": {
@@ -2020,7 +2020,7 @@
     "abbreviation": "百達-KY",
     "industry": "12",
     "market": "TWSE",
-    "share_capital": 535556560,
+    "share_capital": 595556560,
     "shares_issued": 0
   },
   "2239": {
@@ -2572,7 +2572,7 @@
     "abbreviation": "研華",
     "industry": "25",
     "market": "TWSE",
-    "share_capital": 8643744450,
+    "share_capital": 8651897910,
     "shares_issued": 0
   },
   "2397": {
@@ -5260,7 +5260,7 @@
     "abbreviation": "訊映",
     "industry": "22",
     "market": "TWSE",
-    "share_capital": 1460591640,
+    "share_capital": 1448141640,
     "shares_issued": 0
   },
   "4164": {
@@ -6772,7 +6772,7 @@
     "abbreviation": "愛普*",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 813009225,
+    "share_capital": 813313855,
     "shares_issued": 0
   },
   "6533": {
@@ -7068,7 +7068,7 @@
     "abbreviation": "力智",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 1054529890,
+    "share_capital": 1054669890,
     "shares_issued": 0
   },
   "6742": {
@@ -7245,6 +7245,14 @@
     "industry": "31",
     "market": "TWSE",
     "share_capital": 517818460,
+    "shares_issued": 0
+  },
+  "6831": {
+    "company_name": "邁&#33834;科技股份有限公司",
+    "abbreviation": "邁&#33834;",
+    "industry": "25",
+    "market": "TWSE",
+    "share_capital": 675000000,
     "shares_issued": 0
   },
   "6834": {
@@ -7612,7 +7620,7 @@
     "abbreviation": "暉盛-創",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 346317310,
+    "share_capital": 367967310,
     "shares_issued": 0
   },
   "7732": {
@@ -8668,8 +8676,8 @@
     "abbreviation": "光洋科",
     "industry": "31",
     "market": "TPEX",
-    "share_capital": 5960222430,
-    "shares_issued": 596022243
+    "share_capital": 5960022430,
+    "shares_issued": 596002243
   },
   "1788": {
     "company_name": "杏昌生技股份有限公司",
@@ -9972,8 +9980,8 @@
     "abbreviation": "凡甲",
     "industry": "28",
     "market": "TPEX",
-    "share_capital": 651881300,
-    "shares_issued": 65188130
+    "share_capital": 653038650,
+    "shares_issued": 65303865
   },
   "3527": {
     "company_name": "聚積科技股份有限公司",
@@ -11108,8 +11116,8 @@
     "abbreviation": "永昕",
     "industry": "22",
     "market": "TPEX",
-    "share_capital": 2071143000,
-    "shares_issued": 207114300
+    "share_capital": 2071988000,
+    "shares_issued": 207198800
   },
   "4728": {
     "company_name": "雙美生物科技股份有限公司",
@@ -11172,8 +11180,8 @@
     "abbreviation": "強生製藥",
     "industry": "22",
     "market": "TPEX",
-    "share_capital": 449323460,
-    "shares_issued": 44932346
+    "share_capital": 453804710,
+    "shares_issued": 45380471
   },
   "4749": {
     "company_name": "新應材股份有限公司",
@@ -11892,8 +11900,8 @@
     "abbreviation": "中菲",
     "industry": "30",
     "market": "TPEX",
-    "share_capital": 762214950,
-    "shares_issued": 76221495
+    "share_capital": 761930900,
+    "shares_issued": 761930900
   },
   "5410": {
     "company_name": "國眾電腦股份有限公司",
@@ -13223,6 +13231,14 @@
     "share_capital": 376941000,
     "shares_issued": 37694100
   },
+  "6474": {
+    "company_name": "華豫寧股份有限公司",
+    "abbreviation": "華豫寧",
+    "industry": "29",
+    "market": "TPEX",
+    "share_capital": 525261990,
+    "shares_issued": 52526199
+  },
   "6482": {
     "company_name": "弘煜科技事業股份有限公司",
     "abbreviation": "弘煜科",
@@ -13492,8 +13508,8 @@
     "abbreviation": "逸達",
     "industry": "22",
     "market": "TPEX",
-    "share_capital": 1573576660,
-    "shares_issued": 157357666
+    "share_capital": 1574137630,
+    "shares_issued": 157413763
   },
   "6577": {
     "company_name": "勁豐電子股份有限公司",
@@ -13732,8 +13748,8 @@
     "abbreviation": "鑫創電子",
     "industry": "25",
     "market": "TPEX",
-    "share_capital": 238442100,
-    "shares_issued": 23844210
+    "share_capital": 238712100,
+    "shares_issued": 23871210
   },
   "6683": {
     "company_name": "雍智科技股份有限公司",
@@ -14468,7 +14484,7 @@
     "abbreviation": "光速火箭",
     "industry": "38",
     "market": "TPEX",
-    "share_capital": 212270000,
+    "share_capital": 232130000,
     "shares_issued": 21227000
   },
   "8024": {

@@ -5,14 +5,29 @@
   <title>Industry Tags 管理工具（本地編輯用）</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* 桌機等比例放大一點，手機維持 1x */
+    @media (min-width: 769px) {
+      .desktop-zoom {
+        transform: scale(1.2);
+        transform-origin: top center;
+      }
+    }
+    @media (max-width: 768px) {
+      .desktop-zoom {
+        transform: scale(1);
+        transform-origin: top center;
+      }
+    }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
-  <div class="max-w-6xl mx-auto p-4 space-y-4">
+  <div class="desktop-zoom max-w-6xl mx-auto p-4 space-y-4">
     <header class="bg-white shadow p-4 rounded">
       <h1 class="text-xl font-bold mb-2">Industry Tags 管理工具</h1>
       <p class="text-sm text-gray-600">
-        說明：這個頁面只在本機瀏覽器編輯資料，不會自動寫回 GitHub。<br>
-        編輯完成後請按「匯出 JSON」，將產生的內容複製回 <code>docs/industry_tags.json</code> 再 commit。
+        說明：這個頁面只在瀏覽器本機編輯資料，不會自動寫回 GitHub。<br>
+        編輯完成後按「匯出 JSON」，會自動下載 <code>industry_tags.json</code> 檔案，再將它放回 <code>docs/</code> 並 commit。
       </p>
     </header>
 
@@ -22,7 +37,7 @@
         + 新增一檔
       </button>
       <button id="export-btn" class="px-3 py-1 bg-green-600 text-white rounded text-sm">
-        匯出 JSON
+        匯出 JSON（下載檔案）
       </button>
       <span id="status" class="ml-2 text-sm text-gray-500"></span>
     </div>
@@ -36,7 +51,7 @@
 
     <!-- 表格區 -->
     <div class="bg-white p-4 rounded shadow overflow-auto">
-      <table class="min-w-full text-xs" id="tags-table">
+      <table class="min-w-full text-sm" id="tags-table">
         <thead>
           <tr class="border-b bg-gray-50">
             <th class="px-2 py-1 text-left">刪除</th>
@@ -44,8 +59,14 @@
             <th class="px-2 py-1 text-left">名稱</th>
             <th class="px-2 py-1 text-left">大產業<br>(sector_lv1)</th>
             <th class="px-2 py-1 text-left">細產業 / 族群<br>(sector_lv2)</th>
-            <th class="px-2 py-1 text-left">主題 (themes)<br><span class="text-gray-400">逗號分隔，例如：AI, 記憶體</span></th>
-            <th class="px-2 py-1 text-left">AI 角色 (ai_chain)<br><span class="text-gray-400">逗號分隔，例如：AI-伺服器 / ODM</span></th>
+            <th class="px-2 py-1 text-left">
+              主題 (themes)<br>
+              <span class="text-gray-400 text-xs">逗號分隔，例如：AI, 記憶體</span>
+            </th>
+            <th class="px-2 py-1 text-left">
+              AI 角色 (ai_chain)<br>
+              <span class="text-gray-400 text-xs">逗號分隔，例如：AI-伺服器 / ODM</span>
+            </th>
             <th class="px-2 py-1 text-left">備註 (notes)</th>
           </tr>
         </thead>
@@ -55,9 +76,11 @@
       </table>
     </div>
 
-    <!-- 匯出結果 -->
+    <!-- 匯出結果預覽 -->
     <div class="bg-white p-4 rounded shadow">
-      <h2 class="font-semibold text-sm mb-2">匯出結果（複製這段貼回 <code>industry_tags.json</code>）</h2>
+      <h2 class="font-semibold text-sm mb-2">
+        匯出結果預覽（實際已自動下載 <code>industry_tags.json</code>，這裡僅供確認）
+      </h2>
       <textarea id="export-output" class="w-full h-64 border rounded p-2 text-xs font-mono" readonly></textarea>
     </div>
   </div>
@@ -74,28 +97,28 @@
 
       tr.innerHTML = `
         <td class="px-2 py-1 align-top">
-          <button class="delete-row px-2 py-1 bg-red-500 text-white rounded text-2xs">X</button>
+          <button class="delete-row px-2 py-1 bg-red-500 text-white rounded text-xs">X</button>
         </td>
         <td class="px-2 py-1 align-top">
-          <input type="text" class="stock-id border rounded px-1 py-0.5 w-20 text-xs" value="${stockId || ''}">
+          <input type="text" class="stock-id border rounded px-1 py-0.5 w-20 text-sm" value="${stockId || ''}">
         </td>
         <td class="px-2 py-1 align-top">
-          <input type="text" class="name border rounded px-1 py-0.5 w-24 text-xs" value="${info.name || ''}">
+          <input type="text" class="name border rounded px-1 py-0.5 w-24 text-sm" value="${info.name || ''}">
         </td>
         <td class="px-2 py-1 align-top">
-          <input type="text" class="sector-lv1 border rounded px-1 py-0.5 w-24 text-xs" value="${info.sector_lv1 || ''}">
+          <input type="text" class="sector-lv1 border rounded px-1 py-0.5 w-24 text-sm" value="${info.sector_lv1 || ''}">
         </td>
         <td class="px-2 py-1 align-top">
-          <input type="text" class="sector-lv2 border rounded px-1 py-0.5 w-32 text-xs" value="${info.sector_lv2 || ''}">
+          <input type="text" class="sector-lv2 border rounded px-1 py-0.5 w-32 text-sm" value="${info.sector_lv2 || ''}">
         </td>
         <td class="px-2 py-1 align-top">
-          <input type="text" class="themes border rounded px-1 py-0.5 w-40 text-xs" value="${(info.themes || []).join(', ')}">
+          <input type="text" class="themes border rounded px-1 py-0.5 w-40 text-sm" value="${(info.themes || []).join(', ')}">
         </td>
         <td class="px-2 py-1 align-top">
-          <input type="text" class="ai-chain border rounded px-1 py-0.5 w-40 text-xs" value="${(info.ai_chain || []).join(', ')}">
+          <input type="text" class="ai-chain border rounded px-1 py-0.5 w-40 text-sm" value="${(info.ai_chain || []).join(', ')}">
         </td>
         <td class="px-2 py-1 align-top">
-          <input type="text" class="notes border rounded px-1 py-0.5 w-48 text-xs" value="${info.notes || ''}">
+          <input type="text" class="notes border rounded px-1 py-0.5 w-48 text-sm" value="${info.notes || ''}">
         </td>
       `;
 
@@ -217,7 +240,24 @@
 
       const jsonStr = JSON.stringify(tagsData, null, 2);
       document.getElementById('export-output').value = jsonStr;
-      document.getElementById('status').textContent = '已產生匯出結果（請複製下方 JSON）';
+      const status = document.getElementById('status');
+      status.textContent = '已產生匯出結果，並觸發檔案下載';
+
+      // 產生 Blob 並觸發下載 industry_tags.json
+      try {
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'industry_tags.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (e) {
+        console.error('下載檔案失敗：', e);
+        status.textContent = '產生 JSON 成功，但瀏覽器阻擋下載，請改用下方文字自行複製';
+      }
     });
 
     document.getElementById('filter-keyword').addEventListener('input', () => {

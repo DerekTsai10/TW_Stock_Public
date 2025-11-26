@@ -7,8 +7,6 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
-  <!-- 字雲套件：wordcloud2.js -->
-  <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
   <style>
     /* ✅ 桌機維持原本 scale-150（用 transform） */
     .desktop-zoom {
@@ -58,7 +56,7 @@
       法人買賣超查詢
     </h1>
 
-    <!-- 🔝 頂部導覽列：觀察清單 / 個股查詢 / 個股熱度 -->
+    <!-- 🔝 頂部導覽列：觀察清單 / 個股查詢 -->
     <div class="mb-6 border-b">
       <nav class="flex space-x-4">
         <button
@@ -72,12 +70,6 @@
           type="button"
           class="px-4 py-2 text-sm font-medium border-b-2 -mb-px text-gray-500 border-transparent hover:text-blue-600">
           個股查詢
-        </button>
-        <button
-          id="tab-heat"
-          type="button"
-          class="px-4 py-2 text-sm font-medium border-b-2 -mb-px text-gray-500 border-transparent hover:text-blue-600">
-          個股熱度
         </button>
       </nav>
     </div>
@@ -209,27 +201,6 @@
             </table>
         </div>
     </div>
-
-    <!-- 🔥 個股熱度視圖（台股整體新聞文字雲） -->
-    <div id="heat-view" class="hidden">
-      <div class="p-6 border rounded bg-white shadow mb-8">
-        <h3 class="font-bold text-2xl mb-3 mobile-center">📣 個股熱度 - 台股新聞文字雲</h3>
-        <p class="text-sm text-gray-500 mb-3 mobile-center">
-          資料來源建議：每日由 GitHub Actions 抓取 Google News「台股 / 個股」相關新聞，斷詞後產生 <code>news_words.json</code>。
-        </p>
-        <div class="border rounded bg-gray-50 py-2 px-3 mb-3 text-sm text-gray-600">
-          <div>● 字體大小代表在新聞中被提及的頻率（越大越常出現）。</div>
-          <div>● 顏色可視為隨機區分，不代表漲跌方向。</div>
-        </div>
-        <div class="w-full h-80 md:h-96 flex items-center justify-center bg-white border rounded">
-          <canvas id="heat-wordcloud-canvas" class="w-full h-full"></canvas>
-        </div>
-        <div id="heat-wordcloud-message" class="mt-3 text-center text-sm text-gray-500">
-          正在載入字雲資料（news_words.json）...
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <script>
@@ -248,18 +219,12 @@
 
   const insightsView = document.getElementById('insights-view');
   const stockView = document.getElementById('stock-view');
-  const heatView = document.getElementById('heat-view');
 
   const tabInsights = document.getElementById('tab-insights');
   const tabStock = document.getElementById('tab-stock');
-  const tabHeat = document.getElementById('tab-heat');
   const refreshInsightsBtn = document.getElementById('refresh-insights-btn');
 
   const chipSummary = document.getElementById('chip-summary');
-
-  const heatCanvas = document.getElementById('heat-wordcloud-canvas');
-  const heatMsg = document.getElementById('heat-wordcloud-message');
-  let heatLoaded = false;  // 避免每次切頁都重畫
 
   // 數字著色：正紅 / 負綠
   function colorize(val) {
@@ -272,20 +237,14 @@
 
   function setActiveTab(view) {
     const base = 'px-4 py-2 text-sm font-medium border-b-2 -mb-px';
-    if (!tabInsights || !tabStock || !tabHeat) return;
+    if (!tabInsights || !tabStock) return;
 
     if (view === 'insights') {
       tabInsights.className = base + ' text-blue-600 border-blue-500';
       tabStock.className = base + ' text-gray-500 border-transparent hover:text-blue-600';
-      tabHeat.className = base + ' text-gray-500 border-transparent hover:text-blue-600';
-    } else if (view === 'stock') {
+    } else {
       tabInsights.className = base + ' text-gray-500 border-transparent hover:text-blue-600';
       tabStock.className = base + ' text-blue-600 border-blue-500';
-      tabHeat.className = base + ' text-gray-500 border-transparent hover:text-blue-600';
-    } else if (view === 'heat') {
-      tabInsights.className = base + ' text-gray-500 border-transparent hover:text-blue-600';
-      tabStock.className = base + ' text-gray-500 border-transparent hover:text-blue-600';
-      tabHeat.className = base + ' text-blue-600 border-blue-500';
     }
   }
 
@@ -293,18 +252,10 @@
     if (view === 'insights') {
       insightsView.classList.remove('hidden');
       stockView.classList.add('hidden');
-      heatView.classList.add('hidden');
       pageTitle.textContent = "法人買賣超查詢";
     } else if (view === 'stock') {
       insightsView.classList.add('hidden');
       stockView.classList.remove('hidden');
-      heatView.classList.add('hidden');
-    } else if (view === 'heat') {
-      insightsView.classList.add('hidden');
-      stockView.classList.add('hidden');
-      heatView.classList.remove('hidden');
-      pageTitle.textContent = "法人買賣超查詢 - 個股熱度";
-      loadHeatWordCloud();
     }
     setActiveTab(view);
   }
@@ -325,13 +276,6 @@
     tabStock.addEventListener('click', () => {
       toggleView('stock');
       input.focus();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
-
-  if (tabHeat) {
-    tabHeat.addEventListener('click', () => {
-      toggleView('heat');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
@@ -561,57 +505,6 @@
     });
   }
 
-  // 🔥 個股熱度：載入新聞字雲
-  function loadHeatWordCloud() {
-    if (heatLoaded) return;
-    if (!heatCanvas || !window.WordCloud) {
-      if (heatMsg) {
-        heatMsg.textContent = "字雲程式庫載入失敗，請重新整理頁面。";
-      }
-      return;
-    }
-
-    fetch("news_words.json")
-      .then(res => {
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.json();
-      })
-      .then(data => {
-        const words = data.words || [];
-        if (!words.length) {
-          if (heatMsg) heatMsg.textContent = "目前尚無新聞字雲資料（news_words.json）。";
-          return;
-        }
-
-        const deviceScale = window.devicePixelRatio || 1;
-        heatCanvas.width = heatCanvas.clientWidth * deviceScale;
-        heatCanvas.height = heatCanvas.clientHeight * deviceScale;
-
-        WordCloud(heatCanvas, {
-          list: words,          // 例如 [["台積電", 50], ["AI", 30], ...]
-          gridSize: 8,
-          weightFactor: function (size) {
-            return 6 + size;    // 越大權重，字越大
-          },
-          fontFamily: 'Noto Sans TC, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-          color: 'random-dark',
-          backgroundColor: '#ffffff',
-          rotateRatio: 0.1,
-          ellipticity: 0.65,
-          drawOutOfBound: false
-        });
-
-        if (heatMsg) heatMsg.textContent = "資料來源：news_words.json（台股相關新聞文字雲）";
-        heatLoaded = true;
-      })
-      .catch(err => {
-        console.error("[Heat Wordcloud] 載入失敗：", err);
-        if (heatMsg) {
-          heatMsg.textContent = "無法載入 news_words.json，請確認檔案是否已由後端產生。";
-        }
-      });
-  }
-
   // 搜尋框輸入 / 建議清單
   input.addEventListener("input", function() {
     if (this.value.trim()) {
@@ -692,6 +585,7 @@
       return;
     }
 
+    // history[0] 為最近一天（我們從最新往回掃描）
     const calcConsecutive = (key) => {
       let count = 0;
       for (let i = 0; i < history.length; i++) {

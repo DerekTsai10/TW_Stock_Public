@@ -52,9 +52,27 @@
 <body class="p-6 bg-gray-50 text-lg">
   <div class="max-w-7xl mx-auto desktop-zoom mobile-reset transition-transform duration-300">
 
-    <h1 id="page-title" class="text-3xl font-bold mb-8 mobile-center">
+    <h1 id="page-title" class="text-3xl font-bold mb-4 mobile-center">
       法人買賣超查詢
     </h1>
+
+    <!-- 🔝 頂部導覽列：觀察清單 / 個股查詢 -->
+    <div class="mb-6 border-b">
+      <nav class="flex space-x-4">
+        <button
+          id="tab-insights"
+          type="button"
+          class="px-4 py-2 text-sm font-medium border-b-2 -mb-px text-blue-600 border-blue-500">
+          觀察清單
+        </button>
+        <button
+          id="tab-stock"
+          type="button"
+          class="px-4 py-2 text-sm font-medium border-b-2 -mb-px text-gray-500 border-transparent hover:text-blue-600">
+          個股查詢
+        </button>
+      </nav>
+    </div>
 
     <div class="my-6 flex flex-col md:flex-row md:items-center md:space-x-3 relative w-full md:w-80 mx-auto md:mx-0">
       <label for="search-input" class="font-bold text-xl mb-2 md:mb-0 whitespace-nowrap mobile-center">
@@ -77,18 +95,28 @@
     <div id="insights-view">
       <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
         <div class="p-6 border rounded bg-white shadow">
-          <h3 id="insights-title" class="font-bold text-2xl mb-6 mobile-center">📊 指標觀察清單</h3>
-            <h4 class="font-bold text-xl mb-3">🗓️ 當日外/投本比前 10</h4>
-            <div class="grid grid-cols-2 gap-6 text-gray-700">
-              <div>
-                <h5 class="font-semibold mb-2 text-base">🌏 外資</h5>
-                <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
-              </div>
-              <div>
-                <h5 class="font-semibold mb-2 text-base">🏦 投信</h5>
-                <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
-              </div>
+          <!-- 📊 標題 + 刷新按鈕 -->
+          <div class="flex items-center justify-between mb-6">
+            <h3 id="insights-title" class="font-bold text-2xl mobile-center">📊 指標觀察清單</h3>
+            <button
+              id="refresh-insights-btn"
+              type="button"
+              class="text-sm px-3 py-1 rounded border text-gray-600 hover:bg-gray-100">
+              🔄 刷新
+            </button>
+          </div>
+
+          <h4 class="font-bold text-xl mb-3">🗓️ 當日外/投本比前 10</h4>
+          <div class="grid grid-cols-2 gap-6 text-gray-700">
+            <div>
+              <h5 class="font-semibold mb-2 text-base">🌏 外資</h5>
+              <ul id="foreign_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
             </div>
+            <div>
+              <h5 class="font-semibold mb-2 text-base">🏦 投信</h5>
+              <ul id="invest_ratio_list" class="list-disc pl-6 space-y-2 text-base"></ul>
+            </div>
+          </div>
           <div id="period-section" class="mt-8"></div>
         </div>
 
@@ -112,7 +140,7 @@
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
 
             <div id="klineChartContainer" class="relative no-scale-chart" style="height: 720px;">
-                <div class="text-center py-4 text-gray-500">載入中...</div>
+                <div class="text-center py-4 text-gray-500">請先輸入股票代碼或名稱搜尋，以顯示 K 線圖。</div>
             </div>
 
             <div id="kline-ma-legend" class="mt-1 text-base text-gray-600 flex items-center space-x-4 mobile-center flex-wrap">
@@ -183,6 +211,23 @@
   const insightsView = document.getElementById('insights-view');
   const stockView = document.getElementById('stock-view');
 
+  const tabInsights = document.getElementById('tab-insights');
+  const tabStock = document.getElementById('tab-stock');
+  const refreshInsightsBtn = document.getElementById('refresh-insights-btn');
+
+  function setActiveTab(view) {
+    const base = 'px-4 py-2 text-sm font-medium border-b-2 -mb-px';
+    if (!tabInsights || !tabStock) return;
+
+    if (view === 'insights') {
+      tabInsights.className = base + ' text-blue-600 border-blue-500';
+      tabStock.className = base + ' text-gray-500 border-transparent hover:text-blue-600';
+    } else {
+      tabInsights.className = base + ' text-gray-500 border-transparent hover:text-blue-600';
+      tabStock.className = base + ' text-blue-600 border-blue-500';
+    }
+  }
+
   function toggleView(view) {
     if (view === 'insights') {
       insightsView.classList.remove('hidden');
@@ -192,11 +237,28 @@
       insightsView.classList.add('hidden');
       stockView.classList.remove('hidden');
     }
+    setActiveTab(view);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     toggleView('insights');
+    refreshInsights();
   });
+
+  if (tabInsights) {
+    tabInsights.addEventListener('click', () => {
+      toggleView('insights');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  if (tabStock) {
+    tabStock.addEventListener('click', () => {
+      toggleView('stock');
+      input.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
   fetch("data.json")
     .then(res => res.json())
@@ -221,187 +283,208 @@
     return a;
   }
 
-  fetch("insights.json")
-    .then(res => res.json())
-    .then(data => {
-      if (data.date) {
-        document.getElementById("insights-title").textContent =
-          `📊 指標觀察清單 (資料日期：${data.date})`;
-      }
+  function loadInsights() {
+    fetch("insights.json")
+      .then(res => res.json())
+      .then(data => {
+        if (data.date) {
+          document.getElementById("insights-title").textContent =
+            `📊 指標觀察清單 (資料日期：${data.date})`;
+        } else {
+          document.getElementById("insights-title").textContent =
+            `📊 指標觀察清單`;
+        }
 
-      const dailyForeign = (data.foreign_ratio_ranking || []).slice(0, 10);
-      const dailyInvest  = (data.invest_ratio_ranking  || []).slice(0, 10);
+        const dailyForeign = (data.foreign_ratio_ranking || []).slice(0, 10);
+        const dailyInvest  = (data.invest_ratio_ranking  || []).slice(0, 10);
 
-      const foreignList = document.getElementById("foreign_ratio_list");
-      const investList  = document.getElementById("invest_ratio_list");
-      foreignList.innerHTML = "";
-      investList.innerHTML  = "";
+        const foreignList = document.getElementById("foreign_ratio_list");
+        const investList  = document.getElementById("invest_ratio_list");
+        foreignList.innerHTML = "";
+        investList.innerHTML  = "";
 
-      const dailyBoth = new Set(
-        dailyForeign
-          .map(i => i.stock_id)
-          .filter(id => dailyInvest.some(j => j.stock_id === id))
-      );
-
-      // ✅ 名稱：底線、可點，觸發個股查詢
-      // ✅ 百分比：不加底線，跳 CMoney
-      const renderListItem = (listEl, items, ratioKey, bothSet) => {
-        items.forEach(item => {
-          const li = document.createElement("li");
-      
-          // 名稱：超連結樣式，但不跳轉 CMoney → 改成內部查詢
-          const nameSpan = document.createElement("span");
-          nameSpan.textContent = `${item.name} (${item.stock_id})`;
-          nameSpan.className = "cursor-pointer underline underline-offset-2 hover:text-blue-600";
-      
-          nameSpan.addEventListener("click", () => {
-            input.value = item.stock_id;
-            suggestions.classList.add("hidden");
-            clearBtn.classList.remove("hidden");
-            showStockData(item.stock_id); // 不捲動，停留在上方
-          });
-      
-          // 百分比：外部 CMoney（不加底線）
-          const ratioValue = (item[ratioKey] * 100).toFixed(2);
-          const ratioLink = document.createElement("a");
-          ratioLink.textContent = ` : ${ratioValue}%`;
-          ratioLink.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}`;
-          ratioLink.target = "_blank";
-          ratioLink.rel = "noopener";
-          ratioLink.className = "ml-1 text-gray-700 hover:text-blue-600";
-      
-          // 如果同時出現在外本比+投本比 → 標紅
-          if (bothSet.has(item.stock_id)) {
-            nameSpan.classList.add("text-red-600", "font-bold");
-            ratioLink.classList.remove("text-gray-700");
-            ratioLink.classList.add("text-red-600", "font-bold", "hover:text-red-800");
-          }
-      
-          li.appendChild(nameSpan);
-          li.appendChild(ratioLink);
-          listEl.appendChild(li);
-        });
-      };
-
-
-      renderListItem(foreignList, dailyForeign, 'foreign_ratio', dailyBoth);
-      renderListItem(investList, dailyInvest, 'invest_ratio', dailyBoth);
-
-      const periodRoot = document.getElementById("period-section");
-
-      function buildPeriodBlock(titleHTML, foreignKey, investKey, prefix) {
-        const section = document.createElement("div");
-        section.className = "mt-6 border-t pt-4";
-        section.innerHTML = `
-          <h4 class="font-bold text-xl mb-3">${titleHTML}</h4>
-          <div class="grid grid-cols-2 gap-6 text-gray-700">
-            <div>
-              <h5 class="font-semibold mb-2 text-base">🌏 外資</h5>
-              <ul id="${prefix}-foreign" class="list-disc pl-6 space-y-2 text-base"></ul>
-            </div>
-            <div>
-              <h5 class="font-semibold mb-2 text-base">🏦 投信</h5>
-              <ul id="${prefix}-invest" class="list-disc pl-6 space-y-2 text-base"></ul>
-            </div>
-          </div>
-        `;
-        periodRoot.appendChild(section);
-
-        const fList = (data[foreignKey] || []).slice(0, 10);
-        const iList = (data[investKey]  || []).slice(0, 10);
-
-        const both = new Set(
-          fList.map(i => i.stock_id).filter(id => iList.some(j => j.stock_id === id))
+        const dailyBoth = new Set(
+          dailyForeign
+            .map(i => i.stock_id)
+            .filter(id => dailyInvest.some(j => j.stock_id === id))
         );
 
-        const fUl = document.getElementById(`${prefix}-foreign`);
-        const iUl = document.getElementById(`${prefix}-invest`);
-
-        renderListItem(fUl, fList, 'foreign_ratio', both);
-        renderListItem(iUl, iList, 'invest_ratio', both);
-      }
-
-      buildPeriodBlock(
-        "🗓️ 近5日外/投本比前 10",
-        "foreign_ratio_5d_ranking",
-        "invest_ratio_5d_ranking",
-        "p5d"
-      );
-
-      buildPeriodBlock(
-        "🗓️ 近10日外/投本比前 10",
-        "foreign_ratio_10d_ranking",
-        "invest_ratio_10d_ranking",
-        "p10d"
-      );
-    });
-
-  fetch("newcomers.json")
-    .then(res => res.json())
-    .then(data => {
-      const newcomers = data.newcomers || {};
-      const container = document.getElementById("newcomers-container");
-      container.innerHTML = "";
-
-      // 由於新人榜沒有百分比，維持點擊連結到 Cmoney
-      const addList = (title, items) => {
-        if (items && items.length > 0) {
-          const header = document.createElement("p");
-          header.className = "font-semibold mt-2";
-          header.textContent = title;
-          container.appendChild(header);
-
-          const ul = document.createElement("ul");
-          ul.className = "list-disc pl-6 space-y-1";
-          items.slice(0, 10).forEach(stock => {
+        // ✅ 名稱：底線、可點，觸發個股查詢
+        // ✅ 百分比：不加底線，跳 CMoney
+        const renderListItem = (listEl, items, ratioKey, bothSet) => {
+          items.forEach(item => {
             const li = document.createElement("li");
-            const a = createStockLink(stock.stock_id, stock.name); 
-            li.appendChild(a);
-            ul.appendChild(li);
+        
+            // 名稱：超連結樣式，但不跳轉 CMoney → 改成內部查詢
+            const nameSpan = document.createElement("span");
+            nameSpan.textContent = `${item.name} (${item.stock_id})`;
+            nameSpan.className = "cursor-pointer underline underline-offset-2 hover:text-blue-600";
+        
+            nameSpan.addEventListener("click", () => {
+              input.value = item.stock_id;
+              suggestions.classList.add("hidden");
+              clearBtn.classList.remove("hidden");
+              showStockData(item.stock_id); // 不捲動，停留在上方
+            });
+        
+            // 百分比：外部 CMoney（不加底線）
+            const ratioValue = (item[ratioKey] * 100).toFixed(2);
+            const ratioLink = document.createElement("a");
+            ratioLink.textContent = ` : ${ratioValue}%`;
+            ratioLink.href = `https://www.cmoney.tw/finance/f00025.aspx?s=${item.stock_id}`;
+            ratioLink.target = "_blank";
+            ratioLink.rel = "noopener";
+            ratioLink.className = "ml-1 text-gray-700 hover:text-blue-600";
+        
+            // 如果同時出現在外本比+投本比 → 標紅
+            if (bothSet.has(item.stock_id)) {
+              nameSpan.classList.add("text-red-600", "font-bold");
+              ratioLink.classList.remove("text-gray-700");
+              ratioLink.classList.add("text-red-600", "font-bold", "hover:text-red-800");
+            }
+        
+            li.appendChild(nameSpan);
+            li.appendChild(ratioLink);
+            listEl.appendChild(li);
           });
-          container.appendChild(ul);
+        };
+
+        renderListItem(foreignList, dailyForeign, 'foreign_ratio', dailyBoth);
+        renderListItem(investList, dailyInvest, 'invest_ratio', dailyBoth);
+
+        const periodRoot = document.getElementById("period-section");
+        periodRoot.innerHTML = ""; // 🔄 刷新時先清空
+
+        function buildPeriodBlock(titleHTML, foreignKey, investKey, prefix) {
+          const section = document.createElement("div");
+          section.className = "mt-6 border-t pt-4";
+          section.innerHTML = `
+            <h4 class="font-bold text-xl mb-3">${titleHTML}</h4>
+            <div class="grid grid-cols-2 gap-6 text-gray-700">
+              <div>
+                <h5 class="font-semibold mb-2 text-base">🌏 外資</h5>
+                <ul id="${prefix}-foreign" class="list-disc pl-6 space-y-2 text-base"></ul>
+              </div>
+              <div>
+                <h5 class="font-semibold mb-2 text-base">🏦 投信</h5>
+                <ul id="${prefix}-invest" class="list-disc pl-6 space-y-2 text-base"></ul>
+              </div>
+            </div>
+          `;
+          periodRoot.appendChild(section);
+
+          const fList = (data[foreignKey] || []).slice(0, 10);
+          const iList = (data[investKey]  || []).slice(0, 10);
+
+          const both = new Set(
+            fList.map(i => i.stock_id).filter(id => iList.some(j => j.stock_id === id))
+          );
+
+          const fUl = document.getElementById(`${prefix}-foreign`);
+          const iUl = document.getElementById(`${prefix}-invest`);
+
+          renderListItem(fUl, fList, 'foreign_ratio', both);
+          renderListItem(iUl, iList, 'invest_ratio', both);
         }
-      };
 
-      addList("🌏 外資新上榜：", newcomers.foreign);
-      addList("🏦 投信新上榜：", newcomers.invest);
-      if ((!newcomers.foreign || newcomers.foreign.length === 0) &&
-          (!newcomers.invest || newcomers.invest.length === 0)) {
-        container.textContent = "（今日無新上榜股票）";
-      }
-    })
-    .catch(() => {
-      document.getElementById("newcomers-container").textContent = "無法載入資料";
-    });
+        buildPeriodBlock(
+          "🗓️ 近5日外/投本比前 10",
+          "foreign_ratio_5d_ranking",
+          "invest_ratio_5d_ranking",
+          "p5d"
+        );
 
-  fetch("explosive.json")
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("explosive-container");
-      container.innerHTML = "";
-
-      if (!data || !data.explosive || data.explosive.length === 0) {
-        container.textContent = "（今日無爆量股票）";
-        return;
-      }
-
-      // 爆量偵測也沒有百分比，維持點擊連結到 Cmoney
-      const ul = document.createElement("ul");
-      ul.className = "list-disc pl-6 space-y-1";
-      data.explosive.slice(0, 10).forEach(stock => {
-        const li = document.createElement("li");
-        const a = createStockLink(stock.stock_id, stock.name);
-        li.appendChild(a);
-
-        const tag = document.createTextNode(` ${stock.tag}`);
-        li.appendChild(tag);
-        ul.appendChild(li);
+        buildPeriodBlock(
+          "🗓️ 近10日外/投本比前 10",
+          "foreign_ratio_10d_ranking",
+          "invest_ratio_10d_ranking",
+          "p10d"
+        );
       });
-      container.appendChild(ul);
-    })
-    .catch(() => {
-      document.getElementById("explosive-container").textContent = "無法載入資料";
+  }
+
+  function loadNewcomers() {
+    fetch("newcomers.json")
+      .then(res => res.json())
+      .then(data => {
+        const newcomers = data.newcomers || {};
+        const container = document.getElementById("newcomers-container");
+        container.innerHTML = "";
+
+        // 由於新人榜沒有百分比，維持點擊連結到 Cmoney
+        const addList = (title, items) => {
+          if (items && items.length > 0) {
+            const header = document.createElement("p");
+            header.className = "font-semibold mt-2";
+            header.textContent = title;
+            container.appendChild(header);
+
+            const ul = document.createElement("ul");
+            ul.className = "list-disc pl-6 space-y-1";
+            items.slice(0, 10).forEach(stock => {
+              const li = document.createElement("li");
+              const a = createStockLink(stock.stock_id, stock.name);
+              li.appendChild(a);
+              ul.appendChild(li);
+            });
+            container.appendChild(ul);
+          }
+        };
+
+        addList("🌏 外資新上榜：", newcomers.foreign);
+        addList("🏦 投信新上榜：", newcomers.invest);
+        if ((!newcomers.foreign || newcomers.foreign.length === 0) &&
+            (!newcomers.invest || newcomers.invest.length === 0)) {
+          container.textContent = "（今日無新上榜股票）";
+        }
+      })
+      .catch(() => {
+        document.getElementById("newcomers-container").textContent = "無法載入資料";
+      });
+  }
+
+  function loadExplosive() {
+    fetch("explosive.json")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("explosive-container");
+        container.innerHTML = "";
+
+        if (!data || !data.explosive || data.explosive.length === 0) {
+          container.textContent = "（今日無爆量股票）";
+          return;
+        }
+
+        // 爆量偵測也沒有百分比，維持點擊連結到 Cmoney
+        const ul = document.createElement("ul");
+        ul.className = "list-disc pl-6 space-y-1";
+        data.explosive.slice(0, 10).forEach(stock => {
+          const li = document.createElement("li");
+          const a = createStockLink(stock.stock_id, stock.name);
+          li.appendChild(a);
+
+          const tag = document.createTextNode(` ${stock.tag}`);
+          li.appendChild(tag);
+          ul.appendChild(li);
+        });
+        container.appendChild(ul);
+      })
+      .catch(() => {
+        document.getElementById("explosive-container").textContent = "無法載入資料";
+      });
+  }
+
+  function refreshInsights() {
+    loadInsights();
+    loadNewcomers();
+    loadExplosive();
+  }
+
+  if (refreshInsightsBtn) {
+    refreshInsightsBtn.addEventListener('click', () => {
+      refreshInsights();
     });
+  }
 
   input.addEventListener("input", function() {
     if (this.value.trim()) {
@@ -728,7 +811,7 @@
                   borderVisible: false,
                   wickUpColor: '#ef5350',
                   wickDownColor: '#26a69a',
-                  lastValueVisible: false, 
+                  lastValueVisible: false,
                   priceLineVisible: false,
               });
               candleSeries.setData(chartData);
@@ -760,7 +843,7 @@
               const volumeSeries = klineChart.addHistogramSeries({
                   priceScaleId: 'volume',
                   priceFormat: { type: 'volume' },
-                  lastValueVisible: false, 
+                  lastValueVisible: false,
                   priceLineVisible: false,
               });
 

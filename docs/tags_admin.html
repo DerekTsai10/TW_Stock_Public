@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+  <meta charset="utf-8">
+  <title>Industry Tags 管理工具（本地編輯用）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="max-w-6xl mx-auto p-4 space-y-4">
+    <header class="bg-white shadow p-4 rounded">
+      <h1 class="text-xl font-bold mb-2">Industry Tags 管理工具</h1>
+      <p class="text-sm text-gray-600">
+        說明：這個頁面只在本機瀏覽器編輯資料，不會自動寫回 GitHub。<br>
+        編輯完成後請按「匯出 JSON」，將產生的內容複製回 <code>docs/industry_tags.json</code> 再 commit。
+      </p>
+    </header>
+
+    <!-- 控制列 -->
+    <div class="bg-white p-4 rounded shadow flex flex-wrap items-center gap-2">
+      <button id="add-row-btn" class="px-3 py-1 bg-blue-600 text-white rounded text-sm">
+        + 新增一檔
+      </button>
+      <button id="export-btn" class="px-3 py-1 bg-green-600 text-white rounded text-sm">
+        匯出 JSON
+      </button>
+      <span id="status" class="ml-2 text-sm text-gray-500"></span>
+    </div>
+
+    <!-- 篩選 -->
+    <div class="bg-white p-3 rounded shadow flex flex-wrap gap-2 items-center text-sm">
+      <span class="text-gray-600">快速篩選：</span>
+      <input id="filter-keyword" type="text" placeholder="輸入股票代碼 / 名稱 / 主題"
+             class="border rounded px-2 py-1 text-sm flex-1 min-w-[200px]">
+    </div>
+
+    <!-- 表格區 -->
+    <div class="bg-white p-4 rounded shadow overflow-auto">
+      <table class="min-w-full text-xs" id="tags-table">
+        <thead>
+          <tr class="border-b bg-gray-50">
+            <th class="px-2 py-1 text-left">刪除</th>
+            <th class="px-2 py-1 text-left">股票代碼</th>
+            <th class="px-2 py-1 text-left">名稱</th>
+            <th class="px-2 py-1 text-left">大產業<br>(sector_lv1)</th>
+            <th class="px-2 py-1 text-left">細產業 / 族群<br>(sector_lv2)</th>
+            <th class="px-2 py-1 text-left">主題 (themes)<br><span class="text-gray-400">逗號分隔，例如：AI, 記憶體</span></th>
+            <th class="px-2 py-1 text-left">AI 角色 (ai_chain)<br><span class="text-gray-400">逗號分隔，例如：AI-伺服器 / ODM</span></th>
+            <th class="px-2 py-1 text-left">備註 (notes)</th>
+          </tr>
+        </thead>
+        <tbody id="tags-tbody">
+          <!-- 動態插入 -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 匯出結果 -->
+    <div class="bg-white p-4 rounded shadow">
+      <h2 class="font-semibold text-sm mb-2">匯出結果（複製這段貼回 <code>industry_tags.json</code>）</h2>
+      <textarea id="export-output" class="w-full h-64 border rounded p-2 text-xs font-mono" readonly></textarea>
+    </div>
+  </div>
+
+  <script>
+    let tagsData = {};   // 原始物件 { "2330": {...}, ... }
+    let filteredIds = []; // 目前篩選後要顯示的 stockId list
+
+    // 工具：建立一列
+    function createRow(stockId, info) {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b hover:bg-gray-50';
+      tr.dataset.stockId = stockId || '';
+
+      tr.innerHTML = `
+        <td class="px-2 py-1 align-top">
+          <button class="delete-row px-2 py-1 bg-red-500 text-white rounded text-2xs">X</button>
+        </td>
+        <td class="px-2 py-1 align-top">
+          <input type="text" class="stock-id border rounded px-1 py-0.5 w-20 text-xs" value="${stockId || ''}">
+        </td>
+        <td class="px-2 py-1 align-top">
+          <input type="text" class="name border rounded px-1 py-0.5 w-24 text-xs" value="${info.name || ''}">
+        </td>
+        <td class="px-2 py-1 align-top">
+          <input type="text" class="sector-lv1 border rounded px-1 py-0.5 w-24 text-xs" value="${info.sector_lv1 || ''}">
+        </td>
+        <td class="px-2 py-1 align-top">
+          <input type="text" class="sector-lv2 border rounded px-1 py-0.5 w-32 text-xs" value="${info.sector_lv2 || ''}">
+        </td>
+        <td class="px-2 py-1 align-top">
+          <input type="text" class="themes border rounded px-1 py-0.5 w-40 text-xs" value="${(info.themes || []).join(', ')}">
+        </td>
+        <td class="px-2 py-1 align-top">
+          <input type="text" class="ai-chain border rounded px-1 py-0.5 w-40 text-xs" value="${(info.ai_chain || []).join(', ')}">
+        </td>
+        <td class="px-2 py-1 align-top">
+          <input type="text" class="notes border rounded px-1 py-0.5 w-48 text-xs" value="${info.notes || ''}">
+        </td>
+      `;
+
+      return tr;
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('tags-tbody');
+      tbody.innerHTML = '';
+
+      // 用 filteredIds 控制顯示順序
+      filteredIds.forEach(stockId => {
+        const info = tagsData[stockId] || {};
+        tbody.appendChild(createRow(stockId, info));
+      });
+
+      // 綁定刪除事件
+      tbody.querySelectorAll('.delete-row').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const tr = e.target.closest('tr');
+          const sidInput = tr.querySelector('.stock-id');
+          const sid = sidInput.value.trim();
+          if (sid && tagsData[sid]) {
+            delete tagsData[sid];
+          }
+          tr.remove();
+          updateFilteredIds(); // 重新算一次
+        });
+      });
+    }
+
+    function updateFilteredIds() {
+      const keyword = document.getElementById('filter-keyword').value.trim().toLowerCase();
+
+      filteredIds = Object.keys(tagsData).sort().filter(sid => {
+        if (!keyword) return true;
+        const info = tagsData[sid] || {};
+        const text = [
+          sid,
+          info.name || '',
+          info.sector_lv1 || '',
+          info.sector_lv2 || '',
+          (info.themes || []).join(','),
+          (info.ai_chain || []).join(','),
+          info.notes || ''
+        ].join(' ').toLowerCase();
+        return text.includes(keyword);
+      });
+
+      renderTable();
+    }
+
+    function readFromTable() {
+      const tbody = document.getElementById('tags-tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const result = {};
+
+      rows.forEach(tr => {
+        const sid = tr.querySelector('.stock-id').value.trim();
+        if (!sid) return; // 沒填股票代碼就略過
+
+        const name = tr.querySelector('.name').value.trim();
+        const sector_lv1 = tr.querySelector('.sector-lv1').value.trim();
+        const sector_lv2 = tr.querySelector('.sector-lv2').value.trim();
+        const themesStr = tr.querySelector('.themes').value.trim();
+        const aiChainStr = tr.querySelector('.ai-chain').value.trim();
+        const notes = tr.querySelector('.notes').value.trim();
+
+        result[sid] = {
+          name,
+          sector_lv1,
+          sector_lv2,
+          themes: themesStr ? themesStr.split(',').map(s => s.trim()).filter(Boolean) : [],
+          ai_chain: aiChainStr ? aiChainStr.split(',').map(s => s.trim()).filter(Boolean) : [],
+          notes
+        };
+      });
+
+      return result;
+    }
+
+    // 初始化：讀取現有 JSON
+    async function init() {
+      const status = document.getElementById('status');
+      status.textContent = '載入 industry_tags.json 中…';
+
+      try {
+        const res = await fetch('industry_tags.json?_=' + Date.now());
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        tagsData = data || {};
+      } catch (err) {
+        console.warn('讀取失敗，將使用空資料', err);
+        tagsData = {};
+      }
+
+      filteredIds = Object.keys(tagsData).sort();
+      renderTable();
+      status.textContent = '載入完成，可開始編輯';
+    }
+
+    // 綁定按鈕/事件
+    document.getElementById('add-row-btn').addEventListener('click', () => {
+      const tbody = document.getElementById('tags-tbody');
+      const tr = createRow('', {
+        name: '',
+        sector_lv1: '',
+        sector_lv2: '',
+        themes: [],
+        ai_chain: [],
+        notes: ''
+      });
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('export-btn').addEventListener('click', () => {
+      // 先從 table 讀回到 tagsData
+      tagsData = readFromTable();
+
+      const jsonStr = JSON.stringify(tagsData, null, 2);
+      document.getElementById('export-output').value = jsonStr;
+      document.getElementById('status').textContent = '已產生匯出結果（請複製下方 JSON）';
+    });
+
+    document.getElementById('filter-keyword').addEventListener('input', () => {
+      updateFilteredIds();
+    });
+
+    init();
+  </script>
+</body>
+</html>
+

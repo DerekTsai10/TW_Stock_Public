@@ -92,6 +92,7 @@
       </div>
     </div>
 
+    <!-- 🔍 觀察清單視圖 -->
     <div id="insights-view">
       <div class="grid grid-cols-2 gap-6 mb-8 mobile-col">
         <div class="p-6 border rounded bg-white shadow">
@@ -135,7 +136,15 @@
       </div>
     </div>
 
+    <!-- 📈 個股視圖 -->
     <div id="stock-view" class="hidden">
+        <!-- 🧠 法人摘要小卡：連續買超 + 近5/10日累計 -->
+        <div id="chip-summary" class="mb-6 text-base text-gray-700 bg-gray-50 rounded px-4 py-3">
+          <div class="text-gray-400">
+            請先輸入股票代碼或名稱，以顯示法人連續買超與近 5 / 10 日累計資訊。
+          </div>
+        </div>
+
         <div id="kline-chart-wrapper" class="pt-2 px-3 pb-2 border rounded bg-white shadow mb-6">
             <h3 class="font-bold text-2xl mb-4 mobile-center">股價 K 線圖</h3>
 
@@ -215,6 +224,17 @@
   const tabStock = document.getElementById('tab-stock');
   const refreshInsightsBtn = document.getElementById('refresh-insights-btn');
 
+  const chipSummary = document.getElementById('chip-summary');
+
+  // 數字著色：正紅 / 負綠
+  function colorize(val) {
+    const num = Number(val);
+    const formattedVal = num.toLocaleString();
+    if (num > 0) return `<span class="text-red-600">${formattedVal}</span>`;
+    if (num < 0) return `<span class="text-green-600">${formattedVal}</span>`;
+    return formattedVal;
+  }
+
   function setActiveTab(view) {
     const base = 'px-4 py-2 text-sm font-medium border-b-2 -mb-px';
     if (!tabInsights || !tabStock) return;
@@ -260,6 +280,7 @@
     });
   }
 
+  // 載入 data.json → 建立 stockList 與 records
   fetch("data.json")
     .then(res => res.json())
     .then(data => {
@@ -283,6 +304,7 @@
     return a;
   }
 
+  // 觀察清單：主 insights
   function loadInsights() {
     fetch("insights.json")
       .then(res => res.json())
@@ -309,25 +331,22 @@
             .filter(id => dailyInvest.some(j => j.stock_id === id))
         );
 
-        // ✅ 名稱：底線、可點，觸發個股查詢
-        // ✅ 百分比：不加底線，跳 CMoney
+        // 名稱：點擊觸發個股查詢；百分比：外部 CMoney
         const renderListItem = (listEl, items, ratioKey, bothSet) => {
           items.forEach(item => {
             const li = document.createElement("li");
-        
-            // 名稱：超連結樣式，但不跳轉 CMoney → 改成內部查詢
+
             const nameSpan = document.createElement("span");
             nameSpan.textContent = `${item.name} (${item.stock_id})`;
             nameSpan.className = "cursor-pointer underline underline-offset-2 hover:text-blue-600";
-        
+
             nameSpan.addEventListener("click", () => {
               input.value = item.stock_id;
               suggestions.classList.add("hidden");
               clearBtn.classList.remove("hidden");
-              showStockData(item.stock_id); // 不捲動，停留在上方
+              showStockData(item.stock_id);
             });
-        
-            // 百分比：外部 CMoney（不加底線）
+
             const ratioValue = (item[ratioKey] * 100).toFixed(2);
             const ratioLink = document.createElement("a");
             ratioLink.textContent = ` : ${ratioValue}%`;
@@ -335,14 +354,13 @@
             ratioLink.target = "_blank";
             ratioLink.rel = "noopener";
             ratioLink.className = "ml-1 text-gray-700 hover:text-blue-600";
-        
-            // 如果同時出現在外本比+投本比 → 標紅
+
             if (bothSet.has(item.stock_id)) {
               nameSpan.classList.add("text-red-600", "font-bold");
               ratioLink.classList.remove("text-gray-700");
               ratioLink.classList.add("text-red-600", "font-bold", "hover:text-red-800");
             }
-        
+
             li.appendChild(nameSpan);
             li.appendChild(ratioLink);
             listEl.appendChild(li);
@@ -353,7 +371,7 @@
         renderListItem(investList, dailyInvest, 'invest_ratio', dailyBoth);
 
         const periodRoot = document.getElementById("period-section");
-        periodRoot.innerHTML = ""; // 🔄 刷新時先清空
+        periodRoot.innerHTML = ""; // 刷新前先清空
 
         function buildPeriodBlock(titleHTML, foreignKey, investKey, prefix) {
           const section = document.createElement("div");
@@ -403,6 +421,7 @@
       });
   }
 
+  // 觀察清單：新上榜
   function loadNewcomers() {
     fetch("newcomers.json")
       .then(res => res.json())
@@ -411,7 +430,6 @@
         const container = document.getElementById("newcomers-container");
         container.innerHTML = "";
 
-        // 由於新人榜沒有百分比，維持點擊連結到 Cmoney
         const addList = (title, items) => {
           if (items && items.length > 0) {
             const header = document.createElement("p");
@@ -443,6 +461,7 @@
       });
   }
 
+  // 觀察清單：爆量偵測
   function loadExplosive() {
     fetch("explosive.json")
       .then(res => res.json())
@@ -455,7 +474,6 @@
           return;
         }
 
-        // 爆量偵測也沒有百分比，維持點擊連結到 Cmoney
         const ul = document.createElement("ul");
         ul.className = "list-disc pl-6 space-y-1";
         data.explosive.slice(0, 10).forEach(stock => {
@@ -474,6 +492,7 @@
       });
   }
 
+  // 🔄 一鍵刷新觀察清單：外/投本比 + 新上榜 + 爆量
   function refreshInsights() {
     loadInsights();
     loadNewcomers();
@@ -486,6 +505,7 @@
     });
   }
 
+  // 搜尋框輸入 / 建議清單
   input.addEventListener("input", function() {
     if (this.value.trim()) {
       clearBtn.classList.remove("hidden");
@@ -493,6 +513,7 @@
       clearBtn.classList.add("hidden");
       suggestions.classList.add("hidden");
       toggleView('insights');
+      resetChipSummary();
     }
 
     const keyword = this.value.trim();
@@ -532,6 +553,8 @@
         </td>
       </tr>
     `;
+
+    resetChipSummary();
     toggleView('insights');
     input.focus();
   });
@@ -543,16 +566,87 @@
     }
   });
 
-  function showStockData(keyword) {
-    tableBody.innerHTML = "";
-    const colorize = (val) => {
-      const num = Number(val);
-      const formattedVal = num.toLocaleString();
-      if (num > 0) return `<span class="text-red-600">${formattedVal}</span>`;
-      if (num < 0) return `<span class="text-green-600">${formattedVal}</span>`;
-      return formattedVal;
+  // 🧠 重設法人摘要卡片
+  function resetChipSummary() {
+    if (!chipSummary) return;
+    chipSummary.innerHTML = `
+      <div class="text-gray-400">
+        請先輸入股票代碼或名稱，以顯示法人連續買超與近 5 / 10 日累計資訊。
+      </div>
+    `;
+  }
+
+  // 🧠 更新法人摘要：連續買超天數 + 近5/10日累計
+  function updateChipSummary(stockId, stockName, history) {
+    if (!chipSummary) return;
+
+    if (!history || history.length === 0) {
+      resetChipSummary();
+      return;
+    }
+
+    // history[0] 為最近一天（我們從最新往回掃描）
+    const calcConsecutive = (key) => {
+      let count = 0;
+      for (let i = 0; i < history.length; i++) {
+        if (history[i][key] > 0) count++;
+        else break;
+      }
+      return count;
     };
 
+    const sumDays = (key, days) => {
+      let sum = 0;
+      for (let i = 0; i < Math.min(days, history.length); i++) {
+        sum += history[i][key];
+      }
+      return sum;
+    };
+
+    const foreignConsec = calcConsecutive('foreign');
+    const investConsec  = calcConsecutive('invest');
+    const dealerConsec  = calcConsecutive('dealer');
+
+    const foreign5  = sumDays('foreign', 5);
+    const foreign10 = sumDays('foreign', 10);
+    const invest5   = sumDays('invest', 5);
+    const invest10  = sumDays('invest', 10);
+    const dealer5   = sumDays('dealer', 5);
+    const dealer10  = sumDays('dealer', 10);
+
+    chipSummary.innerHTML = `
+      <div class="font-semibold mb-1">
+        ${stockName} (${stockId}) - 法人買賣超摘要（單位：張，已換算千張）
+      </div>
+      <div class="text-sm text-gray-500 mb-2">
+        連續買超天數以最近一日往前計算；近 5 / 10 日為加總買賣超張數（千張四捨五入）。
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+        <div class="bg-white rounded border px-3 py-2">
+          <div class="font-semibold mb-1">🌏 外資</div>
+          <div>連續買超天數：<span class="font-mono">${foreignConsec}</span> 天</div>
+          <div>近 5 日累計：<span class="font-mono">${colorize(foreign5)}</span></div>
+          <div>近 10 日累計：<span class="font-mono">${colorize(foreign10)}</span></div>
+        </div>
+        <div class="bg-white rounded border px-3 py-2">
+          <div class="font-semibold mb-1">🏦 投信</div>
+          <div>連續買超天數：<span class="font-mono">${investConsec}</span> 天</div>
+          <div>近 5 日累計：<span class="font-mono">${colorize(invest5)}</span></div>
+          <div>近 10 日累計：<span class="font-mono">${colorize(invest10)}</span></div>
+        </div>
+        <div class="bg-white rounded border px-3 py-2">
+          <div class="font-semibold mb-1">🏛 自營商</div>
+          <div>連續買超天數：<span class="font-mono">${dealerConsec}</span> 天</div>
+          <div>近 5 日累計：<span class="font-mono">${colorize(dealer5)}</span></div>
+          <div>近 10 日累計：<span class="font-mono">${colorize(dealer10)}</span></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 主搜尋：顯示法人表格 / 圖 / 摘要 / K 線
+  function showStockData(keyword) {
+    tableBody.innerHTML = "";
     const kw = keyword.toString().replace(/\s|　/g, "").trim();
     let foundStock = null;
     let dataFound = false;
@@ -562,6 +656,13 @@
     const chartInvestData = [];
     const chartDealerData = [];
     const chartTotalData = [];
+
+    const history = []; // 給法人摘要用：從最近往前
+
+    if (!records || records.length === 0) {
+      console.log("[LOG] records 尚未載入完成");
+      return;
+    }
 
     for (let i = records.length - 1; i >= 0; i--) {
       const day = records[i];
@@ -573,10 +674,10 @@
         dataFound = true;
         if (!foundStock) foundStock = stock;
 
-        const foreign = Math.round(stock.foreign_net/1000);
-        const invest  = Math.round(stock.invest_net/1000);
-        const dealer  = Math.round(stock.dealer_net/1000);
-        const total   = Math.round((stock.foreign_net + stock.invest_net + stock.dealer_net)/1000);
+        const foreign = Math.round(stock.foreign_net / 1000);
+        const invest  = Math.round(stock.invest_net / 1000);
+        const dealer  = Math.round(stock.dealer_net / 1000);
+        const total   = Math.round((stock.foreign_net + stock.invest_net + stock.dealer_net) / 1000);
 
         const tr = document.createElement("tr");
         tr.className = "hover:bg-gray-50";
@@ -593,16 +694,31 @@
         chartInvestData.push(invest);
         chartDealerData.push(dealer);
         chartTotalData.push(total);
+
+        history.push({
+          date: day.date,
+          foreign,
+          invest,
+          dealer
+        });
       }
     }
 
     if (foundStock && dataFound) {
       toggleView('stock');
       pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
+
+      // 法人摘要
+      updateChipSummary(foundStock.stock_id.toString(), foundStock.name, history);
+
+      // K 線圖
       loadKlineData(foundStock.stock_id.toString());
+
+      // Chart.js 趨勢圖
       updateChart(chartLabels, chartForeignData, chartInvestData, chartDealerData, chartTotalData);
     } else {
       toggleView('insights');
+      resetChipSummary();
       pageTitle.textContent = "法人買賣超查詢";
       console.log(`[🔍 LOG - Search] 查詢失敗或無法人買賣超資料: ${keyword}`);
     }
@@ -664,7 +780,7 @@
         },
         scales: {
           x: { title: { display: true, text: '日期' } },
-          y: { title: { display: true, text: '買賣超張數' } }
+          y: { title: { display: true, text: '買賣超張數（千張）' } }
         }
       }
     });

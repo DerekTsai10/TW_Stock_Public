@@ -52,22 +52,9 @@
 <body class="p-6 bg-gray-50 text-lg">
   <div class="max-w-7xl mx-auto desktop-zoom mobile-reset transition-transform duration-300">
 
-    <!-- 🏷 標題 + 台指期結算提醒按鈕 -->
-    <div class="flex items-center justify-between mb-4">
-      <h1 id="page-title" class="text-3xl font-bold mobile-center">
-        法人買賣超查詢
-      </h1>
-      <!-- 台指期結算提醒：T-XX 長條按鈕 -->
-      <button
-        id="txReminderBtn"
-        type="button"
-        class="ml-3 inline-flex items-center px-3 py-1 rounded-full bg-yellow-300 text-xs md:text-sm font-bold text-gray-800 shadow cursor-pointer hover:bg-yellow-400 transition"
-        title="台指期結算日提醒"
-        style="display: none;"
-      >
-        T-?
-      </button>
-    </div>
+    <h1 id="page-title" class="text-3xl font-bold mb-4 mobile-center">
+      法人買賣超查詢
+    </h1>
 
     <!-- 🔝 頂部導覽列：觀察清單 / 個股查詢 -->
     <div class="mb-6 border-b">
@@ -218,41 +205,6 @@
     </div>
   </div>
 
-  <!-- 🧾 台指期結算提醒 Modal（改為右上角） -->
-  <div
-    id="txReminderModal"
-    class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-start justify-end pt-24 pr-6"
-  >
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-5 md:p-6">
-      <div class="flex items-start justify-between mb-3">
-        <h2 class="text-xl md:text-2xl font-semibold">台指期結算日提醒</h2>
-        <button
-          id="txReminderClose"
-          class="text-gray-400 hover:text-gray-600 text-2xl leading-none"
-        >
-          ×
-        </button>
-      </div>
-
-      <!-- 大大的 T-XX -->
-      <p id="txReminderTLabel" class="text-2xl md:text-3xl font-bold text-yellow-600 mb-3">
-        T-?
-      </p>
-
-      <p class="text-xl md:text-2xl text-gray-700 leading-relaxed mb-1">
-        下一次台指期結算日：
-        <span id="txSettlementDate" class="font-semibold"></span>
-      </p>
-      <p id="txReminderText" class="text-xl md:text-2xl text-gray-800 font-medium mb-3"></p>
-
-      <ul class="text-lg text-gray-600 list-disc list-inside space-y-1">
-        <li>台指期目前規則為「每月第三個星期三」為結算日。</li>
-        <li>提醒區間目前設定為結算日前 25 個工作日內（T-25 ～ T），之後可自行調整。</li>
-        <li>此處先簡化為排除週六、週日的工作日概念，未含國定假日。</li>
-      </ul>
-    </div>
-  </div>
-
   <script>
 
   let industryTags = {};
@@ -321,125 +273,6 @@
 
   const chipSummary = document.getElementById('chip-summary');
 
-  /* 🎯 台指期結算提醒相關函式 */
-
-  // 設定提醒窗口：目前為「結算日前 25 個工作日內」
-  // 若之後要改成 T-5，只要把 25 改成 5 即可
-  const REMINDER_WINDOW = 25;
-
-  // 計算某年某月(0-based)的第三個星期三
-  function getThirdWednesday(year, monthIndex) {
-    const firstDay = new Date(year, monthIndex, 1);
-    const firstDayWeek = firstDay.getDay(); // 0=Sun..3=Wed..6=Sat
-    const offsetToWed = (3 - firstDayWeek + 7) % 7; // 第一次遇到週三需要往後推幾天
-    const thirdWedDate = 1 + offsetToWed + 14;       // 第三個星期三 = 第一個 + 14 天
-    return new Date(year, monthIndex, thirdWedDate);
-  }
-
-  // 從指定日期開始，取得「下一個台指期結算日」（每月第三個星期三，含跨年）
-  function getNextSettlementDate(fromDate) {
-    let year = fromDate.getFullYear();
-    let month = fromDate.getMonth(); // 0-based
-
-    let candidate = getThirdWednesday(year, month);
-
-    // 如果今天已經超過本月的第三個星期三，就看下個月
-    if (fromDate > candidate) {
-      month += 1;
-      if (month > 11) {
-        month = 0;
-        year += 1;
-      }
-      candidate = getThirdWednesday(year, month);
-    }
-
-    return candidate;
-  }
-
-  // 計算兩日期之間的「工作日數」（排除週六、週日），回傳 >=1 的整數；若 start > end 則回 0
-  function countBusinessDaysBetween(startDate, endDate) {
-    if (startDate > endDate) return 0;
-    const cur = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-    const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-    let count = 0;
-
-    while (cur <= end) {
-      const day = cur.getDay(); // 0 Sun, 6 Sat
-      if (day !== 0 && day !== 6) {
-        count++;
-      }
-      cur.setDate(cur.getDate() + 1);
-    }
-    return count;
-  }
-
-  function setupTxReminderWidget() {
-    const btn = document.getElementById('txReminderBtn');
-    const modal = document.getElementById('txReminderModal');
-    const closeBtn = document.getElementById('txReminderClose');
-    const textEl = document.getElementById('txReminderText');
-    const dateEl = document.getElementById('txSettlementDate');
-    const tLabelEl = document.getElementById('txReminderTLabel');
-
-    if (!btn || !modal || !closeBtn || !textEl || !dateEl || !tLabelEl) return;
-
-    const today = new Date();
-    const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-    const settlementDate = getNextSettlementDate(todayDate);
-
-    // 今天到結算日的工作日數（包含今天與結算日）
-    const businessDays = countBusinessDaysBetween(todayDate, settlementDate);
-    if (businessDays === 0) {
-      btn.style.display = 'none';
-      return;
-    }
-
-    // T-0: 今天是結算日 → daysLeft = 0
-    const daysLeft = businessDays - 1;
-
-    if (daysLeft < 0 || daysLeft > REMINDER_WINDOW) {
-      btn.style.display = 'none';
-      return;
-    }
-
-    // 顯示按鈕
-    btn.style.display = 'inline-flex';
-
-    // 顯示結算日期 (YYYY-MM-DD)
-    const y = settlementDate.getFullYear();
-    const m = String(settlementDate.getMonth() + 1).padStart(2, '0');
-    const d = String(settlementDate.getDate()).padStart(2, '0');
-    dateEl.textContent = `${y}-${m}-${d}`;
-
-    if (daysLeft === 0) {
-      btn.textContent = 'T';
-      tLabelEl.textContent = 'T';
-      textEl.textContent = '今天是台指期結算日（T 日）。請留意盤中波動與結算價影響。';
-    } else {
-      btn.textContent = `T-${daysLeft}`;
-      tLabelEl.textContent = `T-${daysLeft}`;
-      textEl.textContent = `距離台指期結算日還有 ${daysLeft} 個工作日（T-${daysLeft}）。`;
-    }
-
-    // 點擊按鈕 → 開啟 Modal
-    btn.addEventListener('click', () => {
-      modal.classList.remove('hidden');
-    });
-
-    // 點擊關閉按鈕 → 關閉 Modal
-    closeBtn.addEventListener('click', () => {
-      modal.classList.add('hidden');
-    });
-
-    // 點擊背景區域 → 關閉 Modal
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.add('hidden');
-      }
-    });
-  }
-
   // 數字著色：正紅 / 負綠
   function colorize(val) {
     const num = Number(val);
@@ -477,7 +310,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     toggleView('insights');
     refreshInsights();
-    setupTxReminderWidget(); // 🆕 啟動台指期結算提醒
   });
 
   if (tabInsights) {
@@ -837,7 +669,7 @@
         連續買超天數以最近一日往前計算；近 5 / 10 日為加總買賣超張數（千張四捨五入）。
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-        <div class="bg白 rounded border px-3 py-2">
+        <div class="bg-white rounded border px-3 py-2">
           <div class="font-semibold mb-1">🌏 外資</div>
           <div>連續買超天數：<span class="font-mono">${foreignConsec}</span> 天</div>
           <div>近 5 日累計：<span class="font-mono">${colorize(foreign5)}</span></div>
@@ -928,9 +760,9 @@
       pageTitle.textContent = `法人買賣超查詢 - ${foundStock.name} (${foundStock.stock_id})`;
 
       // 產業 / 主題 Chips（輸入框右側）
-      const tagsContainer2 = document.getElementById("industry-tags-inline");
-      if (tagsContainer2) {
-        tagsContainer2.innerHTML = renderIndustryTagsBlock(foundStock.stock_id.toString());
+      const tagsContainer = document.getElementById("industry-tags-inline");
+      if (tagsContainer) {
+        tagsContainer.innerHTML = renderIndustryTagsBlock(foundStock.stock_id.toString());
       }
 
       // 法人摘要

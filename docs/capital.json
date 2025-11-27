@@ -11724,8 +11724,8 @@
     "abbreviation": "系統電",
     "industry": "28",
     "market": "TPEX",
-    "share_capital": 1918719090,
-    "shares_issued": 191871909
+    "share_capital": 2044237770,
+    "shares_issued": 204423777
   },
   "5310": {
     "company_name": "天剛資訊股份有限公司",
@@ -13844,8 +13844,8 @@
     "abbreviation": "久昌",
     "industry": "24",
     "market": "TPEX",
-    "share_capital": 300382410,
-    "shares_issued": 30038241
+    "share_capital": 300817410,
+    "shares_issued": 30081741
   },
   "6721": {
     "company_name": "信實保全股份有限公司",
@@ -14388,8 +14388,8 @@
     "abbreviation": "裕山",
     "industry": "35",
     "market": "TPEX",
-    "share_capital": 331800000,
-    "shares_issued": 33180000
+    "share_capital": 337345000,
+    "shares_issued": 33734500
   },
   "7716": {
     "company_name": "昱臺國際股份有限公司",
@@ -14454,6 +14454,14 @@
     "market": "TPEX",
     "share_capital": 364833380,
     "shares_issued": 36483338
+  },
+  "7744": {
+    "company_name": "崴寶精密科技股份有限公司",
+    "abbreviation": "崴寶",
+    "industry": "28",
+    "market": "TPEX",
+    "share_capital": 320000000,
+    "shares_issued": 32000000
   },
   "7747": {
     "company_name": "昕奇雲端科技股份有限公司",

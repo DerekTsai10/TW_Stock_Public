@@ -60,7 +60,7 @@
       
       <!-- 📈 VIX 指數提示按鈕 -->
       <button
-        id="vixBadge"
+        id="vixBadge" class="ml-2"
         type="button"
         class="mr-2 px-3 py-1 rounded-full bg-gray-300 text-gray-900 font-bold shadow cursor-pointer"
         title="VIX 指數"
@@ -1291,8 +1291,8 @@
   </script>
 
 <!-- 📈 VIX Modal -->
-<div id="vixModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-  <div class="bg-white rounded-xl p-6 max-w-md shadow">
+<div id="vixModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-start justify-end z-50 hidden" style="padding-top:120px; padding-right:40px">
+  <div class="bg-white rounded-xl p-4 max-w-sm shadow text-base">
     <h2 class="text-xl font-bold mb-4">VIX 市場恐慌指標</h2>
     <p id="vixValueText" class="mb-4 text-gray-800"></p>
     <ul class="list-disc pl-5 space-y-2 text-gray-700">
@@ -1331,7 +1331,7 @@ async function fetchVIX() {
 
 function updateVixBadge(vix) {
   const el = document.getElementById("vixBadge");
-  el.textContent = `VIX ${vix.toFixed(1)}`;
+  el.textContent = `VIX: ${vix.toFixed(1)}`;
 
   let color = "";
 

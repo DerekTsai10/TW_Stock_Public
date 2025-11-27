@@ -412,8 +412,8 @@
     "abbreviation": "八貫",
     "industry": "20",
     "market": "TWSE",
-    "share_capital": 790589020,
-    "shares_issued": 79058902
+    "share_capital": 792489020,
+    "shares_issued": 79248902
   },
   "1402": {
     "company_name": "遠東新世紀股份有限公司",
@@ -2220,8 +2220,8 @@
     "abbreviation": "台積電",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 259326155210,
-    "shares_issued": 25932615521
+    "share_capital": 259325245210,
+    "shares_issued": 25932524521
   },
   "2331": {
     "company_name": "精英電腦股份有限公司",
@@ -4836,8 +4836,8 @@
     "abbreviation": "柏騰",
     "industry": "31",
     "market": "TWSE",
-    "share_capital": 978872300,
-    "shares_issued": 97887230
+    "share_capital": 976622300,
+    "shares_issued": 97662230
   },
   "3528": {
     "company_name": "安馳科技股份有限公司",
@@ -5780,8 +5780,8 @@
     "abbreviation": "佳凌",
     "industry": "26",
     "market": "TWSE",
-    "share_capital": 1414080000,
-    "shares_issued": 141408000
+    "share_capital": 1413510000,
+    "shares_issued": 141351000
   },
   "4977": {
     "company_name": "眾達科技股份有限公司",
@@ -6676,8 +6676,8 @@
     "abbreviation": "鈺邦",
     "industry": "28",
     "market": "TWSE",
-    "share_capital": 919335140,
-    "shares_issued": 91933514
+    "share_capital": 919185140,
+    "shares_issued": 91918514
   },
   "6451": {
     "company_name": "訊芯科技控股股份有限公司",
@@ -6910,6 +6910,14 @@
     "market": "TWSE",
     "share_capital": 1103037830,
     "shares_issued": 110303783
+  },
+  "6614": {
+    "company_name": "資拓宏宇國際股份有限公司",
+    "abbreviation": "資拓宏宇",
+    "industry": "36",
+    "market": "TWSE",
+    "share_capital": 806605210,
+    "shares_issued": 80660521
   },
   "6625": {
     "company_name": "必應創造股份有限公司",
@@ -7249,7 +7257,7 @@
   },
   "6831": {
     "company_name": "邁&#33834;科技股份有限公司",
-    "abbreviation": "邁&#33834;",
+    "abbreviation": "邁科",
     "industry": "25",
     "market": "TWSE",
     "share_capital": 675000000,
@@ -7452,8 +7460,8 @@
     "abbreviation": "AMAX-KY",
     "industry": "25",
     "market": "TWSE",
-    "share_capital": 423634670,
-    "shares_issued": 42363467
+    "share_capital": 423554670,
+    "shares_issued": 42355467
   },
   "6936": {
     "company_name": "永鴻國際生技股份有限公司",

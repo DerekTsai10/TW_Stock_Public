@@ -298,39 +298,70 @@
   <script>
 
 
-  // 📈 VIX 指數相關邏輯（前端直接從 Yahoo Finance 取得）
-  
-  // 📈 VIX 指數相關邏輯（從 Yahoo Finance 取得）
+  // 📈 VIX 指數：改成讀本地 vix.json，而不是 Yahoo Finance
   async function fetchVIX() {
     try {
-      const url = "https://query1.finance.yahoo.com/v8/finance/chart/^VIX?interval=1d";
-      const resp = await fetch(url);
-      const json = await resp.json();
-      let vix = null;
-
-      const result = json && json.chart && json.chart.result && json.chart.result[0];
-      if (result && result.meta && typeof result.meta.regularMarketPrice === "number") {
-        vix = result.meta.regularMarketPrice;
-      } else if (
-        result &&
-        result.indicators &&
-        result.indicators.quote &&
-        result.indicators.quote[0] &&
-        Array.isArray(result.indicators.quote[0].close)
-      ) {
-        const closes = result.indicators.quote[0].close;
-        vix = closes[closes.length - 1];
-      }
-
-      if (typeof vix === "number" && !Number.isNaN(vix)) {
-        updateVixBadge(vix);
+      const resp = await fetch("vix.json", { cache: "no-cache" });
+      const data = await resp.json();
+  
+      if (typeof data.vix === "number") {
+        updateVixBadge(data.vix);
       } else {
-        console.warn("VIX 數值解析失敗", json);
+        console.warn("VIX 欄位為 null");
       }
     } catch (e) {
-      console.error("VIX 取得失敗", e);
+      console.error("VIX json 讀取失敗", e);
     }
   }
+  
+  function getVixColorClass(vix) {
+    if (vix < 20) return "bg-green-400 text-white";
+    if (vix < 28.7) return "bg-gray-300 text-gray-900";
+    if (vix < 33.5) return "bg-yellow-400 text-gray-900";
+    return "bg-red-500 text-white";
+  }
+  
+  function updateVixBadge(vix) {
+    const badge = document.getElementById("vixBadge");
+    if (!badge) return;
+  
+    badge.textContent = "VIX: " + vix.toFixed(1);
+  
+    const base =
+      "inline-flex items-center px-4 py-1 rounded-full text-xs md:text-sm font-bold shadow cursor-pointer hover:bg-opacity-90 transition ";
+    badge.className = base + getVixColorClass(vix);
+  
+    const info = document.getElementById("vixValueText");
+    if (info) {
+      let rangeText = "";
+      if (vix < 20) rangeText = "（VIX < 20，綠色區間）";
+      else if (vix < 28.7) rangeText = "（20 ≤ VIX < 28.7，灰色區間）";
+      else if (vix < 33.5) rangeText = "（28.7 ≤ VIX < 33.5，橘色區間）";
+      else rangeText = "（VIX ≥ 33.5，紅色區間）";
+  
+      info.textContent = "目前 VIX：約 " + vix.toFixed(1) + " " + rangeText;
+    }
+  }
+  
+  function openVixModal() {
+    document.getElementById("vixModal").classList.remove("hidden");
+  }
+  
+  function closeVixModal() {
+    document.getElementById("vixModal").classList.add("hidden");
+  }
+  
+  function initVixWidget() {
+    fetchVIX(); // ← 改抓本地 json
+  
+    document.getElementById("vixClose").addEventListener("click", closeVixModal);
+    const modal = document.getElementById("vixModal");
+  
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeVixModal();
+    });
+  }
+
 
   function getVixColorClass(vix) {
     if (vix < 20) return "bg-green-400 text-white";

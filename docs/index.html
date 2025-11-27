@@ -57,19 +57,18 @@
       <h1 id="page-title" class="text-3xl font-bold mobile-center">
         法人買賣超查詢
       </h1>
-      
-      <!-- 📈 VIX 指數提示按鈕 -->
-      <button
-        id="vixBadge" class="ml-2"
-        type="button"
-        class="mr-2 px-3 py-1 rounded-full bg-gray-300 text-gray-900 font-bold shadow cursor-pointer"
-        title="VIX 指數"
-        onclick="openVixModal()"
-      >
-        VIX --
-      </button>
-
-<!-- 台指期結算提醒：T-XX 長條按鈕 -->
+            <!-- VIX 指標 + 台指期結算提醒按鈕 -->
+      <div class="flex items-center space-x-2">
+        <!-- VIX 指數提示：顏色會依 VIX 區間變化 -->
+        <button
+          id="vixBadge"
+          type="button"
+          class="inline-flex items-center px-4 py-1 rounded-full bg-gray-300 text-gray-900 text-xs md:text-sm font-bold shadow cursor-pointer hover:bg-gray-400 transition"
+          title="VIX 市場恐慌指標"
+          onclick="openVixModal()"
+        >
+          VIX --
+        </button>
       <button
         id="txReminderBtn"
         type="button"
@@ -78,7 +77,8 @@
         style="display: none;"
       >
         T-?
-      </button>
+      </button>      </div>
+
     </div>
 
     <!-- 🔝 頂部導覽列：觀察清單 / 個股查詢 -->
@@ -231,7 +231,37 @@
   </div>
 
   <!-- 🧾 台指期結算提醒 Modal（改為右上角） -->
+  
+  <!-- VIX 市場恐慌指標 Modal -->
   <div
+    id="vixModal"
+    class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-start justify-end pt-24 pr-6"
+  >
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-5 md:p-6">
+      <div class="flex items-start justify-between mb-3">
+        <h2 class="text-xl md:text-2xl font-semibold">VIX 市場恐慌指標</h2>
+        <button
+          id="vixClose"
+          class="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+        >
+          ×
+        </button>
+      </div>
+
+      <p id="vixValueText" class="text-xl md:text-2xl text-gray-700 leading-relaxed mb-3">
+        目前 VIX：-- 
+      </p>
+
+      <ul class="text-lg text-gray-600 list-disc list-inside space-y-1">
+        <li><span class="font-semibold text-green-600">綠色（VIX &lt; 20）</span>：市場平穩。</li>
+        <li><span class="font-semibold text-gray-700">灰色（20 ≤ VIX &lt; 28.7）</span>：此時買進未來 12 個月的投資報酬率其實非常差，甚至比 VIX 低於 20 還差。</li>
+        <li><span class="font-semibold text-yellow-600">橘色（28.7 ≤ VIX &lt; 33.5）</span>：此時買進未來 12 個月的平均報酬約可達 15%。</li>
+        <li><span class="font-semibold text-red-600">紅色（VIX ≥ 33.5）</span>：此時買進未來 12 個月的平均報酬約可達 25%。</li>
+      </ul>
+    </div>
+  </div>
+
+<div
     id="txReminderModal"
     class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-start justify-end pt-24 pr-6"
   >
@@ -266,6 +296,76 @@
   </div>
 
   <script>
+
+
+  // 📈 VIX 指數相關邏輯（前端直接從 Yahoo Finance 取得）
+  async function fetchVIX() {
+    try {
+      const url = "https://query1.finance.yahoo.com/v8/finance/chart/^VIX?interval=1d";
+      const resp = await fetch(url);
+      const json = await resp.json();
+      let vix = null;
+
+      if (json.chart && json.chart.result && json.chart.result[0] && json.chart.result[0].meta && json.chart.result[0].meta.regularMarketPrice) {
+        vix = json.chart.result[0].meta.regularMarketPrice;
+      } else if (json.chart && json.chart.result && json.chart.result[0] && json.chart.result[0].indicators && json.chart.result[0].indicators.quote && json.chart.result[0].indicators.quote[0] && json.chart.result[0].indicators.quote[0].close && json.chart.result[0].indicators.quote[0].close[0]) {
+        vix = json.chart.result[0].indicators.quote[0].close[0];
+      }
+
+      if (!vix) return;
+      updateVixBadge(vix);
+    } catch (e) {
+      console.error("VIX 取得失敗", e);
+    }
+  }
+
+  function getVixColorClass(vix) {
+    if (vix < 20) return "bg-green-400 text-white";
+    if (vix < 28.7) return "bg-gray-300 text-gray-900";
+    if (vix < 33.5) return "bg-yellow-400 text-gray-900";
+    return "bg-red-500 text-white";
+  }
+
+  function updateVixBadge(vix) {
+    const badge = document.getElementById("vixBadge");
+    if (!badge) return;
+    badge.textContent = "VIX: " + vix.toFixed(1);
+
+    const baseClasses = "inline-flex items-center px-4 py-1 rounded-full text-xs md:text-sm font-bold shadow cursor-pointer hover:bg-opacity-90 transition ";
+    badge.className = baseClasses + getVixColorClass(vix);
+
+    const info = document.getElementById("vixValueText");
+    if (info) {
+      let rangeText = "";
+      if (vix < 20) rangeText = "（VIX < 20，綠色區間）";
+      else if (vix < 28.7) rangeText = "（20 ≤ VIX < 28.7，灰色區間）";
+      else if (vix < 33.5) rangeText = "（28.7 ≤ VIX < 33.5，橘色區間）";
+      else rangeText = "（VIX ≥ 33.5，紅色區間）";
+      info.textContent = "目前 VIX：約 " + vix.toFixed(1) + " " + rangeText;
+    }
+  }
+
+  function openVixModal() {
+    const modal = document.getElementById("vixModal");
+    if (modal) modal.classList.remove("hidden");
+  }
+
+  function closeVixModal() {
+    const modal = document.getElementById("vixModal");
+    if (modal) modal.classList.add("hidden");
+  }
+
+  function initVixWidget() {
+    fetchVIX();
+    const closeBtn = document.getElementById("vixClose");
+    if (closeBtn) closeBtn.addEventListener("click", closeVixModal);
+    const modal = document.getElementById("vixModal");
+    if (modal) {
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeVixModal();
+      });
+    }
+  }
 
   let industryTags = {};
   fetch("industry_tags.json")
@@ -490,6 +590,7 @@
     toggleView('insights');
     refreshInsights();
     setupTxReminderWidget(); // 🆕 啟動台指期結算提醒
+    initVixWidget(); // 🆕 啟動 VIX 提示
   });
 
   if (tabInsights) {
@@ -1289,69 +1390,5 @@
   });
 
   </script>
-
-<!-- 📈 VIX Modal -->
-<div id="vixModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-start justify-end z-50 hidden" style="padding-top:120px; padding-right:40px">
-  <div class="bg-white rounded-xl p-4 max-w-sm shadow text-base">
-    <h2 class="text-xl font-bold mb-4">VIX 市場恐慌指標</h2>
-    <p id="vixValueText" class="mb-4 text-gray-800"></p>
-    <ul class="list-disc pl-5 space-y-2 text-gray-700">
-      <li id="vixGreen">綠色（VIX < 20）：市場平穩。</li>
-      <li id="vixGray">灰色（20 ≤ VIX < 28.7）：未來 12 個月報酬偏差。</li>
-      <li id="vixOrange">橘色（28.7 ≤ VIX < 33.5）：未來 12 個月平均報酬約 15%。</li>
-      <li id="vixRed">紅色（VIX ≥ 33.5）：未來 12 個月平均報酬約 25%。</li>
-    </ul>
-    <div class="text-right mt-4">
-      <button class="px-4 py-2 bg-gray-300 rounded" onclick="closeVixModal()">關閉</button>
-    </div>
-  </div>
-</div>
-
-<script>
-async function fetchVIX() {
-  try {
-    const url = "https://query1.finance.yahoo.com/v8/finance/chart/^VIX?interval=1d";
-    const resp = await fetch(url);
-    const json = await resp.json();
-    let vix = null;
-
-    if (json.chart?.result?.[0]?.meta?.regularMarketPrice) {
-      vix = json.chart.result[0].meta.regularMarketPrice;
-    } else if (json.chart?.result?.[0]?.indicators?.quote?.[0]?.close?.[0]) {
-      vix = json.chart.result[0].indicators.quote[0].close[0];
-    }
-
-    if (!vix) return;
-
-    updateVixBadge(vix);
-  } catch (e) {
-    console.error("VIX 取得失敗", e);
-  }
-}
-
-function updateVixBadge(vix) {
-  const el = document.getElementById("vixBadge");
-  el.textContent = `VIX: ${vix.toFixed(1)}`;
-
-  let color = "";
-
-  if (vix < 20) color = "bg-green-400 text-white";
-  else if (vix < 28.7) color = "bg-gray-300 text-gray-900";
-  else if (vix < 33.5) color = "bg-yellow-400 text-gray-900";
-  else color = "bg-red-500 text-white";
-
-  el.className = `mr-2 px-3 py-1 rounded-full font-bold shadow cursor-pointer ${color}`;
-}
-
-function openVixModal() {
-  document.getElementById("vixModal").classList.remove("hidden");
-}
-function closeVixModal() {
-  document.getElementById("vixModal").classList.add("hidden");
-}
-
-document.addEventListener("DOMContentLoaded", fetchVIX);
-</script>
-
 </body>
 </html>

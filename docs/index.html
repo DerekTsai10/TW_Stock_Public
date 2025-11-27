@@ -237,7 +237,7 @@
     id="vixModal"
     class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-start justify-end pt-24 pr-6"
   >
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-5 md:p-6">
+    <div class="bg-white rounded-lg shadow-xl max-w-xl w-full p-6 md:p-7">
       <div class="flex items-start justify-between mb-3">
         <h2 class="text-xl md:text-2xl font-semibold">VIX 市場恐慌指標</h2>
         <button
@@ -252,7 +252,7 @@
         目前 VIX：-- 
       </p>
 
-      <ul class="text-lg text-gray-600 list-disc list-inside space-y-1">
+      <ul class="text-xl md:text-2xl text-gray-600 list-disc list-inside space-y-2">
         <li><span class="font-semibold text-green-600">綠色（VIX &lt; 20）</span>：市場平穩。</li>
         <li><span class="font-semibold text-gray-700">灰色（20 ≤ VIX &lt; 28.7）</span>：此時買進未來 12 個月的投資報酬率其實非常差，甚至比 VIX 低於 20 還差。</li>
         <li><span class="font-semibold text-yellow-600">橘色（28.7 ≤ VIX &lt; 33.5）</span>：此時買進未來 12 個月的平均報酬約可達 15%。</li>
@@ -287,7 +287,7 @@
       </p>
       <p id="txReminderText" class="text-xl md:text-2xl text-gray-800 font-medium mb-3"></p>
 
-      <ul class="text-lg text-gray-600 list-disc list-inside space-y-1">
+      <ul class="text-xl md:text-2xl text-gray-600 list-disc list-inside space-y-2">
         <li>台指期目前規則為「每月第三個星期三」為結算日。</li>
         <li>提醒區間目前設定為結算日前 25 個工作日內（T-25 ～ T），之後可自行調整。</li>
         <li>此處先簡化為排除週六、週日的工作日概念，未含國定假日。</li>
@@ -299,6 +299,8 @@
 
 
   // 📈 VIX 指數相關邏輯（前端直接從 Yahoo Finance 取得）
+  
+  // 📈 VIX 指數相關邏輯（從 Yahoo Finance 取得）
   async function fetchVIX() {
     try {
       const url = "https://query1.finance.yahoo.com/v8/finance/chart/^VIX?interval=1d";
@@ -306,14 +308,25 @@
       const json = await resp.json();
       let vix = null;
 
-      if (json.chart && json.chart.result && json.chart.result[0] && json.chart.result[0].meta && json.chart.result[0].meta.regularMarketPrice) {
-        vix = json.chart.result[0].meta.regularMarketPrice;
-      } else if (json.chart && json.chart.result && json.chart.result[0] && json.chart.result[0].indicators && json.chart.result[0].indicators.quote && json.chart.result[0].indicators.quote[0] && json.chart.result[0].indicators.quote[0].close && json.chart.result[0].indicators.quote[0].close[0]) {
-        vix = json.chart.result[0].indicators.quote[0].close[0];
+      const result = json && json.chart && json.chart.result && json.chart.result[0];
+      if (result && result.meta && typeof result.meta.regularMarketPrice === "number") {
+        vix = result.meta.regularMarketPrice;
+      } else if (
+        result &&
+        result.indicators &&
+        result.indicators.quote &&
+        result.indicators.quote[0] &&
+        Array.isArray(result.indicators.quote[0].close)
+      ) {
+        const closes = result.indicators.quote[0].close;
+        vix = closes[closes.length - 1];
       }
 
-      if (!vix) return;
-      updateVixBadge(vix);
+      if (typeof vix === "number" && !Number.isNaN(vix)) {
+        updateVixBadge(vix);
+      } else {
+        console.warn("VIX 數值解析失敗", json);
+      }
     } catch (e) {
       console.error("VIX 取得失敗", e);
     }
@@ -329,10 +342,12 @@
   function updateVixBadge(vix) {
     const badge = document.getElementById("vixBadge");
     if (!badge) return;
+
     badge.textContent = "VIX: " + vix.toFixed(1);
 
-    const baseClasses = "inline-flex items-center px-4 py-1 rounded-full text-xs md:text-sm font-bold shadow cursor-pointer hover:bg-opacity-90 transition ";
-    badge.className = baseClasses + getVixColorClass(vix);
+    const base =
+      "inline-flex items-center px-4 py-1 rounded-full text-xs md:text-sm font-bold shadow cursor-pointer hover:bg-opacity-90 transition ";
+    badge.className = base + getVixColorClass(vix);
 
     const info = document.getElementById("vixValueText");
     if (info) {
@@ -357,17 +372,19 @@
 
   function initVixWidget() {
     fetchVIX();
+
     const closeBtn = document.getElementById("vixClose");
     if (closeBtn) closeBtn.addEventListener("click", closeVixModal);
+
     const modal = document.getElementById("vixModal");
     if (modal) {
-      modal.addEventListener("click", (e) => {
+      modal.addEventListener("click", function (e) {
         if (e.target === modal) closeVixModal();
       });
     }
   }
 
-  let industryTags = {};
+let industryTags = {};
   fetch("industry_tags.json")
     .then(r => r.json())
     .then(d => industryTags = d);

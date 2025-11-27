@@ -57,7 +57,19 @@
       <h1 id="page-title" class="text-3xl font-bold mobile-center">
         法人買賣超查詢
       </h1>
-      <!-- 台指期結算提醒：T-XX 長條按鈕 -->
+      
+      <!-- 📈 VIX 指數提示按鈕 -->
+      <button
+        id="vixBadge"
+        type="button"
+        class="mr-2 px-3 py-1 rounded-full bg-gray-300 text-gray-900 font-bold shadow cursor-pointer"
+        title="VIX 指數"
+        onclick="openVixModal()"
+      >
+        VIX --
+      </button>
+
+<!-- 台指期結算提醒：T-XX 長條按鈕 -->
       <button
         id="txReminderBtn"
         type="button"
@@ -1277,5 +1289,69 @@
   });
 
   </script>
+
+<!-- 📈 VIX Modal -->
+<div id="vixModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl p-6 max-w-md shadow">
+    <h2 class="text-xl font-bold mb-4">VIX 市場恐慌指標</h2>
+    <p id="vixValueText" class="mb-4 text-gray-800"></p>
+    <ul class="list-disc pl-5 space-y-2 text-gray-700">
+      <li id="vixGreen">綠色（VIX < 20）：市場平穩。</li>
+      <li id="vixGray">灰色（20 ≤ VIX < 28.7）：未來 12 個月報酬偏差。</li>
+      <li id="vixOrange">橘色（28.7 ≤ VIX < 33.5）：未來 12 個月平均報酬約 15%。</li>
+      <li id="vixRed">紅色（VIX ≥ 33.5）：未來 12 個月平均報酬約 25%。</li>
+    </ul>
+    <div class="text-right mt-4">
+      <button class="px-4 py-2 bg-gray-300 rounded" onclick="closeVixModal()">關閉</button>
+    </div>
+  </div>
+</div>
+
+<script>
+async function fetchVIX() {
+  try {
+    const url = "https://query1.finance.yahoo.com/v8/finance/chart/^VIX?interval=1d";
+    const resp = await fetch(url);
+    const json = await resp.json();
+    let vix = null;
+
+    if (json.chart?.result?.[0]?.meta?.regularMarketPrice) {
+      vix = json.chart.result[0].meta.regularMarketPrice;
+    } else if (json.chart?.result?.[0]?.indicators?.quote?.[0]?.close?.[0]) {
+      vix = json.chart.result[0].indicators.quote[0].close[0];
+    }
+
+    if (!vix) return;
+
+    updateVixBadge(vix);
+  } catch (e) {
+    console.error("VIX 取得失敗", e);
+  }
+}
+
+function updateVixBadge(vix) {
+  const el = document.getElementById("vixBadge");
+  el.textContent = `VIX ${vix.toFixed(1)}`;
+
+  let color = "";
+
+  if (vix < 20) color = "bg-green-400 text-white";
+  else if (vix < 28.7) color = "bg-gray-300 text-gray-900";
+  else if (vix < 33.5) color = "bg-yellow-400 text-gray-900";
+  else color = "bg-red-500 text-white";
+
+  el.className = `mr-2 px-3 py-1 rounded-full font-bold shadow cursor-pointer ${color}`;
+}
+
+function openVixModal() {
+  document.getElementById("vixModal").classList.remove("hidden");
+}
+function closeVixModal() {
+  document.getElementById("vixModal").classList.add("hidden");
+}
+
+document.addEventListener("DOMContentLoaded", fetchVIX);
+</script>
+
 </body>
 </html>

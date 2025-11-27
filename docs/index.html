@@ -218,14 +218,14 @@
     </div>
   </div>
 
-  <!-- 🧾 台指期結算提醒 Modal -->
+  <!-- 🧾 台指期結算提醒 Modal（改為右上角） -->
   <div
     id="txReminderModal"
-    class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden"
+    class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-start justify-end pt-24 pr-6"
   >
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-5 md:p-6">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-5 md:p-6">
       <div class="flex items-start justify-between mb-3">
-        <h2 class="text-lg md:text-xl font-semibold">台指期結算日提醒</h2>
+        <h2 class="text-xl md:text-2xl font-semibold">台指期結算日提醒</h2>
         <button
           id="txReminderClose"
           class="text-gray-400 hover:text-gray-600 text-2xl leading-none"
@@ -239,13 +239,13 @@
         T-?
       </p>
 
-      <p class="text-base text-gray-700 leading-relaxed mb-1">
+      <p class="text-xl md:text-2xl text-gray-700 leading-relaxed mb-1">
         下一次台指期結算日：
         <span id="txSettlementDate" class="font-semibold"></span>
       </p>
-      <p id="txReminderText" class="text-base text-gray-800 font-medium mb-3"></p>
+      <p id="txReminderText" class="text-xl md:text-2xl text-gray-800 font-medium mb-3"></p>
 
-      <ul class="text-sm md:text-base text-gray-600 list-disc list-inside space-y-1">
+      <ul class="text-lg text-gray-600 list-disc list-inside space-y-1">
         <li>台指期目前規則為「每月第三個星期三」為結算日。</li>
         <li>提醒區間目前設定為結算日前 25 個工作日內（T-25 ～ T），之後可自行調整。</li>
         <li>此處先簡化為排除週六、週日的工作日概念，未含國定假日。</li>

@@ -5759,8 +5759,14 @@
     "name": "川湖",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-滑軌"
+    ],
+    "ai_chain": [
+      "NVIDIA_Rail",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2061": {
@@ -6175,9 +6181,14 @@
     "name": "光寶科",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-電源管理"
+    ],
     "ai_chain": [
-      "AI_伺服器_電源"
+      "AI_伺服器_電源",
+      "NVIDIA_Power",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -6193,8 +6204,14 @@
     "name": "聯電",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-晶圓代工"
+    ],
+    "ai_chain": [
+      "NVIDIA_Foundry",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2305": {
@@ -6209,9 +6226,14 @@
     "name": "台達電",
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
-    "themes": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-電源管理"
+    ],
     "ai_chain": [
-      "AI_伺服器_電源"
+      "AI_伺服器_電源",
+      "NVIDIA_Power",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電子零組件業"
   },
@@ -6251,8 +6273,14 @@
     "name": "神達",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器"
+    ],
+    "ai_chain": [
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2316": {
@@ -6269,13 +6297,17 @@
     "sector_lv2": "電子工業",
     "themes": [
       "AI",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器",
       "伺服器",
       "組裝",
       "電動車"
     ],
     "ai_chain": [
       "AI_伺服器_組裝",
-      "AI_供應鏈"
+      "AI_供應鏈",
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電子工業"
   },
@@ -6299,8 +6331,14 @@
     "name": "仁寶",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器"
+    ],
+    "ai_chain": [
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2325": {
@@ -6344,13 +6382,17 @@
     "themes": [
       "AI",
       "HPC",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-晶圓代工",
       "先進製程",
       "晶圓代工龍頭"
     ],
     "ai_chain": [
-      "AI_晶圓代工",
       "AI_GPU/ASIC_製程",
-      "AI_供應鏈核心"
+      "AI_供應鏈核心",
+      "AI_晶圓代工",
+      "NVIDIA_Foundry",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電子工業"
   },
@@ -6440,8 +6482,14 @@
     "name": "智邦",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-網通"
+    ],
+    "ai_chain": [
+      "NVIDIA_Networking",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2347": {
@@ -6504,8 +6552,14 @@
     "name": "宏碁",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-PC及周邊"
+    ],
+    "ai_chain": [
+      "NVIDIA_PC_Peripheral",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2354": {
@@ -6532,11 +6586,15 @@
     "sector_lv2": "電腦及週邊設備業",
     "themes": [
       "AI",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器",
       "伺服器",
       "雲端"
     ],
     "ai_chain": [
-      "AI_伺服器_ODM"
+      "AI_伺服器_ODM",
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -6546,13 +6604,17 @@
     "sector_lv2": "電腦及週邊設備業",
     "themes": [
       "AI",
-      "顯卡",
+      "NB",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-PC及周邊",
       "主機板",
-      "NB"
+      "顯卡"
     ],
     "ai_chain": [
       "AI_GPU_通路",
-      "AI_PC/工作站"
+      "AI_PC/工作站",
+      "NVIDIA_PC_Peripheral",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -6568,8 +6630,14 @@
     "name": "所羅門",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-AI視覺"
+    ],
+    "ai_chain": [
+      "NVIDIA_AI_Vision",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2360": {
@@ -6592,8 +6660,14 @@
     "name": "藍天",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器"
+    ],
+    "ai_chain": [
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2363": {
@@ -6686,11 +6760,15 @@
     "sector_lv2": "電腦及週邊設備業",
     "themes": [
       "AI",
-      "顯卡",
-      "主機板"
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器",
+      "主機板",
+      "顯卡"
     ],
     "ai_chain": [
-      "AI_伺服器_ODM"
+      "AI_伺服器_ODM",
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -6700,13 +6778,17 @@
     "sector_lv2": "電腦及週邊設備業",
     "themes": [
       "AI",
-      "顯卡",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-PC及周邊",
       "主機板",
-      "電競"
+      "電競",
+      "顯卡"
     ],
     "ai_chain": [
       "AI_GPU_通路",
-      "AI_工作站/工規PC"
+      "AI_工作站/工規PC",
+      "NVIDIA_PC_Peripheral",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -6714,8 +6796,14 @@
     "name": "瑞昱",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-IC設計"
+    ],
+    "ai_chain": [
+      "NVIDIA_IC_Design",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2380": {
@@ -6740,12 +6828,16 @@
     "sector_lv2": "電腦及週邊設備業",
     "themes": [
       "AI",
+      "AI伺服器ODM",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器",
       "伺服器",
-      "雲端",
-      "AI伺服器ODM"
+      "雲端"
     ],
     "ai_chain": [
-      "AI_伺服器_ODM"
+      "AI_伺服器_ODM",
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -6833,8 +6925,14 @@
     "name": "研華",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-工業電腦"
+    ],
+    "ai_chain": [
+      "NVIDIA_Industrial_PC",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2396": {
@@ -6982,8 +7080,14 @@
     "name": "圓剛",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-工業電腦"
+    ],
+    "ai_chain": [
+      "NVIDIA_Industrial_PC",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2418": {
@@ -7220,9 +7324,14 @@
     "name": "京元電子",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-封測"
+    ],
     "ai_chain": [
-      "AI_封測"
+      "AI_封測",
+      "NVIDIA_OSAT",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電子工業"
   },
@@ -7262,8 +7371,14 @@
     "name": "聯發科",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-IC設計"
+    ],
+    "ai_chain": [
+      "NVIDIA_IC_Design",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2455": {
@@ -7334,24 +7449,42 @@
     "name": "研揚",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-工業電腦"
+    ],
+    "ai_chain": [
+      "NVIDIA_Industrial_PC",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2464": {
     "name": "盟立",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-其他"
+    ],
+    "ai_chain": [
+      "NVIDIA_Other",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "2465": {
     "name": "麗臺",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-PC及周邊"
+    ],
+    "ai_chain": [
+      "NVIDIA_PC_Peripheral",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "2466": {
@@ -9206,8 +9339,14 @@
     "name": "全漢",
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-電源管理"
+    ],
+    "ai_chain": [
+      "NVIDIA_Power",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "3016": {
@@ -9226,11 +9365,15 @@
     "sector_lv2": "電腦及週邊設備業",
     "themes": [
       "AI",
-      "散熱",
-      "伺服器"
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-散熱",
+      "伺服器",
+      "散熱"
     ],
     "ai_chain": [
-      "AI_伺服器_散熱"
+      "AI_伺服器_散熱",
+      "NVIDIA_Cooling",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -9405,12 +9548,16 @@
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
     "themes": [
-      "AI",
       "ABF載板",
+      "AI",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-PCB",
       "PCB"
     ],
     "ai_chain": [
-      "AI_ABF載板"
+      "AI_ABF載板",
+      "NVIDIA_PCB",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電子零組件業"
   },
@@ -9497,8 +9644,14 @@
     "name": "益登",
     "sector_lv1": "電子通路業",
     "sector_lv2": "電子通路業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-IC通路/連接"
+    ],
+    "ai_chain": [
+      "NVIDIA_IC_Channel_Connector",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子通路業"
   },
   "3049": {
@@ -10183,12 +10336,16 @@
     "sector_lv2": "電子工業",
     "themes": [
       "AI",
+      "AI PC",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器",
       "伺服器",
-      "雲端",
-      "AI PC"
+      "雲端"
     ],
     "ai_chain": [
-      "AI_伺服器_ODM"
+      "AI_伺服器_ODM",
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電子工業"
   },
@@ -10246,10 +10403,14 @@
     "sector_lv2": "半導體業",
     "themes": [
       "AI",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-記憶體模組",
       "記憶體模組"
     ],
     "ai_chain": [
-      "AI_SSD"
+      "AI_SSD",
+      "NVIDIA_Memory_Module",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 半導體業"
   },
@@ -10499,11 +10660,15 @@
     "sector_lv2": "其他電子類",
     "themes": [
       "AI",
-      "散熱",
-      "伺服器"
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-散熱",
+      "伺服器",
+      "散熱"
     ],
     "ai_chain": [
-      "AI_伺服器_散熱"
+      "AI_伺服器_散熱",
+      "NVIDIA_Cooling",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 其他電子類"
   },
@@ -11028,8 +11193,14 @@
     "name": "華擎",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-PC及周邊"
+    ],
+    "ai_chain": [
+      "NVIDIA_PC_Peripheral",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "3516": {
@@ -11148,8 +11319,14 @@
     "name": "嘉澤",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-IC通路/連接"
+    ],
+    "ai_chain": [
+      "NVIDIA_IC_Channel_Connector",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子工業"
   },
   "3534": {
@@ -11188,8 +11365,14 @@
     "name": "曜越",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-散熱"
+    ],
+    "ai_chain": [
+      "NVIDIA_Cooling",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "3541": {
@@ -11758,8 +11941,14 @@
     "name": "貿聯-KY",
     "sector_lv1": "其他電子業",
     "sector_lv2": "其他電子業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-IC通路/連接"
+    ],
+    "ai_chain": [
+      "NVIDIA_IC_Channel_Connector",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 其他電子業"
   },
   "3666": {
@@ -12012,10 +12201,15 @@
     "name": "日月光投控",
     "sector_lv1": "電子工業",
     "sector_lv2": "電子工業",
-    "themes": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-封測"
+    ],
     "ai_chain": [
+      "AI_CoWoS",
       "AI_先進封裝",
-      "AI_CoWoS"
+      "NVIDIA_OSAT",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電子工業"
   },
@@ -13854,8 +14048,14 @@
     "name": "和碩",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器"
+    ],
+    "ai_chain": [
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "4939": {
@@ -14596,8 +14796,14 @@
     "name": "宜鼎",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-邊緣AI"
+    ],
+    "ai_chain": [
+      "NVIDIA_Edge_AI",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "5291": {
@@ -14830,8 +15036,14 @@
     "name": "中光電",
     "sector_lv1": "光電業",
     "sector_lv2": "光電業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-顯示技術"
+    ],
+    "ai_chain": [
+      "NVIDIA_Display",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 光電業"
   },
   "5381": {
@@ -15042,8 +15254,14 @@
     "name": "聰泰",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-電源管理"
+    ],
+    "ai_chain": [
+      "NVIDIA_Power",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "5475": {
@@ -15722,9 +15940,14 @@
     "name": "迎廣",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-機殼"
+    ],
     "ai_chain": [
-      "AI_伺服器_機殼機櫃"
+      "AI_伺服器_機殼機櫃",
+      "NVIDIA_Chassis",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -16060,8 +16283,14 @@
     "name": "凌華",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-工業電腦"
+    ],
+    "ai_chain": [
+      "NVIDIA_Industrial_PC",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
   "6167": {
@@ -17895,8 +18124,14 @@
     "name": "南俊國際",
     "sector_lv1": "電子零組件業",
     "sector_lv2": "電子零組件業",
-    "themes": [],
-    "ai_chain": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-滑軌"
+    ],
+    "ai_chain": [
+      "NVIDIA_Rail",
+      "NVIDIA_供應鏈"
+    ],
     "notes": "FinMind: 電子零組件業"
   },
   "6585": {
@@ -18393,13 +18628,17 @@
     "sector_lv2": "電腦及週邊設備業",
     "themes": [
       "AI",
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-組裝/系統/伺服器",
       "伺服器",
-      "雲端",
-      "資料中心"
+      "資料中心",
+      "雲端"
     ],
     "ai_chain": [
       "AI_伺服器_ODM",
-      "AI_資料中心"
+      "AI_資料中心",
+      "NVIDIA_Server_Assembly",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -22637,9 +22876,14 @@
     "name": "勤誠",
     "sector_lv1": "電腦及週邊設備業",
     "sector_lv2": "電腦及週邊設備業",
-    "themes": [],
+    "themes": [
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-機殼"
+    ],
     "ai_chain": [
-      "AI_伺服器_機殼機櫃"
+      "AI_伺服器_機殼機櫃",
+      "NVIDIA_Chassis",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 電腦及週邊設備業"
   },
@@ -22785,12 +23029,16 @@
     "sector_lv2": "半導體業",
     "themes": [
       "AI",
-      "控制IC",
-      "SSD"
+      "NVIDIA 供應鏈",
+      "NVIDIA 供應鏈-記憶體模組",
+      "SSD",
+      "控制IC"
     ],
     "ai_chain": [
       "AI_SSD",
-      "AI_控制IC"
+      "AI_控制IC",
+      "NVIDIA_Memory_Module",
+      "NVIDIA_供應鏈"
     ],
     "notes": "FinMind: 半導體業"
   },

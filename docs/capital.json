@@ -1372,8 +1372,8 @@
     "abbreviation": "中華化",
     "industry": "21",
     "market": "TWSE",
-    "share_capital": 1253654790,
-    "shares_issued": 125365479
+    "share_capital": 1280195590,
+    "shares_issued": 128019559
   },
   "1730": {
     "company_name": "花仙子企業股份有限公司",
@@ -4484,8 +4484,8 @@
     "abbreviation": "建漢",
     "industry": "27",
     "market": "TWSE",
-    "share_capital": 3301774180,
-    "shares_issued": 330177418
+    "share_capital": 3301360180,
+    "shares_issued": 330136018
   },
   "3090": {
     "company_name": "日電貿股份有限公司",
@@ -6508,8 +6508,8 @@
     "abbreviation": "台郡",
     "industry": "28",
     "market": "TWSE",
-    "share_capital": 3231679810,
-    "shares_issued": 323167981
+    "share_capital": 3231314810,
+    "shares_issued": 323131481
   },
   "6271": {
     "company_name": "同欣電子工業股份有限公司",
@@ -7180,8 +7180,8 @@
     "abbreviation": "采鈺",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 3183021190,
-    "shares_issued": 318302119
+    "share_capital": 3182991190,
+    "shares_issued": 318299119
   },
   "6790": {
     "company_name": "永豐餘消費品實業股份有限公司",
@@ -7679,6 +7679,14 @@
     "share_capital": 406770000,
     "shares_issued": 40677000
   },
+  "7769": {
+    "company_name": "鴻勁精密股份有限公司",
+    "abbreviation": "鴻勁",
+    "industry": "24",
+    "market": "TWSE",
+    "share_capital": 1799300000,
+    "shares_issued": 179930000
+  },
   "7780": {
     "company_name": "大研生醫國際股份有限公司",
     "abbreviation": "大研生醫",
@@ -7740,16 +7748,16 @@
     "abbreviation": "尖點",
     "industry": "31",
     "market": "TWSE",
-    "share_capital": 1421804670,
-    "shares_issued": 142180467
+    "share_capital": 1420424670,
+    "shares_issued": 142042467
   },
   "8028": {
     "company_name": "昇陽國際半導體股份有限公司",
     "abbreviation": "昇陽半導體",
     "industry": "24",
     "market": "TWSE",
-    "share_capital": 1726302060,
-    "shares_issued": 172630206
+    "share_capital": 1740736770,
+    "shares_issued": 174073677
   },
   "8033": {
     "company_name": "雷虎科技股份有限公司",
@@ -8948,8 +8956,8 @@
     "abbreviation": "王座",
     "industry": "16",
     "market": "TPEX",
-    "share_capital": 196180000,
-    "shares_issued": 19618000
+    "share_capital": 197350000,
+    "shares_issued": 19735000
   },
   "2752": {
     "company_name": "豆府股份有限公司",
@@ -9244,8 +9252,8 @@
     "abbreviation": "精確",
     "industry": "05",
     "market": "TPEX",
-    "share_capital": 1302411120,
-    "shares_issued": 130241112
+    "share_capital": 1334411120,
+    "shares_issued": 133441112
   },
   "3163": {
     "company_name": "波若威科技股份有限公司",
@@ -9332,8 +9340,8 @@
     "abbreviation": "順達",
     "industry": "25",
     "market": "TPEX",
-    "share_capital": 1537810210,
-    "shares_issued": 153781021
+    "share_capital": 1539835210,
+    "shares_issued": 153983521
   },
   "3213": {
     "company_name": "茂訊電腦股份有限公司",
@@ -9960,8 +9968,8 @@
     "shares_issued": 68846778
   },
   "3521": {
-    "company_name": "鴻翊國際股份有限公司",
-    "abbreviation": "鴻翊",
+    "company_name": "台鋼建設事業股份有限公司",
+    "abbreviation": "台鋼建設",
     "industry": "14",
     "market": "TPEX",
     "share_capital": 1282655520,
@@ -10180,8 +10188,8 @@
     "abbreviation": "鼎翰",
     "industry": "25",
     "market": "TPEX",
-    "share_capital": 475396340,
-    "shares_issued": 47539634
+    "share_capital": 475546340,
+    "shares_issued": 47554634
   },
   "3615": {
     "company_name": "安可光電股份有限公司",
@@ -11620,8 +11628,8 @@
     "abbreviation": "智晶",
     "industry": "26",
     "market": "TPEX",
-    "share_capital": 449900000,
-    "shares_issued": 44990000
+    "share_capital": 451271410,
+    "shares_issued": 45127141
   },
   "5251": {
     "company_name": "天鉞電子股份有限公司",
@@ -12116,8 +12124,8 @@
     "abbreviation": "凱崴",
     "industry": "28",
     "market": "TPEX",
-    "share_capital": 1924485450,
-    "shares_issued": 192448545
+    "share_capital": 1932835450,
+    "shares_issued": 193283545
   },
   "5508": {
     "company_name": "永信建設開發股份有限公司",
@@ -13012,8 +13020,8 @@
     "abbreviation": "百徽",
     "industry": "28",
     "market": "TPEX",
-    "share_capital": 263041460,
-    "shares_issued": 26304146
+    "share_capital": 267661460,
+    "shares_issued": 26766146
   },
   "6261": {
     "company_name": "久元電子股份有限公司",
@@ -13564,8 +13572,8 @@
     "abbreviation": "台灣銘板",
     "industry": "30",
     "market": "TPEX",
-    "share_capital": 299124360,
-    "shares_issued": 29912436
+    "share_capital": 309114720,
+    "shares_issued": 30911472
   },
   "6596": {
     "company_name": "寬宏藝術經紀股份有限公司",
@@ -14228,8 +14236,8 @@
     "abbreviation": "佑全",
     "industry": "22",
     "market": "TPEX",
-    "share_capital": 449915000,
-    "shares_issued": 44991500
+    "share_capital": 450675000,
+    "shares_issued": 45067500
   },
   "6953": {
     "company_name": "家碩科技股份有限公司",
@@ -14516,8 +14524,8 @@
     "abbreviation": "鈦昇",
     "industry": "05",
     "market": "TPEX",
-    "share_capital": 1074619950,
-    "shares_issued": 107461995
+    "share_capital": 1074805290,
+    "shares_issued": 107480529
   },
   "8032": {
     "company_name": "光菱電子股份有限公司",

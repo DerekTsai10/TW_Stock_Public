@@ -94,7 +94,7 @@
     {
       "stock_id": "8027",
       "name": "鈦昇",
-      "foreign_ratio": 0.01050604
+      "foreign_ratio": 0.01050423
     },
     {
       "stock_id": "4931",
@@ -269,14 +269,14 @@
       "invest_ratio": 0.0059858
     },
     {
+      "stock_id": "3167",
+      "name": "大量",
+      "invest_ratio": 0.00426655
+    },
+    {
       "stock_id": "1802",
       "name": "台玻",
       "invest_ratio": 0.00236928
-    },
-    {
-      "stock_id": "3653",
-      "name": "健策",
-      "invest_ratio": 0.00230895
     },
     {
       "stock_id": "3706",
@@ -287,6 +287,16 @@
       "stock_id": "3023",
       "name": "信邦",
       "invest_ratio": 0.00227018
+    },
+    {
+      "stock_id": "3653",
+      "name": "健策",
+      "invest_ratio": 0.002197
+    },
+    {
+      "stock_id": "6805",
+      "name": "富世達",
+      "invest_ratio": 0.00218806
     },
     {
       "stock_id": "2312",
@@ -311,17 +321,12 @@
     {
       "stock_id": "5289",
       "name": "宜鼎",
-      "invest_ratio": 0.00191232
+      "invest_ratio": 0.00188063
     },
     {
       "stock_id": "1795",
       "name": "美時",
       "invest_ratio": 0.00178997
-    },
-    {
-      "stock_id": "6805",
-      "name": "富世達",
-      "invest_ratio": 0.00177962
     },
     {
       "stock_id": "5469",
@@ -359,6 +364,11 @@
       "invest_ratio": 0.00128092
     },
     {
+      "stock_id": "7769",
+      "name": "鴻勁",
+      "invest_ratio": 0.00123492
+    },
+    {
       "stock_id": "6515",
       "name": "穎崴",
       "invest_ratio": 0.00104579
@@ -377,6 +387,11 @@
       "stock_id": "9802",
       "name": "鈺齊-KY",
       "invest_ratio": 0.00094531
+    },
+    {
+      "stock_id": "1303",
+      "name": "南亞",
+      "invest_ratio": 0.00087494
     },
     {
       "stock_id": "2439",
@@ -404,9 +419,9 @@
       "invest_ratio": 0.00043782
     },
     {
-      "stock_id": "1303",
-      "name": "南亞",
-      "invest_ratio": 0.00042429
+      "stock_id": "3693",
+      "name": "營邦",
+      "invest_ratio": 0.0004187
     },
     {
       "stock_id": "1319",
@@ -414,24 +429,19 @@
       "invest_ratio": 0.0004176
     },
     {
-      "stock_id": "2606",
-      "name": "裕民",
-      "invest_ratio": 0.00039914
-    },
-    {
       "stock_id": "3526",
       "name": "凡甲",
       "invest_ratio": 0.00036751
     },
     {
+      "stock_id": "2454",
+      "name": "聯發科",
+      "invest_ratio": 0.00033634
+    },
+    {
       "stock_id": "3711",
       "name": "日月光投控",
       "invest_ratio": 0.00032258
-    },
-    {
-      "stock_id": "2454",
-      "name": "聯發科",
-      "invest_ratio": 0.00031701
     },
     {
       "stock_id": "6669",
@@ -492,16 +502,6 @@
       "stock_id": "2883",
       "name": "凱基金",
       "invest_ratio": 0.00014563
-    },
-    {
-      "stock_id": "4953",
-      "name": "緯軟",
-      "invest_ratio": 0.00013671
-    },
-    {
-      "stock_id": "6768",
-      "name": "志強-KY",
-      "invest_ratio": 0.00012494
     }
   ],
   "foreign_ratio_5d_ranking": [
@@ -568,7 +568,7 @@
     {
       "stock_id": "8027",
       "name": "鈦昇",
-      "foreign_ratio": 0.0402747
+      "foreign_ratio": 0.04026776
     },
     {
       "stock_id": "6425",
@@ -810,7 +810,7 @@
     {
       "stock_id": "2881",
       "name": "富邦金",
-      "invest_ratio": 0.01070313
+      "invest_ratio": 0.01075082
     },
     {
       "stock_id": "5439",
@@ -825,7 +825,7 @@
     {
       "stock_id": "6805",
       "name": "富世達",
-      "invest_ratio": 0.00869828
+      "invest_ratio": 0.00910672
     },
     {
       "stock_id": "1513",
@@ -848,14 +848,19 @@
       "invest_ratio": 0.00746621
     },
     {
+      "stock_id": "7769",
+      "name": "鴻勁",
+      "invest_ratio": 0.00720391
+    },
+    {
       "stock_id": "2368",
       "name": "金像電",
-      "invest_ratio": 0.00643016
+      "invest_ratio": 0.0062919
     },
     {
       "stock_id": "8021",
       "name": "尖點",
-      "invest_ratio": 0.00605568
+      "invest_ratio": 0.00606157
     },
     {
       "stock_id": "4977",
@@ -873,6 +878,11 @@
       "invest_ratio": 0.00528701
     },
     {
+      "stock_id": "3167",
+      "name": "大量",
+      "invest_ratio": 0.00513797
+    },
+    {
       "stock_id": "5274",
       "name": "信驊",
       "invest_ratio": 0.00496753
@@ -880,17 +890,17 @@
     {
       "stock_id": "2357",
       "name": "華碩",
-      "invest_ratio": 0.00492167
-    },
-    {
-      "stock_id": "3653",
-      "name": "健策",
-      "invest_ratio": 0.00453846
+      "invest_ratio": 0.00480892
     },
     {
       "stock_id": "4979",
       "name": "華星光",
       "invest_ratio": 0.00444477
+    },
+    {
+      "stock_id": "3653",
+      "name": "健策",
+      "invest_ratio": 0.00442651
     },
     {
       "stock_id": "2610",
@@ -938,11 +948,6 @@
       "invest_ratio": 0.00315797
     },
     {
-      "stock_id": "2383",
-      "name": "台光電",
-      "invest_ratio": 0.0031517
-    },
-    {
       "stock_id": "2801",
       "name": "彰銀",
       "invest_ratio": 0.0030951
@@ -951,6 +956,11 @@
       "stock_id": "2912",
       "name": "統一超",
       "invest_ratio": 0.00308375
+    },
+    {
+      "stock_id": "2383",
+      "name": "台光電",
+      "invest_ratio": 0.00296953
     },
     {
       "stock_id": "4915",
@@ -993,19 +1003,9 @@
       "invest_ratio": 0.00215811
     },
     {
-      "stock_id": "2451",
-      "name": "創見",
-      "invest_ratio": 0.00214897
-    },
-    {
       "stock_id": "2454",
       "name": "聯發科",
-      "invest_ratio": 0.00213629
-    },
-    {
-      "stock_id": "6274",
-      "name": "台燿",
-      "invest_ratio": 0.00213312
+      "invest_ratio": 0.00215562
     }
   ],
   "foreign_ratio_10d_ranking": [
@@ -1112,7 +1112,7 @@
     {
       "stock_id": "8027",
       "name": "鈦昇",
-      "foreign_ratio": 0.03470064
+      "foreign_ratio": 0.03469466
     },
     {
       "stock_id": "8054",
@@ -1327,6 +1327,11 @@
       "invest_ratio": 0.02184719
     },
     {
+      "stock_id": "3167",
+      "name": "大量",
+      "invest_ratio": 0.02081216
+    },
+    {
       "stock_id": "5469",
       "name": "瀚宇博",
       "invest_ratio": 0.02030788
@@ -1334,7 +1339,7 @@
     {
       "stock_id": "2881",
       "name": "富邦金",
-      "invest_ratio": 0.01952905
+      "invest_ratio": 0.01957674
     },
     {
       "stock_id": "6257",
@@ -1350,11 +1355,6 @@
       "stock_id": "3264",
       "name": "欣銓",
       "invest_ratio": 0.01756573
-    },
-    {
-      "stock_id": "3167",
-      "name": "大量",
-      "invest_ratio": 0.01654561
     },
     {
       "stock_id": "6442",
@@ -1389,7 +1389,12 @@
     {
       "stock_id": "2368",
       "name": "金像電",
-      "invest_ratio": 0.01174675
+      "invest_ratio": 0.0116085
+    },
+    {
+      "stock_id": "6805",
+      "name": "富世達",
+      "invest_ratio": 0.01085717
     },
     {
       "stock_id": "3131",
@@ -1400,11 +1405,6 @@
       "stock_id": "6139",
       "name": "亞翔",
       "invest_ratio": 0.01055191
-    },
-    {
-      "stock_id": "6805",
-      "name": "富世達",
-      "invest_ratio": 0.01044873
     },
     {
       "stock_id": "4979",
@@ -1437,14 +1437,14 @@
       "invest_ratio": 0.00888371
     },
     {
-      "stock_id": "3653",
-      "name": "健策",
-      "invest_ratio": 0.00869123
-    },
-    {
       "stock_id": "2610",
       "name": "華航",
       "invest_ratio": 0.00861034
+    },
+    {
+      "stock_id": "3653",
+      "name": "健策",
+      "invest_ratio": 0.00857928
     },
     {
       "stock_id": "2451",
@@ -1467,9 +1467,9 @@
       "invest_ratio": 0.00725059
     },
     {
-      "stock_id": "2383",
-      "name": "台光電",
-      "invest_ratio": 0.00658398
+      "stock_id": "7769",
+      "name": "鴻勁",
+      "invest_ratio": 0.00720391
     },
     {
       "stock_id": "8016",
@@ -1485,6 +1485,11 @@
       "stock_id": "2801",
       "name": "彰銀",
       "invest_ratio": 0.00641198
+    },
+    {
+      "stock_id": "2383",
+      "name": "台光電",
+      "invest_ratio": 0.00640181
     },
     {
       "stock_id": "1319",
@@ -1505,11 +1510,6 @@
       "stock_id": "2393",
       "name": "億光",
       "invest_ratio": 0.00577328
-    },
-    {
-      "stock_id": "2439",
-      "name": "美律",
-      "invest_ratio": 0.00574567
     }
   ]
 }
